@@ -4,7 +4,7 @@
   "description": "A linter for Prisma schema files.",
   "main": "index.js",
   "type": "module",
-  "author": "max@loop.com",
+  "author": "engineering@loop.com",
   "license": "MIT",
   "devDependencies": {
     "@swc/core": "^1.3.26",
