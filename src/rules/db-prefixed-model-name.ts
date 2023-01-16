@@ -1,4 +1,4 @@
-import type { Context } from "src/util.js";
+import type { Context } from "../util.js";
 import type { Model } from "@mrleebo/prisma-ast";
 
 export default {

@@ -1,7 +1,7 @@
 import path from "path";
 import fs from "fs";
 import { getSchema } from "@mrleebo/prisma-ast";
-import { listModelBlocks, RuleRegistry, Violation } from "src/util.js";
+import { listModelBlocks, RuleRegistry, Violation } from "./util.js";
 import { promisify } from "util";
 
 export async function lintSchemaSource({

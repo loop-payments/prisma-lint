@@ -1,4 +1,4 @@
-import { Context, PrismaPropertyType } from "src/util.js";
+import { Context, PrismaPropertyType } from "../util.js";
 import type { Model } from "@mrleebo/prisma-ast";
 import * as pluralize from "pluralize";
 
