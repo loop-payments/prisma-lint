@@ -13,9 +13,15 @@ program.parse();
 
 const { args } = program;
 
-for (const arg of args) {
-  const violations = await lintSchemaFile({ schemaFile: arg, ruleRegistry });
-  console.log(renderViolations(violations));
-}
+const run = async () => {
+  for (const arg of args) {
+    const violations = await lintSchemaFile({ schemaFile: arg, ruleRegistry });
+    console.log(renderViolations(violations));
+  }
+};
 
-export {};
+run().catch((err) => {
+  console.error(err);
+});
+
+export default {};
