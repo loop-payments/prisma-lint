@@ -1,5 +1,5 @@
-import { Context, PrismaPropertyType } from "src/util";
-import { Model } from "@mrleebo/prisma-ast";
+import { Context, PrismaPropertyType } from "src/util.js";
+import type { Model } from "@mrleebo/prisma-ast";
 import * as pluralize from "pluralize";
 
 export default {
@@ -15,7 +15,7 @@ export default {
         const hasOmitComment =
           commentFields.length > 0 && commentFields[0].text === "///not-plural";
         if (hasOmitComment) {
-          return false;
+          return;
         }
         if (pluralize.isPlural(node.name)) {
           context.report({ node });

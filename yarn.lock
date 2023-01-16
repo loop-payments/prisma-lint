@@ -964,10 +964,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tsconfig/node16@npm:^1.0.3":
-  version: 1.0.3
-  resolution: "@tsconfig/node16@npm:1.0.3"
-  checksum: 3a8b657dd047495b7ad23437d6afd20297ce90380ff0bdee93fc7d39a900dbd8d9e26e53ff6b465e7967ce2adf0b218782590ce9013285121e6a5928fbd6819f
+"@tsconfig/node18-strictest-esm@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "@tsconfig/node18-strictest-esm@npm:1.0.1"
+  checksum: 9da55e6959defe1115996e3360decbf70f83fae925967c418a5a387db52daa005f6b270b858bea42d74c134ff7155157c5cabbfecc9c783fd1129e354ec2f31c
   languageName: node
   linkType: hard
 
@@ -3188,7 +3188,7 @@ __metadata:
     "@mrleebo/prisma-ast": ^0.5.1
     "@swc/core": ^1.3.26
     "@swc/jest": ^0.2.24
-    "@tsconfig/node16": ^1.0.3
+    "@tsconfig/node18-strictest-esm": ^1.0.1
     "@types/jest": ^29.2.5
     "@types/node": ^18.11.18
     "@types/pluralize": ^0.0.29

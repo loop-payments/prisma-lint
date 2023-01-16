@@ -1,4 +1,4 @@
-import { Model, Schema } from "@mrleebo/prisma-ast";
+import type { Model, Schema } from "@mrleebo/prisma-ast";
 import { Enum } from "@kejistan/enum";
 
 export function listModelBlocks(schema: Schema) {

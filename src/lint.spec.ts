@@ -1,5 +1,4 @@
 import { lintSchemaFile, lintSchemaSource } from "src/lint";
-import ruleRegistry from "src/rule-registry";
 import singularModelName from "src/rules/singular-model-name";
 
 describe("lint", () => {
@@ -21,10 +20,10 @@ describe("lint", () => {
           ruleRegistry: { "singular-model-name": singularModelName },
         });
         expect(violations.length).toEqual(1);
-        expect(violations[0].description).toEqual(
+        expect(violations[0]?.description).toEqual(
           "Expected singular model name."
         );
-        expect(violations[0].ruleName).toEqual("singular-model-name");
+        expect(violations[0]?.ruleName).toEqual("singular-model-name");
       });
     });
   });
@@ -57,10 +56,10 @@ model Users {
           fileName: "fake.ts",
         });
         expect(violations.length).toEqual(1);
-        expect(violations[0].description).toEqual(
+        expect(violations[0]?.description).toEqual(
           "Expected singular model name."
         );
-        expect(violations[0].ruleName).toEqual("singular-model-name");
+        expect(violations[0]?.ruleName).toEqual("singular-model-name");
       });
     });
   });

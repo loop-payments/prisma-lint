@@ -1,6 +1,5 @@
-import { Context, PrismaPropertyType } from "src/util";
-import { Model } from "@mrleebo/prisma-ast";
-import * as pluralize from "pluralize";
+import type { Context } from "src/util.js";
+import type { Model } from "@mrleebo/prisma-ast";
 
 export default {
   meta: {

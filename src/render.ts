@@ -1,5 +1,5 @@
-import { Model } from "@mrleebo/prisma-ast";
-import { Violation } from "src/util";
+import type { Model } from "@mrleebo/prisma-ast";
+import type { Violation } from "src/util.js";
 
 function getNodeLabel(node: Model) {
   return node.name;
