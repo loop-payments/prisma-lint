@@ -10,10 +10,10 @@ const testTimeout = () => (isDebuggerAttached ? 2 ** 31 - 1 : 60000);
 
 const unitTestConfig = {
   moduleDirectories: ["node_modules"],
-  moduleFileExtensions: ["js", "json", "ts", "tsx"],
+  moduleFileExtensions: ["js", "ts"],
   roots: ["<rootDir>/src/"],
   testEnvironment: "node",
-  testRegex: ".*\\.spec\\.[jt]s$",
+  testRegex: ".*\\.spec\\.ts$",
   displayName: {
     name: "unit",
     color: "blue",
@@ -22,7 +22,7 @@ const unitTestConfig = {
     "^src/(.*)$": "<rootDir>/src/$1",
   },
   transform: {
-    "^.+\\.(t|j)sx?$": "@swc/jest",
+    "^.+\\.ts$": "@swc/jest",
   },
 };
 

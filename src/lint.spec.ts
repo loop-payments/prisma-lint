@@ -1,5 +1,6 @@
 import { lintSchemaFile, lintSchemaSource } from "src/lint";
 import ruleRegistry from "src/rule-registry";
+import singularModelName from "src/rules/singular-model-name";
 
 describe("lint", () => {
   describe("lintSchemaFile", () => {
@@ -7,7 +8,7 @@ describe("lint", () => {
       it("returns no violations", async () => {
         const violations = await lintSchemaFile({
           schemaFile: "fixture/valid.prisma",
-          ruleRegistry,
+          ruleRegistry: { "singular-model-name": singularModelName },
         });
         expect(violations.length).toEqual(0);
       });
@@ -17,7 +18,7 @@ describe("lint", () => {
       it("returns violations", async () => {
         const violations = await lintSchemaFile({
           schemaFile: "fixture/invalid.prisma",
-          ruleRegistry,
+          ruleRegistry: { "singular-model-name": singularModelName },
         });
         expect(violations.length).toEqual(1);
         expect(violations[0].description).toEqual(
@@ -37,7 +38,7 @@ model User {
   id         String @id
 }        
         `,
-          ruleRegistry,
+          ruleRegistry: { "singular-model-name": singularModelName },
           fileName: "fake.ts",
         });
         expect(violations.length).toEqual(0);
@@ -52,7 +53,7 @@ model Users {
   id         String @id
 }        
         `,
-          ruleRegistry,
+          ruleRegistry: { "singular-model-name": singularModelName },
           fileName: "fake.ts",
         });
         expect(violations.length).toEqual(1);
