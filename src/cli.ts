@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
 import { program } from "commander";
-import { lintSchemaFile } from "./lint";
-import ruleRegistry from "src/rule-registry";
-import { renderViolations } from "src/render";
+import { lintSchemaFile } from "src/lint.js";
+import ruleRegistry from "src/rule-registry.js";
+import { renderViolations } from "src/render.js";
 
 program
   .description("A linter for Prisma schema files.")

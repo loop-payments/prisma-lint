@@ -1,5 +1,5 @@
-import singularModelName from "src/rules/singular-model-name";
-import { lintSchemaSource } from "src/lint";
+import singularModelName from "src/rules/singular-model-name.js";
+import { lintSchemaSource } from "src/lint.js";
 
 describe("singular-model-name", () => {
   const run = async (schemaSource: string) =>

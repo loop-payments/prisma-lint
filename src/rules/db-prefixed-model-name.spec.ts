@@ -1,5 +1,5 @@
-import { lintSchemaSource } from "src/lint";
-import dbPrefixedModelName from "src/rules/db-prefixed-model-name";
+import { lintSchemaSource } from "src/lint.js";
+import dbPrefixedModelName from "src/rules/db-prefixed-model-name.js";
 
 describe("singular-model-name", () => {
   const run = async (schemaSource: string) =>

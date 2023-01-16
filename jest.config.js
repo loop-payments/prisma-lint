@@ -10,6 +10,7 @@ const testTimeout = () => (isDebuggerAttached ? 2 ** 31 - 1 : 60000);
 
 const unitTestConfig = {
   moduleDirectories: ["node_modules"],
+  extensionsToTreatAsEsm: [".ts"],
   moduleFileExtensions: ["js", "ts"],
   roots: ["<rootDir>/src/"],
   testEnvironment: "node",
@@ -19,10 +20,10 @@ const unitTestConfig = {
     color: "blue",
   },
   moduleNameMapper: {
-    "^src/(.*)$": "<rootDir>/src/$1",
+    "^(\\.{1,2}/.*)\\.js$": "$1",
   },
   transform: {
-    "^.+\\.ts$": "@swc/jest",
+    "^.+\\.ts$": ["ts-jest", { useESM: true }],
   },
 };
 
