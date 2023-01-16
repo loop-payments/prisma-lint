@@ -1,22 +1,10 @@
 {
   "extends": "@tsconfig/node18-strictest-esm/tsconfig.json",
   "compilerOptions": {
-    "module": "nodenext",
-    "target": "es2017",
-    "declaration": true,
-    "removeComments": true,
-    "allowSyntheticDefaultImports": true,
-    "sourceMap": true,
-    "strict": true,
-    "incremental": true,
-    "skipLibCheck": true,
-    "noImplicitAny": true,
-    "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true,
-    "outDir": "./dist",
-    "baseUrl": "./",
-    "paths": {
-      "src/*": ["./src/*"],
-    },
-  }
+    "outDir": "./lib",                        /* Redirect output structure to the directory. */
+    "rootDir": "./src",                       /* Specify the root directory of input files. Use to control the output directory structure with --outDir. */
+    "noImplicitAny": true,                    /* Raise error on expressions and declarations with an implied 'any' type. */
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
 }
