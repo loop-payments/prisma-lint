@@ -16,7 +16,10 @@ const { args } = program;
 const run = async () => {
   for (const arg of args) {
     const violations = await lintSchemaFile({ schemaFile: arg, ruleRegistry });
-    console.log(renderViolations(violations));
+    const lines = renderViolations(violations);
+    for (const line of lines) {
+      console.log(line);
+    }
   }
 };
 

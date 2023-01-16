@@ -1,7 +1,8 @@
 {
   "extends": "@tsconfig/node18-strictest-esm/tsconfig.json",
   "compilerOptions": {
-    "outDir": "./lib",                        /* Redirect output structure to the directory. */
+    "moduleResolution": "nodenext",
+    "outDir": "./dist",                        /* Redirect output structure to the directory. */
     "rootDir": "./src",                       /* Specify the root directory of input files. Use to control the output directory structure with --outDir. */
     "noImplicitAny": true,                    /* Raise error on expressions and declarations with an implied 'any' type. */
   },
