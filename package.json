@@ -2,7 +2,6 @@
   "name": "prisma-lint",
   "version": "0.0.1",
   "description": "A linter for Prisma schema files.",
-  "main": "index.js",
   "type": "module",
   "author": "engineering@loop.com",
   "license": "MIT",
@@ -20,9 +19,8 @@
   "bin": "dist/cli.js",
   "packageManager": "yarn@3.3.1",
   "scripts": {
-    "dev": "node dist/index.js",
-    "cli": "dist/cli.js schema.prisma schema2.prisma",
-    "test": "jest"
+    "test": "jest",
+    "cli": "dist/cli.js"
   },
   "dependencies": {
     "@kejistan/enum": "^0.0.2",
