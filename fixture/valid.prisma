@@ -1,0 +1,14 @@
+generator client {
+  provider        = "prisma-client-js"
+  output          = "../generated/prisma/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = "fake-url"
+}
+
+model User {
+  id         String @id
+  @@map(name: "user")
+}
