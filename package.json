@@ -19,7 +19,7 @@
   "packageManager": "yarn@3.3.1",
   "scripts": {
     "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js",
-    "cli": "dist/cli.js"
+    "cli": "node --experimental-vm-modules dist/cli.js"
   },
   "dependencies": {
     "@kejistan/enum": "^0.0.2",

@@ -17,3 +17,5 @@ for (const arg of args) {
   const violations = await lintSchemaFile({ schemaFile: arg, ruleRegistry });
   console.log(renderViolations(violations));
 }
+
+export {};
