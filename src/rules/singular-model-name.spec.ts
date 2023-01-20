@@ -9,7 +9,7 @@ describe("singular-model-name", () => {
       ruleRegistry: { "singular-model-name": singularModelName },
     });
 
-  describe("singular model name", () => {
+  describe("singular", () => {
     it("returns no violations", async () => {
       const violations = await run(`
       model User {
@@ -20,7 +20,7 @@ describe("singular-model-name", () => {
     });
   });
 
-  describe("plural model name", () => {
+  describe("plural", () => {
     it("returns violation", async () => {
       const violations = await run(`
       model Users {
