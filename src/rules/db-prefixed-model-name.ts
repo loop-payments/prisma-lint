@@ -1,9 +1,10 @@
 import type { Context } from "../util.js";
 import type { Model } from "@mrleebo/prisma-ast";
+import type { RuleDefinition } from "../util.js";
 
 export default {
   meta: {
-    description: "Expected model name to start with 'Db'.",
+    defaultDescription: "Expected model name to start with 'Db'.",
   },
   create: (context: Context) => {
     return {
@@ -15,4 +16,4 @@ export default {
       },
     };
   },
-};
+} satisfies RuleDefinition;

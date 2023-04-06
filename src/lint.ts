@@ -1,7 +1,12 @@
 import path from "path";
 import fs from "fs";
 import { getSchema } from "@mrleebo/prisma-ast";
-import { listModelBlocks, RuleRegistry, Violation } from "./util.js";
+import {
+  listModelBlocks,
+  ReportedViolation,
+  RuleRegistry,
+  Violation,
+} from "./util.js";
 import { promisify } from "util";
 
 export async function lintSchemaSource({
@@ -13,17 +18,22 @@ export async function lintSchemaSource({
   schemaSource: string;
   ruleRegistry: RuleRegistry;
 }) {
-  const schema = await getSchema(schemaSource);
+  const schema = getSchema(schemaSource);
   const violations: Violation[] = [];
   const ruleInstances = Object.entries(ruleRegistry).map(
     ([ruleName, ruleDefinition]) =>
       ruleDefinition.create({
         fileName,
-        report: ({ node, description }) => {
+        report: ({ node, description }: ReportedViolation) => {
+          const finalDescription =
+            description ?? ruleDefinition.meta.defaultDescription;
+          if (finalDescription == null) {
+            throw new Error("Expected description");
+          }
           violations.push({
             ruleName,
             node,
-            description: description ?? ruleDefinition.meta.description,
+            description: finalDescription,
           });
         },
       })

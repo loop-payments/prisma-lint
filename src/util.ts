@@ -44,7 +44,7 @@ export type RuleInstance = {
 
 export type RuleDefinition = {
   meta: {
-    description: string;
+    defaultDescription: string | undefined;
   };
   create: (context: Context) => RuleInstance;
 };

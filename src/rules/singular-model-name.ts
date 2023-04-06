@@ -1,10 +1,10 @@
-import { Context, PrismaPropertyType } from "../util.js";
+import { Context, PrismaPropertyType, RuleDefinition } from "../util.js";
 import type { Model } from "@mrleebo/prisma-ast";
 import pluralize from "pluralize";
 
 export default {
   meta: {
-    description: "Expected singular model name.",
+    defaultDescription: "Expected singular model name.",
   },
   create: (context: Context) => {
     return {
@@ -23,4 +23,4 @@ export default {
       },
     };
   },
-};
+} satisfies RuleDefinition;
