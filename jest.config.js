@@ -6,7 +6,7 @@ const isDebuggerAttached = (() => {
   }
 })();
 
-const testTimeout = () => (isDebuggerAttached ? 2 ** 31 - 1 : 60000);
+const testTimeout = () => (isDebuggerAttached ? Infinity : 60000);
 
 const unitTestConfig = {
   moduleDirectories: ["node_modules"],
