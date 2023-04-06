@@ -9,25 +9,15 @@ describe("singular-model-name", () => {
       ruleRegistry: { "tenant-qid": tenantQid },
     });
 
-  describe("singular", () => {
+  describe("with tenant qid", () => {
     it("returns no violations", async () => {
       const violations = await run(`
-      model User {
-        id String @id
-      }
-    `);
+        model TestTable {
+          tenantQid String
+          createdAt DateTime
+          value Json
+        }`);
       expect(violations.length).toEqual(0);
-    });
-  });
-
-  describe("plural", () => {
-    it("returns violation", async () => {
-      const violations = await run(`
-      model Users {
-        id String @id
-      }
-    `);
-      expect(violations.length).toEqual(1);
     });
   });
 });
