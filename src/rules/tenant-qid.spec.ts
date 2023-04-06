@@ -20,67 +20,39 @@ describe("singular-model-name", () => {
       expect(violations.length).toEqual(0);
     });
   });
+
+  describe("with tenant qid comment", () => {
+    it("returns no violations", async () => {
+      const violations = await run(`
+        model TestTable {
+          ///no-tenant-field
+          createdAt DateTime
+          value Json
+        }`);
+      expect(violations.length).toEqual(0);
+    });
+  });
+
+  describe("without tenant qid", () => {
+    it("returns violation", async () => {
+      const violations = await run(`
+        model TestTable {
+          createdAt DateTime
+          value Json
+        }`);
+      expect(violations.length).toEqual(1);
+    });
+  });
+
+  describe("with tenant qid not as first field", () => {
+    it("returns violation", async () => {
+      const violations = await run(`
+        model TestTable {
+          createdAt DateTime
+          tenantQid String
+          value Json
+        }`);
+      expect(violations.length).toEqual(1);
+    });
+  });
 });
-/*
-describe("tenant qid", () => {
-  it("approves proper models", () => {
-    const schema = `
-model TestTable {
-  tenantQid String
-  createdAt DateTime
-  value Json
-  
-  @@map(name: "test_table")
-}`;
-    const loadedSchema = getModels(schema);
-    const out = ensureTenantField(loadedSchema);
-    expect(out).toEqual([]);
-  });
-
-  it("warns for models with tenantQid as second field", () => {
-    const schema = `
-model TestTable {
-  createdAt DateTime
-  tenantQid String
-  value Json
-}`;
-    const loadedSchema = getModels(schema);
-    const out = ensureTenantField(loadedSchema);
-    expect(out).toEqual([
-      {
-        modelName: "TestTable",
-        error: "Expected tenantQid field to be the first field in the model",
-      },
-    ]);
-  });
-
-  it("warns for models with no tenantQid field", () => {
-    const schema = `
-model TestTable {
-  createdAt DateTime
-  value Json
-}`;
-    const loadedSchema = getModels(schema);
-    const out = ensureTenantField(loadedSchema);
-    expect(out).toEqual([
-      {
-        modelName: "TestTable",
-        error:
-          "Expected tenantQid field to be the first field or have the ///no-tenant-field comment in the model",
-      },
-    ]);
-  });
-
-  it("approves of no tenant field with comment", () => {
-    const schema = `
-model ideas {
-  ///no-tenant-field
-  id String
-  createdAt DateTime
-  value Json
-}`;
-    const loadedSchema = getModels(schema);
-    const out = ensureTenantField(loadedSchema);
-    expect(out).toEqual([]);
-  });
-});*/
