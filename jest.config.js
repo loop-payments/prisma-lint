@@ -23,7 +23,6 @@ const unitTestConfig = {
     "^#src/(.*)\\.js$": "<rootDir>/src/$1",
   },
   transform: {
-    // https://github.com/kulshekhar/ts-jest/issues/4081
     "^.+\\.ts$": ["ts-jest", { tsconfig: "./tsconfig.test.json" }],
   },
 };
@@ -31,11 +30,4 @@ const unitTestConfig = {
 export default {
   testTimeout: testTimeout(),
   projects: [unitTestConfig],
-
-  // Special configuration options set to work around an upstream memory issue.
-  // https://github.com/facebook/jest/issues/11956
-  // https://loop-payments.slack.com/archives/C01MYBY9GJC/p1672264037166109
-  workerIdleMemoryLimit: "512MiB",
-  maxWorkers: "2",
-  logHeapUsage: true,
 };
