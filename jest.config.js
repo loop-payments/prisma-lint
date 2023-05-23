@@ -23,7 +23,8 @@ const unitTestConfig = {
     "^(\\.{1,2}/.*)\\.js$": "$1",
   },
   transform: {
-    "^.+\\.ts$": ["ts-jest", { useESM: true }],
+    // https://github.com/kulshekhar/ts-jest/issues/4081
+    "^.+\\.ts$": ["ts-jest", { tsconfig: "./tsconfig.test.json" }],
   },
 };
 
