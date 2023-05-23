@@ -6,6 +6,9 @@ import {
   type RuleDefinition,
 } from "#src/util.js";
 
+/**
+ * Warns if `tenantQid` is not the first field in the model.
+ */
 export default {
   meta: {
     defaultMessage: undefined,

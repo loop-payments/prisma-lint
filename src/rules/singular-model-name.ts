@@ -6,6 +6,21 @@ import {
 import type { Model } from "@mrleebo/prisma-ast";
 import pluralize from "pluralize";
 
+/**
+ * Warns if model name is plural rather than singular.
+ *
+ * @example
+ *   // good
+ *   model User {
+ *     id String @id
+ *   }
+ *
+ *   // bad
+ *   model Users {
+ *     id String @id
+ *   }
+ *
+ */
 export default {
   meta: {
     defaultMessage: "Expected singular model name.",
