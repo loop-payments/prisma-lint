@@ -7,6 +7,9 @@
     "#src/*": "./dist/*"
   },
   "author": "engineering@loop.com",
+  "files": [
+    "dist"
+  ],
   "license": "MIT",
   "devDependencies": {
     "@tsconfig/esm": "^1.0.3",
