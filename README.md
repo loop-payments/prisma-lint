@@ -18,14 +18,41 @@ A work-in-progress linter for Prisma schema files.
 > yarn prisma-lint path/to/schema.prisma
 ```
 
-## Local testing
+## Configuration
+
+In a `.prisma-lint.js` file:
+
+```js
+{
+  plugins: [
+    "prisma-lint-loop",
+  ],
+  rules: {
+    "singular-model-names": ["error"],
+  }
+}
+```
+
+## Development
+
+### Local testing
 
 ```
 > node ./dist/cli.js fixture/valid.prisma
 > node ./dist/cli.js fixture/invalid.prisma
 ```
 
-## TODO
+### TODO
 
-- Support for plugins with `rc-config-loader`
+Features:
+
+- Support for configuration file
+- Support for plugins
+- Plugin repository template
+- Support for ignore comments
 - Prettier CLI output
+
+Internal:
+
+- GitHub Actions
+- package.json sorting
