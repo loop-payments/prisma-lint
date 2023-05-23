@@ -1,0 +1,27 @@
+name: Run PR tests and style checks
+
+on:
+  pull_request:
+    branches:
+      - main
+
+# Cancel tests on old commits when new commits are pushed.
+concurrency:
+  group: pull-request-test-${{ github.head_ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    timeout-minutes: 20
+    runs-on: ubuntu-latest
+    env:
+      NODE_OPTIONS: "--max_old_space_size=6096"
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "18.13.0"
+          cache: "yarn"
+      - run: yarn install
+      - run: yarn tsc
+      - run: yarn test
