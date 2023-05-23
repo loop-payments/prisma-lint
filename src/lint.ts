@@ -24,16 +24,15 @@ export async function lintSchemaSource({
     ([ruleName, ruleDefinition]) =>
       ruleDefinition.create({
         fileName,
-        report: ({ node, description }: ReportedViolation) => {
-          const finalDescription =
-            description ?? ruleDefinition.meta.defaultMessage;
-          if (finalDescription == null) {
-            throw new Error("Expected description");
+        report: ({ node, message }: ReportedViolation) => {
+          const finalMessage = message ?? ruleDefinition.meta.defaultMessage;
+          if (finalMessage == null) {
+            throw new Error(`Expected message for rule ${ruleName}`);
           }
           violations.push({
             ruleName,
             node,
-            message: finalDescription,
+            message: finalMessage,
           });
         },
       })

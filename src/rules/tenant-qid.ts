@@ -30,14 +30,14 @@ export default {
         if (tenantFields[0] == null) {
           context.report({
             node,
-            description:
+            message:
               "Expected tenantQid field to be the first field or have the " +
               "///no-tenant-field comment in the model.",
           });
         } else if (tenantFields[0][1] !== 0) {
           context.report({
             node,
-            description:
+            message:
               "Expected tenantQid field to be the first field in the model.",
           });
         }

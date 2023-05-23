@@ -22,7 +22,7 @@ export type Context = {
 /**
  * Draft violation, as reported by a rule.
  */
-export type ReportedViolation = { node: Model; description?: string };
+export type ReportedViolation = { node: Model; message?: string };
 
 /**
  * Full violation, as returned by the linter.
