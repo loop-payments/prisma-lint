@@ -3,9 +3,9 @@ import fs from "fs";
 import { getSchema } from "@mrleebo/prisma-ast";
 import {
   listModelBlocks,
-  ReportedViolation,
-  RuleRegistry,
-  Violation,
+  type ReportedViolation,
+  type RuleRegistry,
+  type Violation,
 } from "./util.js";
 import { promisify } from "util";
 
