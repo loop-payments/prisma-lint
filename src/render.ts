@@ -8,9 +8,8 @@ function getNodeLabel(node: Model) {
 export const renderViolations = (violations: Violation[]) =>
   violations.flatMap((v) => renderViolation(v));
 
-const renderViolation = ({ ruleName, node, description }: Violation) => [
+const renderViolation = ({
   ruleName,
-  getNodeLabel(node),
-  description,
-  "",
-];
+  node,
+  message: description,
+}: Violation) => [ruleName, getNodeLabel(node), description, ""];

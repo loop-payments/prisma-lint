@@ -20,7 +20,7 @@ describe("lint", () => {
           ruleRegistry: { "singular-model-name": singularModelName },
         });
         expect(violations.length).toEqual(1);
-        expect(violations[0]?.description).toEqual(
+        expect(violations[0]?.message).toEqual(
           "Expected singular model name."
         );
         expect(violations[0]?.ruleName).toEqual("singular-model-name");
@@ -56,7 +56,7 @@ model Users {
           fileName: "fake.ts",
         });
         expect(violations.length).toEqual(1);
-        expect(violations[0]?.description).toEqual(
+        expect(violations[0]?.message).toEqual(
           "Expected singular model name."
         );
         expect(violations[0]?.ruleName).toEqual("singular-model-name");

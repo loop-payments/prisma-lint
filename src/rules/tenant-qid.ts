@@ -8,7 +8,7 @@ import {
 
 export default {
   meta: {
-    defaultDescription: undefined,
+    defaultMessage: undefined,
   },
   create: (context: Context) => {
     return {

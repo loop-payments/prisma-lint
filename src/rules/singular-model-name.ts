@@ -8,7 +8,7 @@ import pluralize from "pluralize";
 
 export default {
   meta: {
-    defaultDescription: "Expected singular model name.",
+    defaultMessage: "Expected singular model name.",
   },
   create: (context: Context) => {
     return {

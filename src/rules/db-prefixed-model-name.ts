@@ -4,7 +4,7 @@ import type { RuleDefinition } from "#src/util.js";
 
 export default {
   meta: {
-    defaultDescription: "Expected model name to start with 'Db'.",
+    defaultMessage: "Expected model name to start with 'Db'.",
   },
   create: (context: Context) => {
     return {

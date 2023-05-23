@@ -28,6 +28,10 @@ describe("singular-model-name", () => {
       }
     `);
       expect(violations.length).toEqual(1);
+      const [violation] = violations;
+      expect(violation.message).toEqual(
+        "Expected model name to start with 'Db'."
+      );
     });
   });
 });

@@ -11,6 +11,9 @@ export const PrismaPropertyType = Enum({
   COMMENT: "comment",
 });
 
+/**
+ * Context passed to rules.
+ */
 export type Context = {
   fileName: string;
   report: (violation: ReportedViolation) => void;
@@ -35,7 +38,7 @@ export type Violation = {
   node: Model;
 
   /** Description of the violation and possibly how to fix. */
-  description: string;
+  message: string;
 };
 
 export type RuleInstance = {
@@ -44,7 +47,7 @@ export type RuleInstance = {
 
 export type RuleDefinition = {
   meta: {
-    defaultDescription: string | undefined;
+    defaultMessage: string | undefined;
   };
   create: (context: Context) => RuleInstance;
 };
