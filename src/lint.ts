@@ -6,7 +6,7 @@ import {
   type ReportedViolation,
   type RuleRegistry,
   type Violation,
-} from "./util.js";
+} from "#src/util.js";
 import { promisify } from "util";
 
 export async function lintSchemaSource({

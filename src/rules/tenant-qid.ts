@@ -4,7 +4,7 @@ import {
   type Context,
   PrismaPropertyType,
   type RuleDefinition,
-} from "../util.js";
+} from "#src/util.js";
 
 export default {
   meta: {

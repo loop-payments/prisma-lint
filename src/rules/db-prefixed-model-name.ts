@@ -1,6 +1,6 @@
-import type { Context } from "../util.js";
+import type { Context } from "#src/util.js";
 import type { Model } from "@mrleebo/prisma-ast";
-import type { RuleDefinition } from "../util.js";
+import type { RuleDefinition } from "#src/util.js";
 
 export default {
   meta: {

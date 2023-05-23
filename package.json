@@ -3,6 +3,9 @@
   "version": "0.0.1",
   "description": "A linter for Prisma schema files.",
   "type": "module",
+  "imports": {
+    "#src/*": "./src/*"
+  },
   "author": "engineering@loop.com",
   "license": "MIT",
   "devDependencies": {

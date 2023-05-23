@@ -1,5 +1,5 @@
-import { lintSchemaFile, lintSchemaSource } from "./lint.js";
-import singularModelName from "./rules/singular-model-name.js";
+import { lintSchemaFile, lintSchemaSource } from "#src/lint.js";
+import singularModelName from "#src/rules/singular-model-name.js";
 
 describe("lint", () => {
   describe("lintSchemaFile", () => {

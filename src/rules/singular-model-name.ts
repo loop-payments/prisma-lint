@@ -2,7 +2,7 @@ import {
   type Context,
   PrismaPropertyType,
   type RuleDefinition,
-} from "../util.js";
+} from "#src/util.js";
 import type { Model } from "@mrleebo/prisma-ast";
 import pluralize from "pluralize";
 

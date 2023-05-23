@@ -1,5 +1,5 @@
-import { lintSchemaSource } from "../lint.js";
-import tenantQid from "./tenant-qid.js";
+import { lintSchemaSource } from "#src/lint.js";
+import tenantQid from "#src/rules/tenant-qid.js";
 
 describe("singular-model-name", () => {
   const run = async (schemaSource: string) =>
