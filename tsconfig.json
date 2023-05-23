@@ -8,7 +8,8 @@
     "moduleResolution": "nodenext",
     "outDir": "./dist",
     "rootDir": "./src",
-    "noImplicitAny": true
+    "noImplicitAny": true,
+    "isolatedModules": false
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules"]
