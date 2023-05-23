@@ -20,7 +20,7 @@ const unitTestConfig = {
     color: "blue",
   },
   moduleNameMapper: {
-    "^(\\.{1,2}/.*)\\.js$": "$1",
+    "^#src/(.*)\\.js$": "<rootDir>/src/$1",
   },
   transform: {
     // https://github.com/kulshekhar/ts-jest/issues/4081
