@@ -4,9 +4,7 @@
     "moduleResolution": "nodenext",
     "outDir": "./dist",
     "rootDir": "./src",
-    "noImplicitAny": true,
-    "importsNotUsedAsValues": "remove",
-    "isolatedModules": false
+    "noImplicitAny": true
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules"]
