@@ -53,9 +53,7 @@ export const lintSchemaFile = async ({
   schemaFile: string;
   ruleRegistry: RuleRegistry;
 }): Promise<Violation[]> => {
-  const fileName = schemaFile.includes(process.cwd())
-    ? schemaFile
-    : path.join(process.cwd(), schemaFile);
+  const fileName = path.resolve(schemaFile);
   const schemaSource = await promisify(fs.readFile)(fileName, {
     encoding: "utf8",
   });
