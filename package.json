@@ -27,7 +27,7 @@
   "packageManager": "yarn@3.3.1",
   "scripts": {
     "build": "tsc",
-    "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js",
+    "test": "node ./node_modules/jest/bin/jest.js",
     "test:cli:invalid": "dist/cli.js fixture/invalid.prisma"
   },
   "dependencies": {
