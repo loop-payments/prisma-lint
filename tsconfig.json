@@ -1,0 +1,11 @@
+{
+  "extends": ["@tsconfig/esm/tsconfig.json", "@tsconfig/node18/tsconfig"],
+  "compilerOptions": {
+    "moduleResolution": "nodenext",
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "noImplicitAny": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
+}
