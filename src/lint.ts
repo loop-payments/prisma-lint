@@ -27,6 +27,9 @@ export async function lintSchemaSource({
     .filter(([_, ruleLevel]) => ruleLevel !== "off")
     .map(([ruleName]) => {
       const ruleDefinition = ruleRegistry[ruleName];
+      if (ruleDefinition == null) {
+        throw new Error("Unable to find rule for " + ruleName);
+      }
       return ruleDefinition.create({
         fileName,
         report: ({ node, message }: ReportedViolation) => {

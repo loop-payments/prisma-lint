@@ -38,8 +38,7 @@ In a `.prisma-lint.js` file:
 ### Local testing
 
 ```
-> node ./dist/cli.js fixture/valid.prisma
-> node ./dist/cli.js fixture/invalid.prisma
+> yarn build && node ./dist/cli.js -c fixture/.prisma-lint.json fixture/invalid.prisma
 ```
 
 ### TODO

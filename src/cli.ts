@@ -8,20 +8,34 @@ import { cosmiconfig } from "cosmiconfig";
 
 program
   .description("A linter for Prisma schema files.")
-  .argument("<schemaFiles...>", "One or more schema files to lint.");
+  .option("-c, --config <path>", "Path to config file.")
+  .argument("<paths...>", "One or more schema files to lint.");
 
 program.parse();
 
 const explorer = cosmiconfig("prisma-lint");
 
+const options = program.opts();
 const { args } = program;
 
-const run = async () => {
-  const result = await explorer.search("fixtures");
+const getConfig = async () => {
+  if (options.config != null) {
+    const result = await explorer.load(options.config);
+    if (result == null) {
+      throw new Error("Failed to load config");
+    }
+    return result.config;
+  }
+
+  const result = await explorer.search();
   if (result == null) {
     throw new Error("Failed to load config");
   }
-  const { config } = result;
+  return result.config;
+};
+
+const run = async () => {
+  const config = await getConfig();
   for (const arg of args) {
     const violations = await lintSchemaFile({
       schemaFile: arg,
