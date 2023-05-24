@@ -11,6 +11,11 @@ export const PrismaPropertyType = Enum({
   COMMENT: "comment",
 });
 
+export type PrismaLintConfig = {
+  rules: Record<string, "error" | "off">;
+  plugins?: string[];
+};
+
 /**
  * Context passed to rules.
  */
@@ -20,7 +25,7 @@ export type Context = {
 };
 
 /**
- * Draft violation, as reported by a rule.
+ * A "draft" violation, as reported by a rule.
  */
 export type ReportedViolation = { node: Model; message?: string };
 

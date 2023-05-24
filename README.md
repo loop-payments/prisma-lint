@@ -28,7 +28,7 @@ In a `.prisma-lint.js` file:
     "prisma-lint-loop",
   ],
   rules: {
-    "singular-model-names": ["error"],
+    "singular-model-names": "error",
   }
 }
 ```

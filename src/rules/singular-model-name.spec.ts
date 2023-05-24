@@ -6,6 +6,11 @@ describe("singular-model-name", () => {
     await lintSchemaSource({
       fileName: "fake.ts",
       schemaSource,
+      config: {
+        rules: {
+          "singular-model-name": "error",
+        },
+      },
       ruleRegistry: { "singular-model-name": singularModelName },
     });
 

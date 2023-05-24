@@ -3,6 +3,7 @@ import fs from "fs";
 import { getSchema } from "@mrleebo/prisma-ast";
 import {
   listModelBlocks,
+  type PrismaLintConfig,
   type ReportedViolation,
   type RuleRegistry,
   type Violation,
@@ -12,17 +13,21 @@ import { promisify } from "util";
 export async function lintSchemaSource({
   fileName,
   schemaSource,
+  config,
   ruleRegistry,
 }: {
   fileName: string;
   schemaSource: string;
+  config: PrismaLintConfig;
   ruleRegistry: RuleRegistry;
 }) {
   const schema = getSchema(schemaSource);
   const violations: Violation[] = [];
-  const ruleInstances = Object.entries(ruleRegistry).map(
-    ([ruleName, ruleDefinition]) =>
-      ruleDefinition.create({
+  const ruleInstances = Object.entries(config.rules)
+    .filter(([_, ruleLevel]) => ruleLevel !== "off")
+    .map(([ruleName]) => {
+      const ruleDefinition = ruleRegistry[ruleName];
+      return ruleDefinition.create({
         fileName,
         report: ({ node, message }: ReportedViolation) => {
           const finalMessage = message ?? ruleDefinition.meta.defaultMessage;
@@ -35,8 +40,8 @@ export async function lintSchemaSource({
             message: finalMessage,
           });
         },
-      })
-  );
+      });
+    });
   const modelNodes = listModelBlocks(schema);
   modelNodes.forEach((modelNode) => {
     ruleInstances.forEach((ruleInstance) => {
@@ -47,15 +52,22 @@ export async function lintSchemaSource({
 }
 
 export const lintSchemaFile = async ({
+  config,
   schemaFile,
   ruleRegistry,
 }: {
   schemaFile: string;
+  config: PrismaLintConfig;
   ruleRegistry: RuleRegistry;
 }): Promise<Violation[]> => {
   const fileName = path.resolve(schemaFile);
   const schemaSource = await promisify(fs.readFile)(fileName, {
     encoding: "utf8",
   });
-  return await lintSchemaSource({ schemaSource, fileName, ruleRegistry });
+  return await lintSchemaSource({
+    schemaSource,
+    fileName,
+    config,
+    ruleRegistry,
+  });
 };
