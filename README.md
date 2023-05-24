@@ -20,14 +20,14 @@ A work-in-progress linter for Prisma schema files.
 
 ## Configuration
 
-In a `.prisma-lint.js` file:
+In a `.prisma-lint.json` file:
 
 ```js
 {
-  plugins: [
+  "plugins": [
     "prisma-lint-loop",
   ],
-  rules: {
+  "rules": {
     "singular-model-names": "error",
   }
 }
