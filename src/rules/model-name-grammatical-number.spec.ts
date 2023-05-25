@@ -1,9 +1,9 @@
 import modelNameGrammaticalNumber from "#src/rules/model-name-grammatical-number.js";
 import { lintSchemaSource } from "#src/lint.js";
-import type { RuleConfigValue } from "#src/util.js";
+import type { RuleConfig } from "#src/util.js";
 
 describe("model-name-grammatical-number", () => {
-  const getRunner = (config: RuleConfigValue) => async (schemaSource: string) =>
+  const getRunner = (config: RuleConfig) => async (schemaSource: string) =>
     await lintSchemaSource({
       fileName: "fake.ts",
       schemaSource,

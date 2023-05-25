@@ -1,6 +1,6 @@
 import {
   type Context,
-  type RuleConfigValue,
+  type RuleConfig,
   type RuleDefinition,
 } from "#src/util.js";
 import type { Model } from "@mrleebo/prisma-ast";
@@ -36,7 +36,7 @@ export default {
   meta: {
     defaultMessage: undefined,
   },
-  create: (config: RuleConfigValue, context: Context) => {
+  create: (config: RuleConfig, context: Context) => {
     const { enforcedStyle } = config;
     if (
       typeof enforcedStyle !== "string" ||

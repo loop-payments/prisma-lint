@@ -30,12 +30,12 @@ export const PrismaPropertyType = Enum({
   COMMENT: "comment",
 });
 
+export type RuleConfig = Record<string, unknown>;
 export type RuleConfigLevel = "error" | "off";
-export type RuleConfigValue = Record<string, unknown>;
-export type RuleConfig = RuleConfigLevel | [RuleConfigLevel, RuleConfigValue];
+export type RuleConfigValue = RuleConfigLevel | [RuleConfigLevel, RuleConfig];
 
 export type PrismaLintConfig = {
-  rules: Record<string, RuleConfig>;
+  rules: Record<string, RuleConfigValue>;
   plugins?: string[];
 };
 
@@ -77,7 +77,7 @@ export type RuleDefinition = {
   meta: {
     defaultMessage: string | undefined;
   };
-  create: (config: RuleConfigValue, context: Context) => RuleInstance;
+  create: (config: RuleConfig, context: Context) => RuleInstance;
 };
 
 export type RuleRegistry = Record<string, RuleDefinition>;

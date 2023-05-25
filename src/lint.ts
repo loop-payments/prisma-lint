@@ -8,29 +8,29 @@ import {
   listModelBlocks,
   type PrismaLintConfig,
   type ReportedViolation,
-  type RuleConfig,
+  type RuleConfigValue,
   type RuleInstance,
   type RuleRegistry,
   type Violation,
 } from "#src/util.js";
 import { promisify } from "util";
 
-function getRuleLevel(ruleConfig: RuleConfig) {
-  if (Array.isArray(ruleConfig)) {
-    return ruleConfig[0];
+function getRuleLevel(value: RuleConfigValue) {
+  if (Array.isArray(value)) {
+    return value[0];
   }
-  return ruleConfig;
+  return value;
 }
 
-function getRuleConfigValue(ruleConfig: RuleConfig) {
-  if (Array.isArray(ruleConfig)) {
-    return ruleConfig[1] ?? {};
+function getRuleConfig(value: RuleConfigValue) {
+  if (Array.isArray(value)) {
+    return value[1] ?? {};
   }
   return {};
 }
 
-function isRuleEnabled([_, ruleConfig]: [string, RuleConfig]) {
-  return getRuleLevel(ruleConfig) !== "off";
+function isRuleEnabled([_, value]: [string, RuleConfigValue]) {
+  return getRuleLevel(value) !== "off";
 }
 
 export async function lintSchemaSource({
@@ -53,7 +53,7 @@ export async function lintSchemaSource({
       if (ruleDefinition == null) {
         throw new Error("Unable to find rule for " + ruleName);
       }
-      const config = getRuleConfigValue(ruleConfig);
+      const config = getRuleConfig(ruleConfig);
       const context = {
         fileName,
         report: ({ node, message }: ReportedViolation) => {
