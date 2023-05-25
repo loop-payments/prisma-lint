@@ -10,6 +10,7 @@ import {
   type ReportedViolation,
   type RuleConfigValue,
   type RuleInstance,
+  type RuleName,
   type RuleRegistry,
   type Violation,
 } from "#src/util.js";
@@ -29,7 +30,7 @@ function getRuleConfig(value: RuleConfigValue) {
   return {};
 }
 
-function isRuleEnabled([_, value]: [string, RuleConfigValue]) {
+function isRuleEnabled([_, value]: [RuleName, RuleConfigValue]) {
   return getRuleLevel(value) !== "off";
 }
 
@@ -46,7 +47,7 @@ export async function lintSchemaSource({
 }) {
   const schema = getSchema(schemaSource);
   const violations: Violation[] = [];
-  const rules: [string, RuleInstance][] = Object.entries(config.rules)
+  const rules: [RuleName, RuleInstance][] = Object.entries(config.rules)
     .filter(isRuleEnabled)
     .map(([ruleName, ruleConfig]) => {
       const ruleDefinition = ruleRegistry[ruleName];
