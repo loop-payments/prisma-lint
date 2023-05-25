@@ -8,15 +8,26 @@ import type { Model } from "@mrleebo/prisma-ast";
 import pluralize from "pluralize";
 
 /**
- * Warns if model name is plural rather than singular.
+ * Warns if model name does not match plural or singlar convention.
  *
- * @example
+ * @example grammaticalNumber: "singular"
  *   // good
  *   model User {
  *     id String @id
  *   }
  *
  *   // bad
+ *   model Users {
+ *     id String @id
+ *   }
+ *
+ * @example grammaticalNumber: "plural"
+ *   // bad
+ *   model User {
+ *     id String @id
+ *   }
+ *
+ *   // good
  *   model Users {
  *     id String @id
  *   }
