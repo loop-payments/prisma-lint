@@ -2,10 +2,14 @@ import path from "path";
 import fs from "fs";
 import { getSchema } from "@mrleebo/prisma-ast";
 import {
+  isModelEntirelyIgnored,
+  isRuleIgnored,
+  listIgnoreModelComments,
   listModelBlocks,
   type PrismaLintConfig,
   type ReportedViolation,
   type RuleConfig,
+  type RuleInstance,
   type RuleRegistry,
   type Violation,
 } from "#src/util.js";
@@ -42,7 +46,7 @@ export async function lintSchemaSource({
 }) {
   const schema = getSchema(schemaSource);
   const violations: Violation[] = [];
-  const ruleInstances = Object.entries(config.rules)
+  const rules: [string, RuleInstance][] = Object.entries(config.rules)
     .filter(isRuleEnabled)
     .map(([ruleName, ruleConfig]) => {
       const ruleDefinition = ruleRegistry[ruleName];
@@ -64,13 +68,20 @@ export async function lintSchemaSource({
           });
         },
       };
-      return ruleDefinition.create(config, context);
+      const ruleInstance = ruleDefinition.create(config, context);
+      return [ruleName, ruleInstance];
     });
   const modelNodes = listModelBlocks(schema);
   modelNodes.forEach((modelNode) => {
-    ruleInstances.forEach((ruleInstance) => {
-      ruleInstance.Model(modelNode);
-    });
+    const comments = listIgnoreModelComments(modelNode);
+    if (isModelEntirelyIgnored(comments)) {
+      return;
+    }
+    rules
+      .filter(([ruleName]) => !isRuleIgnored(ruleName, comments))
+      .forEach(([_, ruleInstance]) => {
+        ruleInstance.Model(modelNode);
+      });
   });
   return violations;
 }

@@ -17,6 +17,30 @@ describe("model-name-grammatical-number", () => {
       },
     });
 
+  describe("ignore comments", () => {
+    const run = getRunner({ grammaticalNumber: "singular" });
+
+    it("respects rule-specific ignore comments", async () => {
+      const violations = await run(`
+    model Users {
+      /// prisma-lint-ignore-model model-name-grammatical-number
+      id String @id
+    }
+    `);
+      expect(violations.length).toEqual(0);
+    });
+
+    it("respects model-wide ignore comments", async () => {
+      const violations = await run(`
+    model Users {
+      /// prisma-lint-ignore-model
+      id String @id
+    }
+    `);
+      expect(violations.length).toEqual(0);
+    });
+  });
+
   describe("expecting singular", () => {
     const run = getRunner({ grammaticalNumber: "singular" });
 

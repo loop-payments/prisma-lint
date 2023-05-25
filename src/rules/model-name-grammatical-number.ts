@@ -50,14 +50,6 @@ export default {
     }
     return {
       Model: (node: Model) => {
-        const commentFields = node.properties.filter(
-          (p: any) => p.type === PrismaPropertyType.COMMENT
-        ) as any[];
-        const hasOmitComment =
-          commentFields.length > 0 && commentFields[0].text === "///not-plural";
-        if (hasOmitComment) {
-          return;
-        }
         const isPlural = pluralize.isPlural(node.name);
         if (isPlural && grammaticalNumber === "singular") {
           context.report({ node, message: "Expected singular model name." });
