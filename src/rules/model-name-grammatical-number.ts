@@ -1,6 +1,5 @@
 import {
   type Context,
-  PrismaPropertyType,
   type RuleConfigValue,
   type RuleDefinition,
 } from "#src/util.js";
@@ -10,7 +9,7 @@ import pluralize from "pluralize";
 /**
  * Warns if model name does not match plural or singlar convention.
  *
- * @example grammaticalNumber: "singular"
+ * @example enforcedStyle: "singular"
  *   // good
  *   model User {
  *     id String @id
@@ -21,14 +20,14 @@ import pluralize from "pluralize";
  *     id String @id
  *   }
  *
- * @example grammaticalNumber: "plural"
- *   // bad
- *   model User {
+ * @example enforcedStyle: "plural"
+ *   // good
+ *   model Users {
  *     id String @id
  *   }
  *
- *   // good
- *   model Users {
+ *   // bad
+ *   model User {
  *     id String @id
  *   }
  *
@@ -38,23 +37,23 @@ export default {
     defaultMessage: undefined,
   },
   create: (config: RuleConfigValue, context: Context) => {
-    const { grammaticalNumber } = config;
+    const { grammaticalNumber: enforcedStyle } = config;
     if (
-      typeof grammaticalNumber !== "string" ||
-      ["singular", "plural"].includes(grammaticalNumber) === false
+      typeof enforcedStyle !== "string" ||
+      ["singular", "plural"].includes(enforcedStyle) === false
     ) {
       throw new Error(
         `Expected grammaticalNumber to be one of ` +
-          `"singular" or "plural", got ${grammaticalNumber}`
+          `"singular" or "plural", got ${enforcedStyle}`
       );
     }
     return {
       Model: (node: Model) => {
         const isPlural = pluralize.isPlural(node.name);
-        if (isPlural && grammaticalNumber === "singular") {
+        if (isPlural && enforcedStyle === "singular") {
           context.report({ node, message: "Expected singular model name." });
         }
-        if (!isPlural && grammaticalNumber === "plural") {
+        if (!isPlural && enforcedStyle === "plural") {
           context.report({ node, message: "Expected plural model name." });
         }
       },

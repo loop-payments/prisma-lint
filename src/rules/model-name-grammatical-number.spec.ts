@@ -1,6 +1,6 @@
 import modelNameGrammaticalNumber from "#src/rules/model-name-grammatical-number.js";
 import { lintSchemaSource } from "#src/lint.js";
-import type { RuleConfigValue } from "../util.js";
+import type { RuleConfigValue } from "#src/util.js";
 
 describe("model-name-grammatical-number", () => {
   const getRunner = (config: RuleConfigValue) => async (schemaSource: string) =>
@@ -18,7 +18,7 @@ describe("model-name-grammatical-number", () => {
     });
 
   describe("ignore comments", () => {
-    const run = getRunner({ grammaticalNumber: "singular" });
+    const run = getRunner({ enforcedStyle: "singular" });
 
     it("respects rule-specific ignore comments", async () => {
       const violations = await run(`
@@ -42,7 +42,7 @@ describe("model-name-grammatical-number", () => {
   });
 
   describe("expecting singular", () => {
-    const run = getRunner({ grammaticalNumber: "singular" });
+    const run = getRunner({ enforcedStyle: "singular" });
 
     describe("singular", () => {
       it("returns no violations", async () => {
@@ -68,7 +68,7 @@ describe("model-name-grammatical-number", () => {
   });
 
   describe("expecting plural", () => {
-    const run = getRunner({ grammaticalNumber: "plural" });
+    const run = getRunner({ enforcedStyle: "plural" });
     describe("singular", () => {
       it("returns violation", async () => {
         const violations = await run(`
