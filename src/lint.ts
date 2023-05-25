@@ -5,10 +5,29 @@ import {
   listModelBlocks,
   type PrismaLintConfig,
   type ReportedViolation,
+  type RuleConfig,
   type RuleRegistry,
   type Violation,
 } from "#src/util.js";
 import { promisify } from "util";
+
+function getRuleLevel(ruleConfig: RuleConfig) {
+  if (Array.isArray(ruleConfig)) {
+    return ruleConfig[0];
+  }
+  return ruleConfig;
+}
+
+function getRuleConfigValue(ruleConfig: RuleConfig) {
+  if (Array.isArray(ruleConfig)) {
+    return ruleConfig[1] ?? {};
+  }
+  return {};
+}
+
+function isRuleEnabled([_, ruleConfig]: [string, RuleConfig]) {
+  return getRuleLevel(ruleConfig) !== "off";
+}
 
 export async function lintSchemaSource({
   fileName,
@@ -24,26 +43,28 @@ export async function lintSchemaSource({
   const schema = getSchema(schemaSource);
   const violations: Violation[] = [];
   const ruleInstances = Object.entries(config.rules)
-    .filter(([_, ruleLevel]) => ruleLevel !== "off")
-    .map(([ruleName]) => {
+    .filter(isRuleEnabled)
+    .map(([ruleName, ruleConfig]) => {
       const ruleDefinition = ruleRegistry[ruleName];
       if (ruleDefinition == null) {
         throw new Error("Unable to find rule for " + ruleName);
       }
-      return ruleDefinition.create({
+      const config = getRuleConfigValue(ruleConfig);
+      const context = {
         fileName,
         report: ({ node, message }: ReportedViolation) => {
-          const finalMessage = message ?? ruleDefinition.meta.defaultMessage;
-          if (finalMessage == null) {
+          message = message ?? ruleDefinition.meta.defaultMessage;
+          if (message == null) {
             throw new Error(`Expected message for rule ${ruleName}`);
           }
           violations.push({
             ruleName,
             node,
-            message: finalMessage,
+            message,
           });
         },
-      });
+      };
+      return ruleDefinition.create(config, context);
     });
   const modelNodes = listModelBlocks(schema);
   modelNodes.forEach((modelNode) => {

@@ -1,6 +1,7 @@
 import {
   type Context,
   PrismaPropertyType,
+  type RuleConfigValue,
   type RuleDefinition,
 } from "#src/util.js";
 import type { Model } from "@mrleebo/prisma-ast";
@@ -23,9 +24,19 @@ import pluralize from "pluralize";
  */
 export default {
   meta: {
-    defaultMessage: "Expected singular model name.",
+    defaultMessage: undefined,
   },
-  create: (context: Context) => {
+  create: (config: RuleConfigValue, context: Context) => {
+    const { grammaticalNumber } = config;
+    if (
+      typeof grammaticalNumber !== "string" ||
+      ["singular", "plural"].includes(grammaticalNumber) === false
+    ) {
+      throw new Error(
+        `Expected grammaticalNumber to be one of ` +
+          `"singular" or "plural", got ${grammaticalNumber}`
+      );
+    }
     return {
       Model: (node: Model) => {
         const commentFields = node.properties.filter(
@@ -36,8 +47,12 @@ export default {
         if (hasOmitComment) {
           return;
         }
-        if (pluralize.isPlural(node.name)) {
-          context.report({ node });
+        const isPlural = pluralize.isPlural(node.name);
+        if (isPlural && grammaticalNumber === "singular") {
+          context.report({ node, message: "Expected singular model name." });
+        }
+        if (!isPlural && grammaticalNumber === "plural") {
+          context.report({ node, message: "Expected plural model name." });
         }
       },
     };
