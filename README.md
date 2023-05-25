@@ -28,7 +28,9 @@ In a `.prisma-lint.json` file:
     "prisma-lint-loop",
   ],
   "rules": {
-    "singular-model-name": "error",
+    "model-name-grammatical-number": ["error", {
+      "enforcedStyle": "singular"
+    }],
   }
 }
 ```

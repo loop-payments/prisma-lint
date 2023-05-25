@@ -7,7 +7,7 @@ import type { Model } from "@mrleebo/prisma-ast";
 import pluralize from "pluralize";
 
 /**
- * Warns if model name does not match plural or singlar convention.
+ * Errors if model name does not match plural or singlar enforced style.
  *
  * @example enforcedStyle: "singular"
  *   // good
@@ -37,13 +37,13 @@ export default {
     defaultMessage: undefined,
   },
   create: (config: RuleConfigValue, context: Context) => {
-    const { grammaticalNumber: enforcedStyle } = config;
+    const { enforcedStyle } = config;
     if (
       typeof enforcedStyle !== "string" ||
       ["singular", "plural"].includes(enforcedStyle) === false
     ) {
       throw new Error(
-        `Expected grammaticalNumber to be one of ` +
+        `Expected enforcedStyle to be one of ` +
           `"singular" or "plural", got ${enforcedStyle}`
       );
     }
