@@ -1,5 +1,8 @@
 {
   "rules": {
-    "singular-model-name": "error"
+    "model-name-grammatical-number": [
+      "error",
+      { "grammaticalNumber": "singular" }
+    ]
   }
 }
