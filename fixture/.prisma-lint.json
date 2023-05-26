@@ -1,5 +1,6 @@
 {
   "rules": {
-    "model-name-grammatical-number": ["error", { "enforcedStyle": "singular" }]
+    "model-name-grammatical-number": ["error", { "enforcedStyle": "singular" }],
+    "model-name-prefix": ["error", { "prefix": "Db" }]
   }
 }

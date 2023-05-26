@@ -31,6 +31,9 @@ In a `.prisma-lint.json` file:
     "model-name-grammatical-number": ["error", {
       "enforcedStyle": "singular"
     }],
+    "model-name-prefix": ["error", {
+      "prefix": "Db"
+    }]
   }
 }
 ```

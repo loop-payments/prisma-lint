@@ -8,7 +8,12 @@ datasource db {
   url      = "fake-url"
 }
 
-model User {
+model DbUser {
   id         String @id
   @@map(name: "user")
+}
+
+model DbTenant {
+  id         String @id
+  @@map(name: "tenant")
 }
