@@ -1,6 +1,6 @@
 import modelNameGrammaticalNumber from "#src/rules/model-name-grammatical-number.js";
 import { lintSchemaSource } from "#src/lint.js";
-import type { RuleConfig } from "#src/util.js";
+import type { RuleConfig } from "#src/common/config.js";
 
 describe("model-name-grammatical-number", () => {
   const getRunner = (config: RuleConfig) => async (schemaSource: string) =>

@@ -1,20 +1,27 @@
 import path from "path";
 import fs from "fs";
-import { getSchema } from "@mrleebo/prisma-ast";
+import { getSchema, type Model, type Schema } from "@mrleebo/prisma-ast";
+import { promisify } from "util";
+import type {
+  PrismaLintConfig,
+  RuleConfigValue,
+  RuleName,
+} from "#src/common/config.js";
+import type {
+  ReportedViolation,
+  RuleInstance,
+  RuleRegistry,
+  Violation,
+} from "#src/common/rule.js";
 import {
   isModelEntirelyIgnored,
   isRuleIgnored,
   listIgnoreModelComments,
-  listModelBlocks,
-  type PrismaLintConfig,
-  type ReportedViolation,
-  type RuleConfigValue,
-  type RuleInstance,
-  type RuleName,
-  type RuleRegistry,
-  type Violation,
-} from "#src/util.js";
-import { promisify } from "util";
+} from "#src/common/ignore.js";
+
+function listModelBlocks(schema: Schema) {
+  return schema.list.filter((block): block is Model => block.type === "model");
+}
 
 function getRuleLevel(value: RuleConfigValue) {
   if (Array.isArray(value)) {

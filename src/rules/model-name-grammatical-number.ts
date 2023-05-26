@@ -1,10 +1,7 @@
-import {
-  type Context,
-  type RuleConfig,
-  type RuleDefinition,
-} from "#src/util.js";
 import type { Model } from "@mrleebo/prisma-ast";
 import pluralize from "pluralize";
+import type { RuleConfig } from "#src/common/config.js";
+import type { Context, RuleDefinition } from "#src/common/rule.js";
 
 /**
  * Errors if model name does not match plural or singlar enforced style.

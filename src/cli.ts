@@ -3,8 +3,8 @@
 import { program } from "commander";
 import { lintSchemaFile } from "#src/lint.js";
 import ruleRegistry from "#src/rule-registry.js";
-import { renderViolations } from "#src/render.js";
 import { cosmiconfig } from "cosmiconfig";
+import { renderViolations } from "#src/common/render.js";
 
 program
   .description("A linter for Prisma schema files.")
