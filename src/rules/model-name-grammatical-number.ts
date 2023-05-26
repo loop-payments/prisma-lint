@@ -4,7 +4,9 @@ import type { RuleConfig } from "#src/common/config.js";
 import type { Context, RuleDefinition } from "#src/common/rule.js";
 
 /**
- * Errors if model name does not match plural or singlar enforced style.
+ * Requires model name to match plural or singlar enforced style.
+ *
+ * https://en.wikipedia.org/wiki/Grammatical_number
  *
  * @example enforcedStyle: "singular"
  *   // good
