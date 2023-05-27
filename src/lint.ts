@@ -18,12 +18,9 @@ import {
   listIgnoreModelComments,
 } from '#src/common/ignore.js';
 import { listModelBlocks } from '#src/common/prisma.js';
-import type {
-  ReportedViolation,
-  RuleInstance,
-  RuleRegistry,
-  Violation,
-} from '#src/common/rule.js';
+import type { RuleInstance, RuleRegistry } from '#src/common/rule.js';
+
+import type { ReportedViolation, Violation } from '#src/common/violation.js';
 
 function isRuleEnabled([_, value]: [RuleName, RuleConfigValue]) {
   return getRuleLevel(value) !== 'off';

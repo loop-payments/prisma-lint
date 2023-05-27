@@ -1,8 +1,8 @@
-import type { Model } from "@mrleebo/prisma-ast";
-import pluralize from "pluralize";
+import type { Model } from '@mrleebo/prisma-ast';
+import pluralize from 'pluralize';
 
-import type { RuleConfig } from "#src/common/config.js";
-import type { Context, RuleDefinition } from "#src/common/rule.js";
+import type { RuleConfig } from '#src/common/config.js';
+import type { RuleContext, RuleDefinition } from '#src/common/rule.js';
 
 /**
  * Requires model name to match plural or singlar enforced style.
@@ -33,25 +33,25 @@ import type { Context, RuleDefinition } from "#src/common/rule.js";
  *
  */
 export default {
-  create: (config: RuleConfig, context: Context) => {
+  create: (config: RuleConfig, context: RuleContext) => {
     const { enforcedStyle } = config;
     if (
-      typeof enforcedStyle !== "string" ||
-      ["singular", "plural"].includes(enforcedStyle) === false
+      typeof enforcedStyle !== 'string' ||
+      ['singular', 'plural'].includes(enforcedStyle) === false
     ) {
       throw new Error(
-        "Expected enforcedStyle to be one of " +
+        'Expected enforcedStyle to be one of ' +
           `"singular" or "plural", got ${enforcedStyle}`
       );
     }
     return {
       Model: (node: Model) => {
         const isPlural = pluralize.isPlural(node.name);
-        if (isPlural && enforcedStyle === "singular") {
-          context.report({ node, message: "Expected singular model name." });
+        if (isPlural && enforcedStyle === 'singular') {
+          context.report({ node, message: 'Expected singular model name.' });
         }
-        if (!isPlural && enforcedStyle === "plural") {
-          context.report({ node, message: "Expected plural model name." });
+        if (!isPlural && enforcedStyle === 'plural') {
+          context.report({ node, message: 'Expected plural model name.' });
         }
       },
     };

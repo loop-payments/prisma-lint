@@ -1,7 +1,7 @@
-import type { Model } from "@mrleebo/prisma-ast";
+import type { Model } from '@mrleebo/prisma-ast';
 
-import type { RuleConfig } from "#src/common/config.js";
-import type { Context, RuleDefinition } from "#src/common/rule.js";
+import type { RuleConfig } from '#src/common/config.js';
+import type { RuleContext, RuleDefinition } from '#src/common/rule.js';
 
 /**
  * Requires model names to include a prefix.
@@ -25,9 +25,9 @@ import type { Context, RuleDefinition } from "#src/common/rule.js";
  *
  */
 export default {
-  create: (config: RuleConfig, context: Context) => {
+  create: (config: RuleConfig, context: RuleContext) => {
     const { prefix } = config;
-    if (typeof prefix !== "string") {
+    if (typeof prefix !== 'string') {
       throw new Error(`Expected string prefix, got ${JSON.stringify(prefix)}`);
     }
     return {
