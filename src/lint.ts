@@ -14,7 +14,7 @@ import {
 } from '#src/common/config.js';
 import {
   isModelEntirelyIgnored,
-  isRuleIgnored,
+  isRuleEntirelyIgnored,
   listIgnoreModelComments,
 } from '#src/common/ignore.js';
 import { listModelBlocks, listFields } from '#src/common/prisma.js';
@@ -67,7 +67,7 @@ export async function lintSchemaSource({
     }
     const fields = listFields(model);
     rules
-      .filter(([ruleName]) => !isRuleIgnored(ruleName, comments))
+      .filter(([ruleName]) => !isRuleEntirelyIgnored(ruleName, comments))
       .forEach(([_, ruleInstance]) => {
         if ('Model' in ruleInstance) {
           ruleInstance.Model(model);

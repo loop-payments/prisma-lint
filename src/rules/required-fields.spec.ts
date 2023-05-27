@@ -18,25 +18,38 @@ describe('required-fields', () => {
     });
 
   describe('ignore comments', () => {
-    const run = getRunner({ requiredFields: ['tenantId'] });
+    const run = getRunner({
+      requiredFields: ['tenantId', 'createdAt', 'revisionCreatedAt'],
+    });
 
     it('respects rule-specific ignore comments', async () => {
       const violations = await run(`
-    model Products {
-      /// prisma-lint-ignore-model required-fields
-      id String @id
-    }
-    `);
+        model Products {
+          /// prisma-lint-ignore-model required-fields
+          id String @id
+        }
+        `);
       expect(violations.length).toEqual(0);
+    });
+
+    it('respects field-specific ignore comments', async () => {
+      const violations = await run(`
+        model Products {
+          /// prisma-lint-ignore-model required-fields tenantId,createdAt
+          id String @id
+        }
+        `);
+      expect(violations.length).toEqual(1);
+      expect(violations[0].message).toContain('revisionCreatedAt');
     });
 
     it('respects model-wide ignore comments', async () => {
       const violations = await run(`
-    model Products {
-      /// prisma-lint-ignore-model
-      id String @id
-    }
-    `);
+        model Products {
+          /// prisma-lint-ignore-model
+          id String @id
+        }
+      `);
       expect(violations.length).toEqual(0);
     });
   });

@@ -1,3 +1,4 @@
+import { getRuleIgnoreParams } from '#src/common/ignore.js';
 import { listFields } from '#src/common/prisma.js';
 import type { ModelRuleDefinition } from '#src/common/rule.js';
 
@@ -22,6 +23,14 @@ import type { ModelRuleDefinition } from '#src/common/rule.js';
  *     ifField: "/[a|A]mountD6$/";
  *   }
  *
+ * This rules supports selective ignoring via the `prisma-lint-ignore-model`
+ * comment, like so:
+ *
+ *   /// prisma-lint-ignore-model required-fields tenantId
+ *
+ * That will ignore only `tenantId` field violations for the model. Other
+ * required fields will still be enforced. A comma-separated list of fields
+ * can be provided to ignore multiple required fields.
  *
  * @example requiredFields: ["id"]
  *   // good
@@ -89,8 +98,12 @@ export default {
       });
     return {
       Model: (model) => {
+        const ruleIgnoreParams = getRuleIgnoreParams(model, 'required-fields');
         const fields = listFields(model);
         const fieldNameSet = new Set(fields.map((f) => f.name));
+        for (const param of ruleIgnoreParams) {
+          fieldNameSet.delete(param);
+        }
         const missingFields = [];
         for (const requiredName of requiredNames) {
           if (!fieldNameSet.has(requiredName)) {
