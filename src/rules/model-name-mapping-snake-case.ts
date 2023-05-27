@@ -1,4 +1,4 @@
-import type { Model, ModelAttribute } from '@mrleebo/prisma-ast';
+import type { ModelAttribute } from '@mrleebo/prisma-ast';
 
 import { findNameAttributeArg, listAttributes } from '#src/common/prisma.js';
 import type { ModelRuleDefinition } from '#src/common/rule.js';
@@ -71,7 +71,7 @@ export default {
     }
     const trimPrefix = (trimPrefixRaw as string) || undefined;
     return {
-      Model: (model: Model) => {
+      Model: (model) => {
         const attributes = listAttributes(model);
         const mapAttribute = findMapAttribute(attributes);
         if (!mapAttribute) {

@@ -1,4 +1,4 @@
-import type { Attribute, Field, Model } from '@mrleebo/prisma-ast';
+import type { Attribute, Field } from '@mrleebo/prisma-ast';
 
 import {
   PRISMA_SCALAR_TYPES,
@@ -55,7 +55,7 @@ export default {
     }
     const compoundWords = (compoundWordsRaw as string[]) || undefined;
     return {
-      Field: (model: Model, field: Field) => {
+      Field: (model, field) => {
         if (allowedToHaveNoMapping(field)) {
           return;
         }

@@ -1,5 +1,3 @@
-import type { Model } from '@mrleebo/prisma-ast';
-
 import type { ModelRuleDefinition } from '#src/common/rule.js';
 
 /**
@@ -30,7 +28,7 @@ export default {
       throw new Error(`Expected string prefix, got ${JSON.stringify(prefix)}`);
     }
     return {
-      Model: (model: Model) => {
+      Model: (model) => {
         if (model.name.startsWith(prefix)) {
           return;
         }

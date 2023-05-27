@@ -1,4 +1,3 @@
-import type { Model } from '@mrleebo/prisma-ast';
 import pluralize from 'pluralize';
 
 import type { ModelRuleDefinition } from '#src/common/rule.js';
@@ -44,7 +43,7 @@ export default {
       );
     }
     return {
-      Model: (model: Model) => {
+      Model: (model) => {
         const isPlural = pluralize.isPlural(model.name);
         if (isPlural && enforcedStyle === 'singular') {
           context.report({ model, message: 'Expected singular model name.' });
