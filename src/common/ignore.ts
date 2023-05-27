@@ -27,7 +27,7 @@ export function isRuleEntirelyIgnored(
 export function getRuleIgnoreParams(model: Model, ruleName: string) {
   const ignoreModelComments = listIgnoreModelComments(model);
   const ruleIgnoreComment = ignoreModelComments.find((c) =>
-    c.startsWith(`${IGNORE_MODEL} ${ruleName}`),
+    c.startsWith(`${IGNORE_MODEL} ${ruleName} `),
   );
   if (ruleIgnoreComment == null) {
     return [];

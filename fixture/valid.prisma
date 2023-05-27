@@ -15,7 +15,7 @@ model DbUser {
 }
 
 model DbTenant {
-  /// prisma-lint-ignore-model required-fields createdAt
+  /// prisma-lint-ignore-model required-field createdAt
   id         String @id
   @@map(name: "tenant")
 }
