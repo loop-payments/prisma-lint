@@ -12,3 +12,13 @@ model Users {
   id         String @id
   @@map(name: "users")
 }
+
+model UserRole {
+  id         String @id
+  @@map(name: "unexpected_snake_case")
+}
+
+model UserRole {
+  id         String @id
+  // No mapping.
+}

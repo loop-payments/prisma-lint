@@ -31,6 +31,10 @@ In a `.prisma-lint.json` file:
     "model-name-grammatical-number": ["error", {
       "enforcedStyle": "singular"
     }],
+    "model-name-mapping-snake-case": ["error", {
+      "compoundWords": ["GraphQL"],
+      "trimPrefix": "Db"
+    }],
     "model-name-prefix": ["error", {
       "prefix": "Db"
     }]
