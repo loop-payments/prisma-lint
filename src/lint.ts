@@ -3,7 +3,7 @@ import path from 'path';
 
 import { promisify } from 'util';
 
-import { getSchema, type Field } from '@mrleebo/prisma-ast';
+import { getSchema } from '@mrleebo/prisma-ast';
 
 import {
   getRuleConfig,
@@ -17,7 +17,7 @@ import {
   isRuleIgnored,
   listIgnoreModelComments,
 } from '#src/common/ignore.js';
-import { listModelBlocks } from '#src/common/prisma.js';
+import { listModelBlocks, listFields } from '#src/common/prisma.js';
 import type { RuleInstance, RuleRegistry } from '#src/common/rule.js';
 
 import type { Violation, NodeViolation } from '#src/common/violation.js';
@@ -59,24 +59,22 @@ export async function lintSchemaSource({
     });
 
   // Run each rule instance for each AST node.
-  const modelNodes = listModelBlocks(schema);
-  modelNodes.forEach((modelNode) => {
-    const comments = listIgnoreModelComments(modelNode);
+  const models = listModelBlocks(schema);
+  models.forEach((model) => {
+    const comments = listIgnoreModelComments(model);
     if (isModelEntirelyIgnored(comments)) {
       return;
     }
-    const fields = modelNode.properties.filter(
-      (property) => property.type === 'field',
-    ) as Field[];
+    const fields = listFields(model);
     rules
       .filter(([ruleName]) => !isRuleIgnored(ruleName, comments))
       .forEach(([_, ruleInstance]) => {
         if ('Model' in ruleInstance) {
-          ruleInstance.Model(modelNode);
+          ruleInstance.Model(model);
         }
         if ('Field' in ruleInstance) {
           fields.forEach((field) => {
-            ruleInstance.Field(modelNode, field);
+            ruleInstance.Field(model, field);
           });
         }
       });

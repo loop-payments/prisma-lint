@@ -1,12 +1,18 @@
 import { Enum } from '@kejistan/enum';
 import type {
   AttributeArgument,
+  Field,
   KeyValue,
   Model,
   ModelAttribute,
   Schema,
 } from '@mrleebo/prisma-ast';
 
+export function listFields(model: Model): Field[] {
+  return model.properties.filter(
+    (property) => property.type === 'field',
+  ) as Field[];
+}
 export const PRISMA_SCALAR_TYPES = new Set<string>([
   'String',
   'Boolean',
