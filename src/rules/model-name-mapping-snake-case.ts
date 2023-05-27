@@ -97,7 +97,7 @@ export default {
           return;
         }
         const nodeName = node.name;
-        const mappedName = nameAttribute.value.value;
+        const mappedName = nameAttribute.value.value.replaceAll('"', "");
         const expectedSnakeCase = getExpectedSnakeCase(nodeName, {
           compoundWords,
           trimPrefix,

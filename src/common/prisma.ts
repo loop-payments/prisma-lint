@@ -44,7 +44,7 @@ export function findNameAttributeArg(
     if (typeof a.value !== "object") {
       return false;
     }
-    if (!a.hasOwnProperty("key")) {
+    if (!a.value.hasOwnProperty("key")) {
       return false;
     }
     const value = a.value as KeyValue;
