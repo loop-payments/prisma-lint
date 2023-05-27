@@ -1,6 +1,6 @@
-import type { Model } from "@mrleebo/prisma-ast";
+import type { Model } from '@mrleebo/prisma-ast';
 
-import type { RuleConfig } from "#src/common/config.js";
+import type { RuleConfig } from '#src/common/config.js';
 
 /**
  * Context passed to rules.
@@ -13,7 +13,7 @@ export type Context = {
 /**
  * A "draft" violation, as reported by a rule.
  */
-export type ReportedViolation = { node: Model; message?: string };
+export type ReportedViolation = { node: Model; message: string };
 
 /**
  * Full violation, as returned by the linter.

@@ -1,7 +1,6 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-# Prevent commits to the main branch.
 current_branch=$(git rev-parse --abbrev-ref HEAD)
 if [[ $current_branch = 'main' ]]
 then
@@ -9,7 +8,12 @@ then
   exit 1
 fi
 
-# Lint all staged files.
+echo "Checking types..."
+yarn tsc --noEmit
+
+echo "Running tests..."
+yarn test
+
 echo "Linting staged files..."
 yarn lint-staged
 

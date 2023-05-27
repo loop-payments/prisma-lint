@@ -29,6 +29,7 @@ module.exports = {
     "/dist",
     "*.d.ts",
     "**/*.d.ts",
+    "**/*.cjs",
   ],
   rules: {
     "@typescript-eslint/interface-name-prefix": "off",
