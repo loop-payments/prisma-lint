@@ -1,5 +1,4 @@
 import type { Model } from "@mrleebo/prisma-ast";
-import pluralize from "pluralize";
 import type { RuleConfig } from "#src/common/config.js";
 import type { Context, RuleDefinition } from "#src/common/rule.js";
 
