@@ -1,5 +1,5 @@
 import type { Model } from "@mrleebo/prisma-ast";
-import { PrismaPropertyType } from "#src/common/prisma-property-type.js";
+import { PrismaPropertyType } from "./prisma.js";
 
 const IGNORE_MODEL = "/// prisma-lint-ignore-model";
 

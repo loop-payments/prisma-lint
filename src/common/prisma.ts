@@ -4,7 +4,6 @@ import type {
   KeyValue,
   Model,
   ModelAttribute,
-  Property,
 } from "@mrleebo/prisma-ast";
 
 export const PrismaPropertyType = Enum({
