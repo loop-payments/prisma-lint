@@ -3,42 +3,27 @@ import path from 'path';
 
 import { promisify } from 'util';
 
-import { getSchema, type Model, type Schema } from '@mrleebo/prisma-ast';
+import { getSchema } from '@mrleebo/prisma-ast';
 
-import type {
-  PrismaLintConfig,
-  RuleConfigValue,
-  RuleName,
+import {
+  getRuleConfig,
+  getRuleLevel,
+  type PrismaLintConfig,
+  type RuleConfigValue,
+  type RuleName,
 } from '#src/common/config.js';
 import {
   isModelEntirelyIgnored,
   isRuleIgnored,
   listIgnoreModelComments,
 } from '#src/common/ignore.js';
+import { listModelBlocks } from '#src/common/prisma.js';
 import type {
   ReportedViolation,
   RuleInstance,
   RuleRegistry,
   Violation,
 } from '#src/common/rule.js';
-
-function listModelBlocks(schema: Schema) {
-  return schema.list.filter((block): block is Model => block.type === 'model');
-}
-
-function getRuleLevel(value: RuleConfigValue) {
-  if (Array.isArray(value)) {
-    return value[0];
-  }
-  return value;
-}
-
-function getRuleConfig(value: RuleConfigValue) {
-  if (Array.isArray(value)) {
-    return value[1] ?? {};
-  }
-  return {};
-}
 
 function isRuleEnabled([_, value]: [RuleName, RuleConfigValue]) {
   return getRuleLevel(value) !== 'off';
