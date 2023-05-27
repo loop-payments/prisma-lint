@@ -72,17 +72,19 @@ export default {
       if (f.ifField == null) {
         throw new Error('Missing ifField in requiredFields object');
       }
-      if (typeof f.ifField !== 'string') {
+      if (typeof f.ifField !== 'string' && !(f.ifField instanceof RegExp)) {
         throw new Error('requiredFields object ifField must be a string');
       }
     });
     const simpleIfFieldConditions = conditionalRequiredFields.filter(
-      (f) => !f.ifField.startsWith('/') && !f.ifField.endsWith('/'),
+      (f) => !isRegexOrRegexStr(f.ifField),
     );
     const regexIfFieldConditions = conditionalRequiredFields
-      .filter((f) => f.ifField.startsWith('/') && f.ifField.endsWith('/'))
+      .filter((f) => isRegexOrRegexStr(f.ifField))
       .map((f) => {
-        const ifFieldRegex = new RegExp(f.ifField.slice(1, -1));
+        const { ifField } = f;
+        const ifFieldRegex =
+          typeof f === 'string' ? new RegExp(ifField.slice(1, -1)) : ifField;
         return { ...f, ifFieldRegex };
       });
     return {
@@ -123,3 +125,9 @@ export default {
     };
   },
 } satisfies ModelRuleDefinition;
+
+const isRegexOrRegexStr = (value: any) => {
+  return (
+    value instanceof RegExp || (value.startsWith('/') && value.endsWith('/'))
+  );
+};
