@@ -1,5 +1,7 @@
 import type { ModelRuleDefinition } from '#src/common/rule.js';
 
+const RULE_NAME = 'model-name-prefix';
+
 /**
  * Requires model names to include a prefix.
  *
@@ -22,6 +24,7 @@ import type { ModelRuleDefinition } from '#src/common/rule.js';
  *
  */
 export default {
+  ruleName: RULE_NAME,
   create: (config, context) => {
     const { prefix } = config;
     if (typeof prefix !== 'string') {

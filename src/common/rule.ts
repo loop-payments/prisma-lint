@@ -17,6 +17,7 @@ export type RuleContext<T extends NodeViolation> = {
 };
 
 export type ModelRuleDefinition = {
+  ruleName: string;
   create: (
     config: RuleConfig,
     context: RuleContext<ModelViolation>,
@@ -28,6 +29,7 @@ export type ModelRuleInstance = {
 };
 
 export type FieldRuleDefinition = {
+  ruleName: string;
   create: (
     config: RuleConfig,
     context: RuleContext<FieldViolation>,

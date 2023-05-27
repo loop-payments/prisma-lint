@@ -2,6 +2,8 @@ import pluralize from 'pluralize';
 
 import type { ModelRuleDefinition } from '#src/common/rule.js';
 
+const RULE_NAME = 'model-name-grammatical-number';
+
 /**
  * Requires model name to match plural or singlar enforced style.
  *
@@ -31,6 +33,7 @@ import type { ModelRuleDefinition } from '#src/common/rule.js';
  *
  */
 export default {
+  ruleName: RULE_NAME,
   create: (config, context) => {
     const { enforcedStyle } = config;
     if (

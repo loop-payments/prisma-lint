@@ -7,6 +7,8 @@ import {
 import type { FieldRuleDefinition } from '#src/common/rule.js';
 import { getExpectedSnakeCase } from '#src/common/snake-case.js';
 
+const RULE_NAME = 'field-name-mapping-snake-case';
+
 /**
  * Requires that the mapped name of a field is the expected snake case.
  *
@@ -46,6 +48,7 @@ import { getExpectedSnakeCase } from '#src/common/snake-case.js';
  *
  */
 export default {
+  ruleName: RULE_NAME,
   create: (config, context) => {
     const { compoundWords: compoundWordsRaw } = config;
     if (compoundWordsRaw && !Array.isArray(compoundWordsRaw)) {

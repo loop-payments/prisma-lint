@@ -2,6 +2,8 @@ import { getRuleIgnoreParams } from '#src/common/ignore.js';
 import { listFields } from '#src/common/prisma.js';
 import type { ModelRuleDefinition } from '#src/common/rule.js';
 
+const RULE_NAME = 'required-fields';
+
 /**
  * Requires that a model has certain fields.
  *
@@ -59,6 +61,7 @@ import type { ModelRuleDefinition } from '#src/common/rule.js';
  *
  */
 export default {
+  ruleName: RULE_NAME,
   create: (config, context) => {
     const { requiredFields } = config;
     if (requiredFields == null) {
@@ -100,7 +103,7 @@ export default {
       });
     return {
       Model: (model) => {
-        const ruleIgnoreParams = getRuleIgnoreParams(model, 'required-fields');
+        const ruleIgnoreParams = getRuleIgnoreParams(model, RULE_NAME);
         const fields = listFields(model);
         const fieldNameSet = new Set(fields.map((f) => f.name));
         for (const param of ruleIgnoreParams) {
