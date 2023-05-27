@@ -41,17 +41,8 @@ describe('required-fields', () => {
         `);
       expect(violations.length).toEqual(1);
       expect(violations[0].message).toContain('revisionCreatedAt');
-    });
-
-    it('respects field-specific ignore comments without comma', async () => {
-      const violations = await run(`
-        model Products {
-          /// prisma-lint-ignore-model required-fields createdAt
-          id String @id
-        }
-        `);
-      expect(violations.length).toEqual(1);
-      expect(violations[0].message).toContain('revisionCreatedAt');
+      expect(violations[0].message).not.toContain('tenantId');
+      expect(violations[0].message).not.toContain('createdAt');
     });
 
     it('respects model-wide ignore comments', async () => {

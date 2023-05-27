@@ -32,6 +32,6 @@ export function getRuleIgnoreParams(model: Model, ruleName: string) {
   if (ruleIgnoreComment == null) {
     return [];
   }
-  const [, params] = ruleIgnoreComment.split(' ');
+  const params = ruleIgnoreComment.split(' ').slice(-1)[0];
   return params.split(',').map((p: string) => p.trim());
 }
