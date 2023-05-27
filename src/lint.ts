@@ -1,26 +1,30 @@
-import path from "path";
-import fs from "fs";
-import { getSchema, type Model, type Schema } from "@mrleebo/prisma-ast";
-import { promisify } from "util";
+import fs from 'fs';
+import path from 'path';
+
+import { promisify } from 'util';
+
+import { getSchema, type Model, type Schema } from '@mrleebo/prisma-ast';
+
+
 import type {
   PrismaLintConfig,
   RuleConfigValue,
   RuleName,
-} from "#src/common/config.js";
+} from '#src/common/config.js';
+import {
+  isModelEntirelyIgnored,
+  isRuleIgnored,
+  listIgnoreModelComments,
+} from '#src/common/ignore.js';
 import type {
   ReportedViolation,
   RuleInstance,
   RuleRegistry,
   Violation,
-} from "#src/common/rule.js";
-import {
-  isModelEntirelyIgnored,
-  isRuleIgnored,
-  listIgnoreModelComments,
-} from "#src/common/ignore.js";
+} from '#src/common/rule.js';
 
 function listModelBlocks(schema: Schema) {
-  return schema.list.filter((block): block is Model => block.type === "model");
+  return schema.list.filter((block): block is Model => block.type === 'model');
 }
 
 function getRuleLevel(value: RuleConfigValue) {
@@ -38,7 +42,7 @@ function getRuleConfig(value: RuleConfigValue) {
 }
 
 function isRuleEnabled([_, value]: [RuleName, RuleConfigValue]) {
-  return getRuleLevel(value) !== "off";
+  return getRuleLevel(value) !== 'off';
 }
 
 export async function lintSchemaSource({
@@ -59,7 +63,7 @@ export async function lintSchemaSource({
     .map(([ruleName, ruleConfig]) => {
       const ruleDefinition = ruleRegistry[ruleName];
       if (ruleDefinition == null) {
-        throw new Error("Unable to find rule for " + ruleName);
+        throw new Error(`Unable to find rule for ${  ruleName}`);
       }
       const config = getRuleConfig(ruleConfig);
       const context = {
@@ -105,7 +109,7 @@ export const lintSchemaFile = async ({
 }): Promise<Violation[]> => {
   const fileName = path.resolve(schemaFile);
   const schemaSource = await promisify(fs.readFile)(fileName, {
-    encoding: "utf8",
+    encoding: 'utf8',
   });
   return await lintSchemaSource({
     schemaSource,

@@ -1,26 +1,26 @@
-import modelNamePrefix from "#src/rules/model-name-prefix.js";
-import { lintSchemaSource } from "#src/lint.js";
-import type { RuleConfig } from "#src/common/config.js";
+import type { RuleConfig } from '#src/common/config.js';
+import { lintSchemaSource } from '#src/lint.js';
+import modelNamePrefix from '#src/rules/model-name-prefix.js';
 
-describe("model-name-prefix", () => {
+describe('model-name-prefix', () => {
   const getRunner = (config: RuleConfig) => async (schemaSource: string) =>
     await lintSchemaSource({
-      fileName: "fake.ts",
+      fileName: 'fake.ts',
       schemaSource,
       config: {
         rules: {
-          "model-name-prefix": ["error", config],
+          'model-name-prefix': ['error', config],
         },
       },
       ruleRegistry: {
-        "model-name-prefix": modelNamePrefix,
+        'model-name-prefix': modelNamePrefix,
       },
     });
 
-  describe("ignore comments", () => {
-    const run = getRunner({ prefix: "Db" });
+  describe('ignore comments', () => {
+    const run = getRunner({ prefix: 'Db' });
 
-    it("respects rule-specific ignore comments", async () => {
+    it('respects rule-specific ignore comments', async () => {
       const violations = await run(`
     model Users {
       /// prisma-lint-ignore-model model-name-prefix
@@ -30,7 +30,7 @@ describe("model-name-prefix", () => {
       expect(violations.length).toEqual(0);
     });
 
-    it("respects model-wide ignore comments", async () => {
+    it('respects model-wide ignore comments', async () => {
       const violations = await run(`
     model Users {
       /// prisma-lint-ignore-model
@@ -41,11 +41,11 @@ describe("model-name-prefix", () => {
     });
   });
 
-  describe("expecting Db", () => {
-    const run = getRunner({ prefix: "Db" });
+  describe('expecting Db', () => {
+    const run = getRunner({ prefix: 'Db' });
 
-    describe("with prefix", () => {
-      it("returns no violations", async () => {
+    describe('with prefix', () => {
+      it('returns no violations', async () => {
         const violations = await run(`
       model DbUser {
         id String @id
@@ -55,8 +55,8 @@ describe("model-name-prefix", () => {
       });
     });
 
-    describe("without prefix", () => {
-      it("returns violation", async () => {
+    describe('without prefix', () => {
+      it('returns violation', async () => {
         const violations = await run(`
       model Users {
         id String @id

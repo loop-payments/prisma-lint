@@ -1,26 +1,26 @@
-import modelNameGrammaticalNumber from "#src/rules/model-name-grammatical-number.js";
-import { lintSchemaSource } from "#src/lint.js";
-import type { RuleConfig } from "#src/common/config.js";
+import type { RuleConfig } from '#src/common/config.js';
+import { lintSchemaSource } from '#src/lint.js';
+import modelNameGrammaticalNumber from '#src/rules/model-name-grammatical-number.js';
 
-describe("model-name-grammatical-number", () => {
+describe('model-name-grammatical-number', () => {
   const getRunner = (config: RuleConfig) => async (schemaSource: string) =>
     await lintSchemaSource({
-      fileName: "fake.ts",
+      fileName: 'fake.ts',
       schemaSource,
       config: {
         rules: {
-          "model-name-grammatical-number": ["error", config],
+          'model-name-grammatical-number': ['error', config],
         },
       },
       ruleRegistry: {
-        "model-name-grammatical-number": modelNameGrammaticalNumber,
+        'model-name-grammatical-number': modelNameGrammaticalNumber,
       },
     });
 
-  describe("ignore comments", () => {
-    const run = getRunner({ enforcedStyle: "singular" });
+  describe('ignore comments', () => {
+    const run = getRunner({ enforcedStyle: 'singular' });
 
-    it("respects rule-specific ignore comments", async () => {
+    it('respects rule-specific ignore comments', async () => {
       const violations = await run(`
     model Users {
       /// prisma-lint-ignore-model model-name-grammatical-number
@@ -30,7 +30,7 @@ describe("model-name-grammatical-number", () => {
       expect(violations.length).toEqual(0);
     });
 
-    it("respects model-wide ignore comments", async () => {
+    it('respects model-wide ignore comments', async () => {
       const violations = await run(`
     model Users {
       /// prisma-lint-ignore-model
@@ -41,11 +41,11 @@ describe("model-name-grammatical-number", () => {
     });
   });
 
-  describe("expecting singular", () => {
-    const run = getRunner({ enforcedStyle: "singular" });
+  describe('expecting singular', () => {
+    const run = getRunner({ enforcedStyle: 'singular' });
 
-    describe("singular", () => {
-      it("returns no violations", async () => {
+    describe('singular', () => {
+      it('returns no violations', async () => {
         const violations = await run(`
       model User {
         id String @id
@@ -55,8 +55,8 @@ describe("model-name-grammatical-number", () => {
       });
     });
 
-    describe("plural", () => {
-      it("returns violation", async () => {
+    describe('plural', () => {
+      it('returns violation', async () => {
         const violations = await run(`
       model Users {
         id String @id
@@ -67,10 +67,10 @@ describe("model-name-grammatical-number", () => {
     });
   });
 
-  describe("expecting plural", () => {
-    const run = getRunner({ enforcedStyle: "plural" });
-    describe("singular", () => {
-      it("returns violation", async () => {
+  describe('expecting plural', () => {
+    const run = getRunner({ enforcedStyle: 'plural' });
+    describe('singular', () => {
+      it('returns violation', async () => {
         const violations = await run(`
       model User {
         id String @id
@@ -80,8 +80,8 @@ describe("model-name-grammatical-number", () => {
       });
     });
 
-    describe("plural", () => {
-      it("returns no violations", async () => {
+    describe('plural', () => {
+      it('returns no violations', async () => {
         const violations = await run(`
       model Users {
         id String @id

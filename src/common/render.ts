@@ -1,5 +1,6 @@
-import type { Model } from "@mrleebo/prisma-ast";
-import type { Violation } from "#src/common/rule.js";
+import type { Model } from '@mrleebo/prisma-ast';
+
+import type { Violation } from '#src/common/rule.js';
 
 export const renderViolations = (violations: Violation[]) => {
   const groupedByModelName = violations.reduce((acc, v) => {
@@ -13,12 +14,12 @@ export const renderViolations = (violations: Violation[]) => {
   }, {} as Record<string, Violation[]>);
   return Object.entries(groupedByModelName).flatMap(
     ([modelName, violations]) => {
-      return [`${modelName}`, ...violations.flatMap(renderViolation), ""];
+      return [`${modelName}`, ...violations.flatMap(renderViolation), ''];
     }
   );
 };
 
 const renderViolation = ({ ruleName, message }: Violation) => [
-  "  " + ruleName,
-  "    " + message,
+  `  ${  ruleName}`,
+  `    ${  message}`,
 ];
