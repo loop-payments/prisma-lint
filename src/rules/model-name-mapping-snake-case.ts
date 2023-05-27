@@ -59,9 +59,6 @@ import { getExpectedSnakeCase } from "#src/common/snake-case.js";
  *
  */
 export default {
-  meta: {
-    defaultMessage: undefined,
-  },
   create: (config: RuleConfig, context: Context) => {
     const { compoundWords: compoundWordsRaw, trimPrefix: trimPrefixRaw } =
       config;

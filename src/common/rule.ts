@@ -36,9 +36,6 @@ export type RuleInstance = {
 };
 
 export type RuleDefinition = {
-  meta: {
-    defaultMessage: string | undefined;
-  };
   create: (config: RuleConfig, context: Context) => RuleInstance;
 };
 

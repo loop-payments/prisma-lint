@@ -32,9 +32,6 @@ import type { Context, RuleDefinition } from "#src/common/rule.js";
  *
  */
 export default {
-  meta: {
-    defaultMessage: undefined,
-  },
   create: (config: RuleConfig, context: Context) => {
     const { enforcedStyle } = config;
     if (
