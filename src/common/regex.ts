@@ -9,7 +9,7 @@ export const toRegExp = (value: string | RegExp) => {
     return value;
   }
   if (value.startsWith('/') && value.endsWith('/')) {
-    new RegExp(value.slice(1, -1));
+    return new RegExp(value.slice(1, -1));
   }
   return new RegExp(value);
 };

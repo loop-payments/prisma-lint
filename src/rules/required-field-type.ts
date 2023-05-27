@@ -7,13 +7,13 @@ const RULE_NAME = 'required-field-type';
  * Requires certain fields to have a specific type.
  *
  *   {
- *     fields: [
- *       { name: "id", type: "String" },
- *       { name: "/At$/", type: "DateTime" },
+ *     requirements: [
+ *       { fieldName: "id", fieldType: "String" },
+ *       { fieldName: "/At$/", fieldType: "DateTime" },
  *     ]
  *   }
  *
- * @example { fields: [{ name: "id", type: "String" }] }
+ * @example { requirements: [{ fieldName: "id", fieldType: "String" }] }
  *   // good
  *   type User {
  *     id String
@@ -24,7 +24,7 @@ const RULE_NAME = 'required-field-type';
  *     id Int
  *   }
  *
- * @example { fields: [{ name: "/At$/", type: "DateTime" }] }
+ * @example { requirements: [{ fieldName: "/At$/", fieldType: "DateTime" }] }
  *   // good
  *   type User {
  *     createdAt DateTime
@@ -40,17 +40,17 @@ const RULE_NAME = 'required-field-type';
 export default {
   ruleName: RULE_NAME,
   create: (config, context) => {
-    const { fields: fieldRules } = config;
-    if (fieldRules == null) {
+    const { requirements } = config;
+    if (requirements == null) {
       throw new Error('Missing required config "fields"');
     }
-    if (!Array.isArray(fieldRules)) {
+    if (!Array.isArray(requirements)) {
       throw new Error('Config "fields" must be an array');
     }
-    const rulesWithRegExp = fieldRules.map((r) => ({
+    const rulesWithRegExp = requirements.map((r) => ({
       ...r,
-      regex: toRegExp(r.name),
-    }));
+      regex: toRegExp(r.fieldName),
+    })) as { fieldName: string; fieldType: string; regex: RegExp }[];
     return {
       Field: (model, field) => {
         const matches = rulesWithRegExp.filter((r) => r.regex.test(field.name));
@@ -58,16 +58,19 @@ export default {
           return;
         }
         const areMatchesConflicting =
-          new Set(matches.map((m) => m.type)).size > 1;
+          new Set(matches.map((m) => m.fieldType)).size > 1;
         if (areMatchesConflicting) {
           const message = `Field has conflicting type requirements: ${JSON.stringify(
-            matches.map(({ name, type }) => ({ name, type })),
+            matches.map(({ fieldName, fieldType }) => ({
+              fieldName,
+              fieldType,
+            })),
           )}`;
 
           context.report({ model, field, message });
         }
         const actualType = field.fieldType;
-        const expectedType = matches[0].type;
+        const expectedType = matches[0].fieldType;
         if (actualType !== expectedType) {
           const message = `Field type "${actualType}" does not match expected type "${expectedType}"`;
           context.report({ model, field, message });
