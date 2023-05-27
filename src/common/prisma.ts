@@ -24,21 +24,6 @@ export function listAttributes(node: Model): ModelAttribute[] {
   return attributes;
 }
 
-export function findMapAttribute(
-  attributes: ModelAttribute[],
-): ModelAttribute | undefined {
-  const filtered = attributes.filter((a) => a.name === 'map');
-  if (filtered.length === 0) {
-    return;
-  }
-  if (filtered.length > 1) {
-    throw Error(
-      `Unexpected multiple map attributes! ${JSON.stringify(filtered)}`,
-    );
-  }
-  return filtered[0];
-}
-
 type NameAttribute = AttributeArgument & {
   value: { key: 'name'; value: string };
 };

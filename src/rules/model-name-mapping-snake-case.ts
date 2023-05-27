@@ -1,10 +1,6 @@
-import type { Model } from '@mrleebo/prisma-ast';
+import type { Model, ModelAttribute } from '@mrleebo/prisma-ast';
 
-import {
-  findMapAttribute,
-  findNameAttributeArg,
-  listAttributes,
-} from '#src/common/prisma.js';
+import { findNameAttributeArg, listAttributes } from '#src/common/prisma.js';
 import type { ModelRuleDefinition } from '#src/common/rule.js';
 import { getExpectedSnakeCase } from '#src/common/snake-case.js';
 
@@ -15,7 +11,7 @@ import { getExpectedSnakeCase } from '#src/common/snake-case.js';
  *   // good
  *   model UserRole {
  *     id String @id
- *     @map(name: "user_role")
+ *     @@map(name: "user_role")
  *   }
  *
  *   // bad
@@ -26,21 +22,21 @@ import { getExpectedSnakeCase } from '#src/common/snake-case.js';
  *   // bad
  *   model UserRole {
  *     id String @id
- *     @map(name: "user_roles")
+ *     @@map(name: "user_roles")
  *   }
  *
  *
  * @example trimPrefix: "Db"
  *   // good
  *   model DbUserRole {
- *    id String @id
- *    @map(name: "user_role")
+ *     id String @id
+ *     @@map(name: "user_role")
  *   }
  *
  *   // bad
  *   model DbUserRole {
  *     id String @id
- *     @map(name: "db_user_role")
+ *     @@map(name: "db_user_role")
  *   }
  *
  *
@@ -48,13 +44,13 @@ import { getExpectedSnakeCase } from '#src/common/snake-case.js';
  *   // good
  *   model GraphQLPersistedQuery {
  *     id String @id
- *     @map(name: "graphql_persisted_query")
+ *     @@map(name: "graphql_persisted_query")
  *   }
  *
  *   // bad
  *   model GraphQLPersistedQuery {
  *     id String @id
- *     @map(name: "graph_q_l_persisted_query")
+ *     @@map(name: "graph_q_l_persisted_query")
  *   }
  *
  */
@@ -111,3 +107,18 @@ export default {
     };
   },
 } satisfies ModelRuleDefinition;
+
+function findMapAttribute(
+  attributes: ModelAttribute[],
+): ModelAttribute | undefined {
+  const filtered = attributes.filter((a) => a.name === 'map');
+  if (filtered.length === 0) {
+    return;
+  }
+  if (filtered.length > 1) {
+    throw Error(
+      `Unexpected multiple map attributes! ${JSON.stringify(filtered)}`,
+    );
+  }
+  return filtered[0];
+}

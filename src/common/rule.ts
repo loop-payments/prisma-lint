@@ -2,14 +2,18 @@ import type { Field, Model } from '@mrleebo/prisma-ast';
 
 import type { RuleConfig } from '#src/common/config.js';
 
-import type { FieldViolation, ModelViolation } from '#src/common/violation.js';
+import type {
+  FieldViolation,
+  ModelViolation,
+  NodeViolation,
+} from '#src/common/violation.js';
 
 /**
  * Context passed to rules.
  */
-export type RuleContext<V extends ModelViolation | FieldViolation> = {
+export type RuleContext<T extends NodeViolation> = {
   fileName: string;
-  report: (violation: V) => void;
+  report: (nodeViolation: T) => void;
 };
 
 export type ModelRuleDefinition = {
@@ -31,7 +35,7 @@ export type FieldRuleDefinition = {
 };
 
 export type FieldRuleInstance = {
-  Field: (field: Field) => void;
+  Field: (model: Model, field: Field) => void;
 };
 
 export type RuleDefinition = ModelRuleDefinition | FieldRuleDefinition;

@@ -68,7 +68,9 @@ export async function lintSchemaSource({
     rules
       .filter(([ruleName]) => !isRuleIgnored(ruleName, comments))
       .forEach(([_, ruleInstance]) => {
-        (ruleInstance as any).Model(modelNode);
+        if ('Model' in ruleInstance) {
+          ruleInstance.Model(modelNode);
+        }
       });
   });
   return violations;
