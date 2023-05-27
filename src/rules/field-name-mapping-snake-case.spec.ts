@@ -20,11 +20,22 @@ describe('field-name-mapping-snake-case', () => {
   describe('without config', () => {
     const run = getRunner();
 
-    describe('valid', () => {
+    describe('valid with mapping', () => {
       it('returns no violations', async () => {
         const violations = await run(`
       model User {
         emailAddress String @map(name: "email_address")
+      }
+    `);
+        expect(violations.length).toEqual(0);
+      });
+    });
+
+    describe('valid without mapping', () => {
+      it('returns no violations', async () => {
+        const violations = await run(`
+      model User {
+        email String
       }
     `);
         expect(violations.length).toEqual(0);

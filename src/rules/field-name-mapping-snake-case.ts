@@ -1,6 +1,9 @@
 import type { Attribute, Field, Model } from '@mrleebo/prisma-ast';
 
-import { findNameAttributeArg } from '#src/common/prisma.js';
+import {
+  PRISMA_SCALAR_TYPES,
+  findNameAttributeArg,
+} from '#src/common/prisma.js';
 import type { FieldRuleDefinition } from '#src/common/rule.js';
 import { getExpectedSnakeCase } from '#src/common/snake-case.js';
 
@@ -53,6 +56,9 @@ export default {
     const compoundWords = (compoundWordsRaw as string[]) || undefined;
     return {
       Field: (model: Model, field: Field) => {
+        if (allowedToHaveNoMapping(field)) {
+          return;
+        }
         const report = (message: string) =>
           context.report({ model, field, message });
         const { attributes } = field;
@@ -80,7 +86,6 @@ export default {
             'Expected mapped name to be snake case consistent ' +
               `with the field name "${expectedSnakeCase}".`,
           );
-          
         }
       },
     };
@@ -98,4 +103,22 @@ function findMapAttribute(attributes: Attribute[]): Attribute | undefined {
     );
   }
   return filtered[0];
+}
+
+export function allowedToHaveNoMapping(field: Field) {
+  return isAllLowerCase(field.name) || isAssociation(field.fieldType);
+}
+
+function isAssociation(fieldType: any) {
+  if (typeof fieldType != 'string') {
+    return false;
+  }
+  if (PRISMA_SCALAR_TYPES.has(fieldType)) {
+    return false;
+  }
+  return true;
+}
+
+function isAllLowerCase(s: string) {
+  return s.toLowerCase() == s;
 }

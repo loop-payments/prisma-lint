@@ -7,6 +7,18 @@ import type {
   Schema,
 } from '@mrleebo/prisma-ast';
 
+export const PRISMA_SCALAR_TYPES = new Set<string>([
+  'String',
+  'Boolean',
+  'Int',
+  'BigInt',
+  'Float',
+  'Decimal',
+  'DateTime',
+  'Json',
+  'Bytes',
+]);
+
 export const PrismaPropertyType = Enum({
   FIELD: 'field',
   ATTRIBUTE: 'attribute',
