@@ -2,14 +2,15 @@
  * Returns a snake case string constistent with input string,
  * accounting for compound words and prefix.
  */
-export function getConsistentSnakeCase(
+export function getExpectedSnakeCase(
   input: string,
   options: {
     /**
      * A prefix to remove from the input string
      * before converting to snake case.
      */
-    withoutPrefix?: string;
+    trimPrefix?: string;
+
     /**
      * A list of words to keep as a single word
      * when converting to snake case. For example,
@@ -20,9 +21,9 @@ export function getConsistentSnakeCase(
     compoundWords?: string[];
   } = {}
 ) {
-  const { withoutPrefix = "", compoundWords = [] } = options;
-  const inputWithoutPrefix = input.startsWith(withoutPrefix)
-    ? input.slice(withoutPrefix.length)
+  const { trimPrefix = "", compoundWords = [] } = options;
+  const inputWithoutPrefix = input.startsWith(trimPrefix)
+    ? input.slice(trimPrefix.length)
     : input;
   const inputWithCompoundWords = compoundWords.reduce((s, compoundWord) => {
     return s.replace(
