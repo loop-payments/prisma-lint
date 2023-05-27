@@ -13,7 +13,7 @@ model Users {
   @@map(name: "users")
 }
 
-model UserRole {
+model UserRoleFoo {
   id         String @id
   @@map(name: "unexpected_snake_case")
 }

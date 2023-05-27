@@ -1,15 +1,24 @@
 import type { Model } from "@mrleebo/prisma-ast";
 import type { Violation } from "#src/common/rule.js";
 
-function getNodeLabel(node: Model) {
-  return node.name;
-}
+export const renderViolations = (violations: Violation[]) => {
+  const groupedByModelName = violations.reduce((acc, v) => {
+    const { node } = v;
+    const model = node as Model;
+    if (!acc[model.name]) {
+      acc[model.name] = [];
+    }
+    acc[model.name].push(v);
+    return acc;
+  }, {} as Record<string, Violation[]>);
+  return Object.entries(groupedByModelName).flatMap(
+    ([modelName, violations]) => {
+      return [`${modelName}`, ...violations.flatMap(renderViolation), ""];
+    }
+  );
+};
 
-export const renderViolations = (violations: Violation[]) =>
-  violations.flatMap((v) => renderViolation(v));
-
-const renderViolation = ({
-  ruleName,
-  node,
-  message: description,
-}: Violation) => [ruleName, getNodeLabel(node), description, ""];
+const renderViolation = ({ ruleName, message }: Violation) => [
+  "  " + ruleName,
+  "    " + message,
+];
