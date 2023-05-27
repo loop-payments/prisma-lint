@@ -20,11 +20,7 @@ import {
 import { listModelBlocks } from '#src/common/prisma.js';
 import type { RuleInstance, RuleRegistry } from '#src/common/rule.js';
 
-import type {
-  FieldViolation,
-  ModelViolation,
-  Violation,
-} from '#src/common/violation.js';
+import type { Violation, NodeViolation } from '#src/common/violation.js';
 
 function isRuleEnabled([_, value]: [RuleName, RuleConfigValue]) {
   return getRuleLevel(value) !== 'off';
@@ -42,7 +38,11 @@ export async function lintSchemaSource({
   ruleRegistry: RuleRegistry;
 }) {
   const schema = getSchema(schemaSource);
+
+  // Mutatable list of violations added to by rule instances.
   const violations: Violation[] = [];
+
+  // Create rule instances.
   const rules: [RuleName, RuleInstance][] = Object.entries(config.rules)
     .filter(isRuleEnabled)
     .map(([ruleName, ruleConfig]) => {
@@ -50,21 +50,15 @@ export async function lintSchemaSource({
       if (ruleDefinition == null) {
         throw new Error(`Unable to find rule for ${ruleName}`);
       }
+      const report = (nodeViolation: NodeViolation) =>
+        violations.push({ ruleName, fileName, ...nodeViolation });
+      const context = { fileName, report };
       const config = getRuleConfig(ruleConfig);
-      const context = {
-        fileName,
-        report: ({ model, message }: FieldViolation | ModelViolation) => {
-          violations.push({
-            ruleName,
-            fileName,
-            model,
-            message,
-          });
-        },
-      };
       const ruleInstance = ruleDefinition.create(config, context);
       return [ruleName, ruleInstance];
     });
+
+  // Run each rule instance for each AST node.
   const modelNodes = listModelBlocks(schema);
   modelNodes.forEach((modelNode) => {
     const comments = listIgnoreModelComments(modelNode);

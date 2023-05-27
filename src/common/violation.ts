@@ -6,6 +6,7 @@ export type FieldViolation = {
   field: Field;
   message: string;
 };
+export type NodeViolation = ModelViolation | FieldViolation;
 
 /**
  * Full violation, as returned by the linter.

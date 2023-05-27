@@ -7,21 +7,34 @@ import type { FieldViolation, ModelViolation } from '#src/common/violation.js';
 /**
  * Context passed to rules.
  */
-export type RuleContext = {
+export type RuleContext<V extends ModelViolation | FieldViolation> = {
   fileName: string;
-  report: (violation: ModelViolation | FieldViolation) => void;
+  report: (violation: V) => void;
 };
 
-export type RuleInstance =
-  | {
-      Model: (model: Model) => void;
-    }
-  | {
-      Field: (field: Field) => void;
-    };
-
-export type RuleDefinition = {
-  create: (config: RuleConfig, context: RuleContext) => RuleInstance;
+export type ModelRuleDefinition = {
+  create: (
+    config: RuleConfig,
+    context: RuleContext<ModelViolation>,
+  ) => ModelRuleInstance;
 };
+
+export type ModelRuleInstance = {
+  Model: (model: Model) => void;
+};
+
+export type FieldRuleDefinition = {
+  create: (
+    config: RuleConfig,
+    context: RuleContext<FieldViolation>,
+  ) => FieldRuleInstance;
+};
+
+export type FieldRuleInstance = {
+  Field: (field: Field) => void;
+};
+
+export type RuleDefinition = ModelRuleDefinition | FieldRuleDefinition;
+export type RuleInstance = ModelRuleInstance | FieldRuleInstance;
 
 export type RuleRegistry = Record<string, RuleDefinition>;

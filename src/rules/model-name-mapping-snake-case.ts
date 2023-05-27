@@ -1,12 +1,11 @@
 import type { Model } from '@mrleebo/prisma-ast';
 
-import type { RuleConfig } from '#src/common/config.js';
 import {
   findMapAttribute,
   findNameAttributeArg,
   listAttributes,
 } from '#src/common/prisma.js';
-import type { RuleContext, RuleDefinition } from '#src/common/rule.js';
+import type { ModelRuleDefinition } from '#src/common/rule.js';
 import { getExpectedSnakeCase } from '#src/common/snake-case.js';
 
 /**
@@ -60,7 +59,7 @@ import { getExpectedSnakeCase } from '#src/common/snake-case.js';
  *
  */
 export default {
-  create: (config: RuleConfig, context: RuleContext) => {
+  create: (config, context) => {
     const { compoundWords: compoundWordsRaw, trimPrefix: trimPrefixRaw } =
       config;
     if (compoundWordsRaw && !Array.isArray(compoundWordsRaw)) {
@@ -111,4 +110,4 @@ export default {
       },
     };
   },
-} satisfies RuleDefinition;
+} satisfies ModelRuleDefinition;

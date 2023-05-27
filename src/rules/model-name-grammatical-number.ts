@@ -1,8 +1,7 @@
 import type { Model } from '@mrleebo/prisma-ast';
 import pluralize from 'pluralize';
 
-import type { RuleConfig } from '#src/common/config.js';
-import type { RuleContext, RuleDefinition } from '#src/common/rule.js';
+import type { ModelRuleDefinition } from '#src/common/rule.js';
 
 /**
  * Requires model name to match plural or singlar enforced style.
@@ -33,7 +32,7 @@ import type { RuleContext, RuleDefinition } from '#src/common/rule.js';
  *
  */
 export default {
-  create: (config: RuleConfig, context: RuleContext) => {
+  create: (config, context) => {
     const { enforcedStyle } = config;
     if (
       typeof enforcedStyle !== 'string' ||
@@ -56,4 +55,4 @@ export default {
       },
     };
   },
-} satisfies RuleDefinition;
+} satisfies ModelRuleDefinition;
