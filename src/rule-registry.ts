@@ -3,6 +3,7 @@ import fieldNameMappingSnakeCase from '#src/rules/field-name-mapping-snake-case.
 import modelNameGrammaticalNumber from '#src/rules/model-name-grammatical-number.js';
 import modelNameMappingSnakeCase from '#src/rules/model-name-mapping-snake-case.js';
 import modelNamePrefix from '#src/rules/model-name-prefix.js';
+import requiredFields from '#src/rules/required-fields.js';
 
 export default Object.fromEntries(
   [
@@ -10,6 +11,7 @@ export default Object.fromEntries(
     modelNameGrammaticalNumber,
     modelNameMappingSnakeCase,
     modelNamePrefix,
+    requiredFields,
   ].map((rule) => {
     return [rule.ruleName, rule];
   }),

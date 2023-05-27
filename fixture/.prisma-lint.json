@@ -9,6 +9,12 @@
         "trimPrefix": "Db"
       }
     ],
-    "model-name-prefix": ["error", { "prefix": "Db" }]
+    "model-name-prefix": ["error", { "prefix": "Db" }],
+    "required-fields": [
+      "error",
+      {
+        "requiredFields": ["id", "createdAt"]
+      }
+    ]
   }
 }

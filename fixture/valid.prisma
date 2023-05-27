@@ -10,10 +10,12 @@ datasource db {
 
 model DbUser {
   id         String @id
+  createdAt  String
   @@map(name: "user")
 }
 
 model DbTenant {
+  /// prisma-lint-model-ignore required-fields createdAt
   id         String @id
   @@map(name: "tenant")
 }
