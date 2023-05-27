@@ -63,7 +63,7 @@ export default {
           context.report({ model, field, message });
         const { attributes } = field;
         if (!attributes) {
-          report('Expected');
+          report('Field name must be mapped to snake case.');
           return;
         }
         const mapAttribute = findMapAttribute(attributes);
@@ -73,7 +73,7 @@ export default {
         }
         const nameAttribute = findNameAttributeArg(mapAttribute.args);
         if (!nameAttribute) {
-          report('Model name must be mapped to snake case.');
+          report('Field name must be mapped to snake case.');
           return;
         }
         const fieldName = field.name;

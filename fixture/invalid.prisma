@@ -10,6 +10,7 @@ datasource db {
 
 model Users {
   id         String @id
+  emailAddress String
   @@map(name: "users")
 }
 
