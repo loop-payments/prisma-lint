@@ -3,7 +3,7 @@ import path from 'path';
 
 import { promisify } from 'util';
 
-import { getSchema } from '@mrleebo/prisma-ast';
+import { getSchema, type Field } from '@mrleebo/prisma-ast';
 
 import {
   getRuleConfig,
@@ -65,11 +65,19 @@ export async function lintSchemaSource({
     if (isModelEntirelyIgnored(comments)) {
       return;
     }
+    const fields = modelNode.properties.filter(
+      (property) => property.type === 'field',
+    ) as Field[];
     rules
       .filter(([ruleName]) => !isRuleIgnored(ruleName, comments))
       .forEach(([_, ruleInstance]) => {
         if ('Model' in ruleInstance) {
           ruleInstance.Model(modelNode);
+        }
+        if ('Field' in ruleInstance) {
+          fields.forEach((field) => {
+            ruleInstance.Field(modelNode, field);
+          });
         }
       });
   });
