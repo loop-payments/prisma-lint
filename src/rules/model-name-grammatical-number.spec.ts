@@ -41,6 +41,42 @@ describe('model-name-grammatical-number', () => {
     });
   });
 
+  describe('invalid config', () => {
+    describe('missing config', () => {
+      expect(() => {
+        modelNameGrammaticalNumber.create(undefined as any, {} as any);
+      }).toThrowErrorMatchingInlineSnapshot(`
+        "[
+          {
+            "code": "invalid_type",
+            "expected": "object",
+            "received": "undefined",
+            "path": [],
+            "message": "A rule configuration is required"
+          }
+        ]"
+      `);
+    });
+
+    describe('missing key in config', () => {
+      expect(() => {
+        modelNameGrammaticalNumber.create({} as any, {} as any);
+      }).toThrowErrorMatchingInlineSnapshot(`
+        "[
+          {
+            "expected": "'singular' | 'plural'",
+            "received": "undefined",
+            "code": "invalid_type",
+            "path": [
+              "enforcedStyle"
+            ],
+            "message": "Invalid rule configuration"
+          }
+        ]"
+      `);
+    });
+  });
+
   describe('expecting singular', () => {
     const run = getRunner({ enforcedStyle: 'singular' });
 

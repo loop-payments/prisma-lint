@@ -1,8 +1,15 @@
 import pluralize from 'pluralize';
 
+import { z } from 'zod';
+
+import { RULE_CONFIG_PARSE_PARAMS } from '#src/common/config.js';
 import type { ModelRuleDefinition } from '#src/common/rule.js';
 
 const RULE_NAME = 'model-name-grammatical-number';
+
+const Config = z.object({
+  enforcedStyle: z.enum(['singular', 'plural']),
+});
 
 /**
  * Requires model name to match plural or singlar enforced style.
@@ -35,16 +42,8 @@ const RULE_NAME = 'model-name-grammatical-number';
 export default {
   ruleName: RULE_NAME,
   create: (config, context) => {
-    const { enforcedStyle } = config;
-    if (
-      typeof enforcedStyle !== 'string' ||
-      ['singular', 'plural'].includes(enforcedStyle) === false
-    ) {
-      throw new Error(
-        'Expected enforcedStyle to be one of ' +
-          `"singular" or "plural", got ${enforcedStyle}`,
-      );
-    }
+    const parsedConfig = Config.parse(config, RULE_CONFIG_PARSE_PARAMS);
+    const { enforcedStyle } = parsedConfig;
     return {
       Model: (model) => {
         const isPlural = pluralize.isPlural(model.name);
