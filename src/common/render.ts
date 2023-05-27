@@ -15,7 +15,7 @@ export const renderViolations = (violations: Violation[]) => {
   return Object.entries(groupedByModelName).flatMap(
     ([modelName, violations]) => {
       return [`${modelName}`, ...violations.flatMap(renderViolation), ''];
-    }
+    },
   );
 };
 

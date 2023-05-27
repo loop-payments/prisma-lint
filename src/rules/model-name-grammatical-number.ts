@@ -41,7 +41,7 @@ export default {
     ) {
       throw new Error(
         'Expected enforcedStyle to be one of ' +
-          `"singular" or "plural", got ${enforcedStyle}`
+          `"singular" or "plural", got ${enforcedStyle}`,
       );
     }
     return {

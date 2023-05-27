@@ -19,7 +19,7 @@ export function getExpectedSnakeCase(
      * to "graphql".
      */
     compoundWords?: string[];
-  } = {}
+  } = {},
 ) {
   const { trimPrefix = '', compoundWords = [] } = options;
   const inputWithoutPrefix = input.startsWith(trimPrefix)
@@ -28,7 +28,8 @@ export function getExpectedSnakeCase(
   const inputWithCompoundWords = compoundWords.reduce((s, compoundWord) => {
     return s.replace(
       compoundWord,
-      compoundWord.charAt(0).toUpperCase() + compoundWord.slice(1).toLowerCase()
+      compoundWord.charAt(0).toUpperCase() +
+        compoundWord.slice(1).toLowerCase(),
     );
   }, inputWithoutPrefix);
   return inputWithCompoundWords

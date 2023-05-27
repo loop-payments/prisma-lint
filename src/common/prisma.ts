@@ -19,13 +19,13 @@ export function listModelBlocks(schema: Schema) {
 
 export function listAttributes(node: Model): ModelAttribute[] {
   const attributes = node.properties.filter(
-    (p) => p.type === PrismaPropertyType.ATTRIBUTE
+    (p) => p.type === PrismaPropertyType.ATTRIBUTE,
   ) as ModelAttribute[];
   return attributes;
 }
 
 export function findMapAttribute(
-  attributes: ModelAttribute[]
+  attributes: ModelAttribute[],
 ): ModelAttribute | undefined {
   const filtered = attributes.filter((a) => a.name === 'map');
   if (filtered.length === 0) {
@@ -33,7 +33,7 @@ export function findMapAttribute(
   }
   if (filtered.length > 1) {
     throw Error(
-      `Unexpected multiple map attributes! ${JSON.stringify(filtered)}`
+      `Unexpected multiple map attributes! ${JSON.stringify(filtered)}`,
     );
   }
   return filtered[0];
@@ -43,7 +43,7 @@ type NameAttribute = AttributeArgument & {
   value: { key: 'name'; value: string };
 };
 export function findNameAttributeArg(
-  args: AttributeArgument[]
+  args: AttributeArgument[],
 ): NameAttribute | undefined {
   const filtered = args.filter((a) => {
     if (typeof a.value !== 'object') {
@@ -66,7 +66,7 @@ export function findNameAttributeArg(
   }
   if (filtered.length > 1) {
     throw Error(
-      `Unexpected multiple name attributes! ${JSON.stringify(filtered)}`
+      `Unexpected multiple name attributes! ${JSON.stringify(filtered)}`,
     );
   }
   return filtered[0];

@@ -65,13 +65,13 @@ export default {
       config;
     if (compoundWordsRaw && !Array.isArray(compoundWordsRaw)) {
       throw new Error(
-        `Expected "compoundWords" to be an array, but got ${compoundWordsRaw}.`
+        `Expected "compoundWords" to be an array, but got ${compoundWordsRaw}.`,
       );
     }
     const compoundWords = (compoundWordsRaw as string[]) || undefined;
     if (trimPrefixRaw && typeof trimPrefixRaw !== 'string') {
       throw new Error(
-        `Expected "trimPrefix" to be a string, but got ${trimPrefixRaw}.`
+        `Expected "trimPrefix" to be a string, but got ${trimPrefixRaw}.`,
       );
     }
     const trimPrefix = (trimPrefixRaw as string) || undefined;
