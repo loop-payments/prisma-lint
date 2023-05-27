@@ -76,12 +76,12 @@ export default {
     }
     const trimPrefix = (trimPrefixRaw as string) || undefined;
     return {
-      Model: (node: Model) => {
-        const attributes = listAttributes(node);
+      Model: (model: Model) => {
+        const attributes = listAttributes(model);
         const mapAttribute = findMapAttribute(attributes);
         if (!mapAttribute) {
           context.report({
-            node,
+            model,
             message: 'Model name must be mapped to snake case.',
           });
           return;
@@ -89,12 +89,12 @@ export default {
         const nameAttribute = findNameAttributeArg(mapAttribute.args);
         if (!nameAttribute) {
           context.report({
-            node,
+            model,
             message: 'Model name must be mapped to snake case.',
           });
           return;
         }
-        const nodeName = node.name;
+        const nodeName = model.name;
         const mappedName = nameAttribute.value.value.replaceAll('"', '');
         const expectedSnakeCase = getExpectedSnakeCase(nodeName, {
           compoundWords,
@@ -102,7 +102,7 @@ export default {
         });
         if (mappedName !== expectedSnakeCase) {
           context.report({
-            node,
+            model,
             message:
               'Expected mapped model name to be snake case consistent ' +
               `with the model name "${expectedSnakeCase}".`,

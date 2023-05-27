@@ -1,11 +1,8 @@
-import type { Model } from '@mrleebo/prisma-ast';
-
 import type { Violation } from '#src/common/violation.js';
 
 export const renderViolations = (violations: Violation[]) => {
   const groupedByModelName = violations.reduce((acc, v) => {
-    const { node } = v;
-    const model = node as Model;
+    const { model } = v;
     if (!acc[model.name]) {
       acc[model.name] = [];
     }

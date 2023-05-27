@@ -31,12 +31,12 @@ export default {
       throw new Error(`Expected string prefix, got ${JSON.stringify(prefix)}`);
     }
     return {
-      Model: (node: Model) => {
-        if (node.name.startsWith(prefix)) {
+      Model: (model: Model) => {
+        if (model.name.startsWith(prefix)) {
           return;
         }
-        const message = `Model name "${node.name}" should start with "${prefix}"`;
-        context.report({ node, message });
+        const message = `Model name "${model.name}" should start with "${prefix}"`;
+        context.report({ model, message });
       },
     };
   },

@@ -20,7 +20,11 @@ import {
 import { listModelBlocks } from '#src/common/prisma.js';
 import type { RuleInstance, RuleRegistry } from '#src/common/rule.js';
 
-import type { ReportedViolation, Violation } from '#src/common/violation.js';
+import type {
+  FieldViolation,
+  ModelViolation,
+  Violation,
+} from '#src/common/violation.js';
 
 function isRuleEnabled([_, value]: [RuleName, RuleConfigValue]) {
   return getRuleLevel(value) !== 'off';
@@ -49,10 +53,11 @@ export async function lintSchemaSource({
       const config = getRuleConfig(ruleConfig);
       const context = {
         fileName,
-        report: ({ node, message }: ReportedViolation) => {
+        report: ({ model, message }: FieldViolation | ModelViolation) => {
           violations.push({
             ruleName,
-            node,
+            fileName,
+            model,
             message,
           });
         },
@@ -69,7 +74,7 @@ export async function lintSchemaSource({
     rules
       .filter(([ruleName]) => !isRuleIgnored(ruleName, comments))
       .forEach(([_, ruleInstance]) => {
-        ruleInstance.Model(modelNode);
+        (ruleInstance as any).Model(modelNode);
       });
   });
   return violations;

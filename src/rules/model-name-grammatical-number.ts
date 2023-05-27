@@ -45,13 +45,13 @@ export default {
       );
     }
     return {
-      Model: (node: Model) => {
-        const isPlural = pluralize.isPlural(node.name);
+      Model: (model: Model) => {
+        const isPlural = pluralize.isPlural(model.name);
         if (isPlural && enforcedStyle === 'singular') {
-          context.report({ node, message: 'Expected singular model name.' });
+          context.report({ model, message: 'Expected singular model name.' });
         }
         if (!isPlural && enforcedStyle === 'plural') {
-          context.report({ node, message: 'Expected plural model name.' });
+          context.report({ model, message: 'Expected plural model name.' });
         }
       },
     };
