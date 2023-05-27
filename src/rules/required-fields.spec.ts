@@ -81,6 +81,55 @@ describe('required-fields', () => {
     });
   });
 
+  describe('conditional ifField regex string', () => {
+    const run = getRunner({
+      requiredFields: [
+        {
+          ifField: '/amountD\\d$/',
+          name: 'currencyCode',
+        },
+      ],
+    });
+
+    describe('with field', () => {
+      it('returns no violations', async () => {
+        const violations = await run(`
+          model Product {
+            id String
+            amountD6 Int
+            currencyCode string
+          }
+        `);
+        expect(violations.length).toEqual(0);
+      });
+    });
+
+    describe('without field', () => {
+      describe('with ifField', () => {
+        it('returns violation', async () => {
+          const violations = await run(`
+            model Product {
+              id string
+              amountD6 Int
+            }
+          `);
+          expect(violations.length).toEqual(1);
+        });
+      });
+
+      describe('without ifField', () => {
+        it('returns no violations', async () => {
+          const violations = await run(`
+            model Product {
+              id String
+            }
+          `);
+          expect(violations.length).toEqual(0);
+        });
+      });
+    });
+  });
+
   describe('conditional ifField regex', () => {
     const run = getRunner({
       requiredFields: [

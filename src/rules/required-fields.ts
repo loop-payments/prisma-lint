@@ -93,7 +93,9 @@ export default {
       .map((f) => {
         const { ifField } = f;
         const ifFieldRegex =
-          typeof f === 'string' ? new RegExp(ifField.slice(1, -1)) : ifField;
+          typeof ifField === 'string'
+            ? new RegExp(ifField.slice(1, -1))
+            : ifField;
         return { ...f, ifFieldRegex };
       });
     return {
