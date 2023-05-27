@@ -32,10 +32,21 @@ describe('required-fields', () => {
       expect(violations.length).toEqual(0);
     });
 
-    it('respects field-specific ignore comments', async () => {
+    it('respects field-specific ignore comments with comma', async () => {
       const violations = await run(`
         model Products {
           /// prisma-lint-ignore-model required-fields tenantId,createdAt
+          id String @id
+        }
+        `);
+      expect(violations.length).toEqual(1);
+      expect(violations[0].message).toContain('revisionCreatedAt');
+    });
+
+    it('respects field-specific ignore comments without comma', async () => {
+      const violations = await run(`
+        model Products {
+          /// prisma-lint-ignore-model required-fields createdAt
           id String @id
         }
         `);
@@ -144,7 +155,7 @@ describe('required-fields', () => {
       it('returns no violations', async () => {
         const violations = await run(`
           model Product {
-            id string
+            id String
             amountD6 Int
             currencyCode string
           }
@@ -158,7 +169,7 @@ describe('required-fields', () => {
         it('returns violation', async () => {
           const violations = await run(`
             model Product {
-              id string
+              id String
               amountD6 Int
             }
           `);
@@ -170,7 +181,7 @@ describe('required-fields', () => {
         it('returns no violations', async () => {
           const violations = await run(`
             model Product {
-             id string
+             id String
             }
           `);
           expect(violations.length).toEqual(0);
@@ -219,7 +230,7 @@ describe('required-fields', () => {
         it('returns no violations', async () => {
           const violations = await run(`
             model Product {
-             id string
+             id String
             }
           `);
           expect(violations.length).toEqual(0);
