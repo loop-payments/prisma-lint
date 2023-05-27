@@ -2,7 +2,7 @@ import { listFields } from '#src/common/prisma.js';
 import type { ModelRuleDefinition } from '#src/common/rule.js';
 
 /**
- * Require that a model has certain fields.
+ * Requires that a model has certain fields.
  *
  * The `requiredFields` config option is an array of strings or objects.
  * Each string is the name of a field that must be present. Each object
@@ -13,7 +13,8 @@ import type { ModelRuleDefinition } from '#src/common/rule.js';
  *     { name: string; ifField: string; }
  *   )[];
  *
- * For example to require a model to have a field named "currencyCode"
+ * The `ifField` property of an object can be a string or a regular expression.
+ * For example, to require a model to have a field named "currencyCode"
  * if it has a field ending in "amountD6":
  *
  *   {
