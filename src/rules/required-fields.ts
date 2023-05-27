@@ -1,5 +1,6 @@
 import { getRuleIgnoreParams } from '#src/common/ignore.js';
 import { listFields } from '#src/common/prisma.js';
+import { isRegexOrRegexStr } from '#src/common/regex.js';
 import type { ModelRuleDefinition } from '#src/common/rule.js';
 
 const RULE_NAME = 'required-fields';
@@ -154,9 +155,3 @@ export default {
     };
   },
 } satisfies ModelRuleDefinition;
-
-const isRegexOrRegexStr = (value: any) => {
-  return (
-    value instanceof RegExp || (value.startsWith('/') && value.endsWith('/'))
-  );
-};

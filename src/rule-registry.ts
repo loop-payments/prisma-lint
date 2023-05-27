@@ -5,6 +5,8 @@ import modelNameMappingSnakeCase from '#src/rules/model-name-mapping-snake-case.
 import modelNamePrefix from '#src/rules/model-name-prefix.js';
 import requiredFields from '#src/rules/required-fields.js';
 
+import requiredFieldType from './rules/required-field-type.js';
+
 export default Object.fromEntries(
   [
     fieldNameMappingSnakeCase,
@@ -12,6 +14,7 @@ export default Object.fromEntries(
     modelNameMappingSnakeCase,
     modelNamePrefix,
     requiredFields,
+    requiredFieldType,
   ].map((rule) => {
     return [rule.ruleName, rule];
   }),
