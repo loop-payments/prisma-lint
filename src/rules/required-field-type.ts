@@ -40,14 +40,14 @@ const RULE_NAME = 'required-field-type';
 export default {
   ruleName: RULE_NAME,
   create: (config, context) => {
-    const { requirements } = config;
-    if (requirements == null) {
-      throw new Error('Missing required config "fields"');
+    const { required } = config;
+    if (required == null) {
+      throw new Error('Missing "required" key in configuration');
     }
-    if (!Array.isArray(requirements)) {
-      throw new Error('Config "fields" must be an array');
+    if (!Array.isArray(required)) {
+      throw new Error('Config "required" value must be an array');
     }
-    const rulesWithRegExp = requirements.map((r) => ({
+    const rulesWithRegExp = required.map((r) => ({
       ...r,
       regex: toRegExp(r.fieldName),
     })) as { fieldName: string; fieldType: string; regex: RegExp }[];

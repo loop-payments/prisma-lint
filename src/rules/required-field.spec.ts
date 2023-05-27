@@ -1,31 +1,31 @@
 import type { RuleConfig } from '#src/common/config.js';
 import { lintSchemaSource } from '#src/lint.js';
-import requiredFields from '#src/rules/required-fields.js';
+import requiredField from '#src/rules/required-field.js';
 
-describe('required-fields', () => {
+describe('required-field', () => {
   const getRunner = (config: RuleConfig) => async (schemaSource: string) =>
     await lintSchemaSource({
       fileName: 'fake.ts',
       schemaSource,
       config: {
         rules: {
-          'required-fields': ['error', config],
+          'required-field': ['error', config],
         },
       },
       ruleRegistry: {
-        'required-fields': requiredFields,
+        'required-field': requiredField,
       },
     });
 
   describe('ignore comments', () => {
     const run = getRunner({
-      requiredFields: ['tenantId', 'createdAt', 'revisionCreatedAt'],
+      required: ['tenantId', 'createdAt', 'revisionCreatedAt'],
     });
 
     it('respects rule-specific ignore comments', async () => {
       const violations = await run(`
         model Products {
-          /// prisma-lint-ignore-model required-fields
+          /// prisma-lint-ignore-model required-field
           id String @id
         }
         `);
@@ -35,7 +35,7 @@ describe('required-fields', () => {
     it('respects field-specific ignore comments with comma', async () => {
       const violations = await run(`
         model Products {
-          /// prisma-lint-ignore-model required-fields tenantId,createdAt
+          /// prisma-lint-ignore-model required-field tenantId,createdAt
           id String @id
         }
         `);
@@ -57,7 +57,7 @@ describe('required-fields', () => {
   });
 
   describe('simple field name', () => {
-    const run = getRunner({ requiredFields: ['tenantId'] });
+    const run = getRunner({ required: ['tenantId'] });
 
     describe('with field', () => {
       it('returns no violations', async () => {
@@ -83,109 +83,11 @@ describe('required-fields', () => {
     });
   });
 
-  describe('conditional ifField regex string', () => {
+  describe('conditional ifSibling regex string', () => {
     const run = getRunner({
-      requiredFields: [
+      required: [
         {
-          ifField: '/amountD\\d$/',
-          name: 'currencyCode',
-        },
-      ],
-    });
-
-    describe('with field', () => {
-      it('returns no violations', async () => {
-        const violations = await run(`
-          model Product {
-            id String
-            amountD6 Int
-            currencyCode string
-          }
-        `);
-        expect(violations.length).toEqual(0);
-      });
-    });
-
-    describe('without field', () => {
-      describe('with ifField', () => {
-        it('returns violation', async () => {
-          const violations = await run(`
-            model Product {
-              id string
-              amountD6 Int
-            }
-          `);
-          expect(violations.length).toEqual(1);
-        });
-      });
-
-      describe('without ifField', () => {
-        it('returns no violations', async () => {
-          const violations = await run(`
-            model Product {
-              id String
-            }
-          `);
-          expect(violations.length).toEqual(0);
-        });
-      });
-    });
-  });
-
-  describe('conditional ifField regex', () => {
-    const run = getRunner({
-      requiredFields: [
-        {
-          ifField: /amountD\d$/,
-          name: 'currencyCode',
-        },
-      ],
-    });
-
-    describe('with field', () => {
-      it('returns no violations', async () => {
-        const violations = await run(`
-          model Product {
-            id String
-            amountD6 Int
-            currencyCode string
-          }
-        `);
-        expect(violations.length).toEqual(0);
-      });
-    });
-
-    describe('without field', () => {
-      describe('with ifField', () => {
-        it('returns violation', async () => {
-          const violations = await run(`
-            model Product {
-              id String
-              amountD6 Int
-            }
-          `);
-          expect(violations.length).toEqual(1);
-        });
-      });
-
-      describe('without ifField', () => {
-        it('returns no violations', async () => {
-          const violations = await run(`
-            model Product {
-             id String
-            }
-          `);
-          expect(violations.length).toEqual(0);
-        });
-      });
-    });
-  });
-
-  describe('conditional ifField string', () => {
-    const run = getRunner({
-      requiredFields: [
-        {
-          ifField: 'amountD6',
+          ifSibling: '/amountD\\d$/',
           name: 'currencyCode',
         },
       ],
@@ -205,7 +107,7 @@ describe('required-fields', () => {
     });
 
     describe('without field', () => {
-      describe('with ifField', () => {
+      describe('with ifSibling', () => {
         it('returns violation', async () => {
           const violations = await run(`
             model Product {
@@ -217,7 +119,105 @@ describe('required-fields', () => {
         });
       });
 
-      describe('without ifField', () => {
+      describe('without ifSibling', () => {
+        it('returns no violations', async () => {
+          const violations = await run(`
+            model Product {
+              id String
+            }
+          `);
+          expect(violations.length).toEqual(0);
+        });
+      });
+    });
+  });
+
+  describe('conditional ifSibling regex', () => {
+    const run = getRunner({
+      required: [
+        {
+          ifSibling: /amountD\d$/,
+          name: 'currencyCode',
+        },
+      ],
+    });
+
+    describe('with field', () => {
+      it('returns no violations', async () => {
+        const violations = await run(`
+          model Product {
+            id String
+            amountD6 Int
+            currencyCode String
+          }
+        `);
+        expect(violations.length).toEqual(0);
+      });
+    });
+
+    describe('without field', () => {
+      describe('with ifSibling', () => {
+        it('returns violation', async () => {
+          const violations = await run(`
+            model Product {
+              id String
+              amountD6 Int
+            }
+          `);
+          expect(violations.length).toEqual(1);
+        });
+      });
+
+      describe('without ifSibling', () => {
+        it('returns no violations', async () => {
+          const violations = await run(`
+            model Product {
+             id String
+            }
+          `);
+          expect(violations.length).toEqual(0);
+        });
+      });
+    });
+  });
+
+  describe('conditional ifSibling string', () => {
+    const run = getRunner({
+      required: [
+        {
+          ifSibling: 'amountD6',
+          name: 'currencyCode',
+        },
+      ],
+    });
+
+    describe('with field', () => {
+      it('returns no violations', async () => {
+        const violations = await run(`
+          model Product {
+            id String
+            amountD6 Int
+            currencyCode String
+          }
+        `);
+        expect(violations.length).toEqual(0);
+      });
+    });
+
+    describe('without field', () => {
+      describe('with ifSibling', () => {
+        it('returns violation', async () => {
+          const violations = await run(`
+            model Product {
+              id String
+              amountD6 Int
+            }
+          `);
+          expect(violations.length).toEqual(1);
+        });
+      });
+
+      describe('without ifSibling', () => {
         it('returns no violations', async () => {
           const violations = await run(`
             model Product {

@@ -10,10 +10,36 @@
       }
     ],
     "model-name-prefix": ["error", { "prefix": "Db" }],
-    "required-fields": [
+    "required-field-type": [
       "error",
       {
-        "requiredFields": ["id", "createdAt"]
+        "required": [
+          {
+            "type": "DateTime",
+            "ifName": "/At$/"
+          }
+        ]
+      }
+    ],
+    "required-field": [
+      "error",
+      {
+        "required": [
+          "id",
+          "createdAt",
+          {
+            "name": "revisionCreatedAt",
+            "ifSibling": "revisionNumber"
+          },
+          {
+            "name": "revisionNumber",
+            "ifSibling": "revisionCreatedAt"
+          },
+          {
+            "name": "currencyCode",
+            "ifSibling": "/[A|a]mountD6$/"
+          }
+        ]
       }
     ]
   }

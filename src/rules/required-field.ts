@@ -3,39 +3,39 @@ import { listFields } from '#src/common/prisma.js';
 import { isRegexOrRegexStr } from '#src/common/regex.js';
 import type { ModelRuleDefinition } from '#src/common/rule.js';
 
-const RULE_NAME = 'required-fields';
+const RULE_NAME = 'required-field';
 
 /**
  * Requires that a model has certain fields.
  *
- * The `requiredFields` config option is an array of strings or objects.
+ * The `required` config option is an array of strings or objects.
  * Each string is the name of a field that must be present. Each object
  * defines a field that must be present if another field is present.
  *
- *   requiredFields: (
+ *   required: (
  *     string |
- *     { name: string; ifField: string; }
+ *     { name: string; ifSibling: string; }
  *   )[];
  *
- * The `ifField` property of an object can be a string or a regular expression.
+ * The `ifSibling` property of an object can be a string or a regular expression.
  * For example, to require a model to have a field named "currencyCode"
  * if it has a field ending in "amountD6":
  *
  *   {
  *     name: "currencyCode";
- *     ifField: "/[a|A]mountD6$/";
+ *     ifSibling: "/[a|A]mountD6$/";
  *   }
  *
  * This rules supports selective ignoring via the `prisma-lint-ignore-model`
  * comment, like so:
  *
- *   /// prisma-lint-ignore-model required-fields tenantId
+ *   /// prisma-lint-ignore-model required-field tenantId
  *
  * That will ignore only `tenantId` field violations for the model. Other
  * required fields will still be enforced. A comma-separated list of fields
  * can be provided to ignore multiple required fields.
  *
- * @example requiredFields: ["id"]
+ * @example required: ["id"]
  *   // good
  *   model User {
  *     id Int @id
@@ -47,7 +47,7 @@ const RULE_NAME = 'required-fields';
  *   }
  *
  *
- * @example requiredFields: [{ name: "currencyCode", ifField: "/mountD6$/" }]
+ * @example required: [{ name: "currencyCode", ifSibling: "/mountD6$/" }]
  *   // good
  *   model Product {
  *     currencyCode string
@@ -64,43 +64,43 @@ const RULE_NAME = 'required-fields';
 export default {
   ruleName: RULE_NAME,
   create: (config, context) => {
-    const { requiredFields } = config;
-    if (requiredFields == null) {
-      throw new Error('Missing requiredFields');
+    const { required } = config;
+    if (required == null) {
+      throw new Error('Missing "required" option');
     }
-    if (!Array.isArray(requiredFields)) {
-      throw new Error('requiredFields must be an array');
+    if (!Array.isArray(required)) {
+      throw new Error('Config "required" value must be an array');
     }
-    const requiredNames = requiredFields.filter((f) => typeof f === 'string');
-    const conditionalRequiredFields = requiredFields.filter(
+    const requiredNames = required.filter((f) => typeof f === 'string');
+    const conditionalRequiredFields = required.filter(
       (f) => typeof f === 'object',
     );
     conditionalRequiredFields.forEach((f) => {
       if (f.name == null) {
-        throw new Error('Missing name in requiredFields object');
+        throw new Error('Missing name in required object');
       }
       if (typeof f.name !== 'string') {
-        throw new Error('requiredFields object name must be a string');
+        throw new Error('"required" object name must be a string');
       }
-      if (f.ifField == null) {
-        throw new Error('Missing ifField in requiredFields object');
+      if (f.ifSibling == null) {
+        throw new Error('Missing ifSibling in "required" object');
       }
-      if (typeof f.ifField !== 'string' && !(f.ifField instanceof RegExp)) {
-        throw new Error('requiredFields object ifField must be a string');
+      if (typeof f.ifSibling !== 'string' && !(f.ifSibling instanceof RegExp)) {
+        throw new Error('A required object "ifSibling" must be a string');
       }
     });
-    const simpleIfFieldConditions = conditionalRequiredFields.filter(
-      (f) => !isRegexOrRegexStr(f.ifField),
+    const simpleIfSiblingConditions = conditionalRequiredFields.filter(
+      (f) => !isRegexOrRegexStr(f.ifSibling),
     );
-    const regexIfFieldConditions = conditionalRequiredFields
-      .filter((f) => isRegexOrRegexStr(f.ifField))
+    const regexIfSiblingConditions = conditionalRequiredFields
+      .filter((f) => isRegexOrRegexStr(f.ifSibling))
       .map((f) => {
-        const { ifField } = f;
-        const ifFieldRegex =
-          typeof ifField === 'string'
-            ? new RegExp(ifField.slice(1, -1))
-            : ifField;
-        return { ...f, ifFieldRegex };
+        const { ifSibling } = f;
+        const ifSiblingRegex =
+          typeof ifSibling === 'string'
+            ? new RegExp(ifSibling.slice(1, -1))
+            : ifSibling;
+        return { ...f, ifSiblingRegex };
       });
     return {
       Model: (model) => {
@@ -121,24 +121,24 @@ export default {
           }
         }
 
-        for (const condition of simpleIfFieldConditions) {
+        for (const condition of simpleIfSiblingConditions) {
           if (ignoreNameSet.has(condition.name)) {
             continue;
           }
           if (
-            fieldNameSet.has(condition.ifField) &&
+            fieldNameSet.has(condition.ifSibling) &&
             !fieldNameSet.has(condition.name)
           ) {
             missingFields.push(condition.name);
           }
         }
 
-        for (const condition of regexIfFieldConditions) {
+        for (const condition of regexIfSiblingConditions) {
           if (ignoreNameSet.has(condition.name)) {
             continue;
           }
           if (
-            fields.some((f) => condition.ifFieldRegex.test(f.name)) &&
+            fields.some((f) => condition.ifSiblingRegex.test(f.name)) &&
             !fieldNameSet.has(condition.name)
           ) {
             missingFields.push(condition.name);
