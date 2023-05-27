@@ -11,7 +11,12 @@ module.exports = {
     "import",
     "jest",
   ],
-  extends: ["plugin:@typescript-eslint/recommended", "prettier"],
+  extends: [
+    "plugin:@typescript-eslint/recommended",
+    "plugin:import/recommended",
+    "plugin:import/typescript",
+    "prettier",
+  ],
   root: true,
   env: {
     node: true,
@@ -46,6 +51,10 @@ module.exports = {
       "error",
       { regex: "^[0-9a-z-.]+$", ignoreExporting: false },
     ],
+    "import/default": "off",
+    "import/namespace": "off",
+    "import/no-named-as-default": "off",
+    "import/no-named-as-default-member": "off",
     "import/order": [
       "error",
       {
@@ -58,7 +67,6 @@ module.exports = {
       },
     ],
     "jest/no-identical-title": "error",
-
     // Prettier takes care of code width. This is just for comments.
     "max-len": [
       "error",
