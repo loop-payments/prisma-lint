@@ -9,7 +9,7 @@ then
 fi
 
 echo "Checking types..."
-yarn tsc --noEmit
+yarn build 
 
 echo "Running tests..."
 yarn test
