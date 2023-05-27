@@ -1,27 +1,27 @@
-import type { RuleConfig } from '#src/common/config.js';
-import { lintSchemaSource } from '#src/lint.js';
-import modelNameMappingSnakeCase from '#src/rules/model-name-mapping-snake-case.js';
+import type { RuleConfig } from "#src/common/config.js";
+import { lintSchemaSource } from "#src/lint.js";
+import modelNameMappingSnakeCase from "#src/rules/model-name-mapping-snake-case.js";
 
-describe('model-name-mapping-snake-case', () => {
+describe("model-name-mapping-snake-case", () => {
   const getRunner = (config?: RuleConfig) => async (schemaSource: string) =>
     await lintSchemaSource({
-      fileName: 'fake.ts',
+      fileName: "fake.ts",
       schemaSource,
       config: {
         rules: {
-          'model-name-mapping-snake-case': ['error', config],
+          "model-name-mapping-snake-case": ["error", config],
         },
       },
       ruleRegistry: {
-        'model-name-mapping-snake-case': modelNameMappingSnakeCase,
+        "model-name-mapping-snake-case": modelNameMappingSnakeCase,
       },
     });
 
-  describe('without config', () => {
+  describe("without config", () => {
     const run = getRunner();
 
-    describe('valid', () => {
-      it('returns no violations', async () => {
+    describe("valid", () => {
+      it("returns no violations", async () => {
         const violations = await run(`
       model UserRole {
         id String @id
@@ -32,8 +32,8 @@ describe('model-name-mapping-snake-case', () => {
       });
     });
 
-    describe('missing @@map', () => {
-      it('returns violation', async () => {
+    describe("missing @@map", () => {
+      it("returns violation", async () => {
         const violations = await run(`
       model UserRole {
         id String @id
@@ -43,8 +43,8 @@ describe('model-name-mapping-snake-case', () => {
       });
     });
 
-    describe('@@map has no name', () => {
-      it('returns violation', async () => {
+    describe("@@map has no name", () => {
+      it("returns violation", async () => {
         const violations = await run(`
       model UserRole {
         id String @id

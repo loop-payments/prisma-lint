@@ -1,8 +1,8 @@
-import type { Model } from '@mrleebo/prisma-ast';
+import type { Model } from "@mrleebo/prisma-ast";
 
-import { PrismaPropertyType } from '#src/common/prisma.js';
+import { PrismaPropertyType } from "#src/common/prisma.js";
 
-const IGNORE_MODEL = '/// prisma-lint-ignore-model';
+const IGNORE_MODEL = "/// prisma-lint-ignore-model";
 
 export function listIgnoreModelComments(node: Model) {
   const commentFields = node.properties.filter(

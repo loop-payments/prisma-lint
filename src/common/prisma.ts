@@ -1,15 +1,15 @@
-import { Enum } from '@kejistan/enum';
+import { Enum } from "@kejistan/enum";
 import type {
   AttributeArgument,
   KeyValue,
   Model,
   ModelAttribute,
-} from '@mrleebo/prisma-ast';
+} from "@mrleebo/prisma-ast";
 
 export const PrismaPropertyType = Enum({
-  FIELD: 'field',
-  ATTRIBUTE: 'attribute',
-  COMMENT: 'comment',
+  FIELD: "field",
+  ATTRIBUTE: "attribute",
+  COMMENT: "comment",
 });
 
 export function listAttributes(node: Model): ModelAttribute[] {
@@ -22,7 +22,7 @@ export function listAttributes(node: Model): ModelAttribute[] {
 export function findMapAttribute(
   attributes: ModelAttribute[]
 ): ModelAttribute | undefined {
-  const filtered = attributes.filter((a) => a.name === 'map');
+  const filtered = attributes.filter((a) => a.name === "map");
   if (filtered.length === 0) {
     return;
   }
@@ -35,23 +35,23 @@ export function findMapAttribute(
 }
 
 type NameAttribute = AttributeArgument & {
-  value: { key: 'name'; value: string };
+  value: { key: "name"; value: string };
 };
 export function findNameAttributeArg(
   args: AttributeArgument[]
 ): NameAttribute | undefined {
   const filtered = args.filter((a) => {
-    if (typeof a.value !== 'object') {
+    if (typeof a.value !== "object") {
       return false;
     }
-    if (!a.value.hasOwnProperty('key')) {
+    if (!a.value.hasOwnProperty("key")) {
       return false;
     }
     const value = a.value as KeyValue;
-    if (value.key !== 'name') {
+    if (value.key !== "name") {
       return false;
     }
-    if (typeof value.value !== 'string') {
+    if (typeof value.value !== "string") {
       return false;
     }
     return true;

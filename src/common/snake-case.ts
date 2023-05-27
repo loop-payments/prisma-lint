@@ -21,7 +21,7 @@ export function getExpectedSnakeCase(
     compoundWords?: string[];
   } = {}
 ) {
-  const { trimPrefix = '', compoundWords = [] } = options;
+  const { trimPrefix = "", compoundWords = [] } = options;
   const inputWithoutPrefix = input.startsWith(trimPrefix)
     ? input.slice(trimPrefix.length)
     : input;
@@ -32,8 +32,8 @@ export function getExpectedSnakeCase(
     );
   }, inputWithoutPrefix);
   return inputWithCompoundWords
-    .replace(/[\W]+/g, '_')
+    .replace(/[\W]+/g, "_")
     .replace(/([A-Z])/g, (_, group) => `_${group.toLowerCase()}`)
-    .replace(/^_/, '')
-    .replace(/_+/g, '_');
+    .replace(/^_/, "")
+    .replace(/_+/g, "_");
 }

@@ -24,4 +24,6 @@ jobs:
           cache: "yarn"
       - run: yarn install
       - run: yarn tsc
+      - run: yarn style:eslint:check
+      - run: yarn style:prettier:check
       - run: yarn test

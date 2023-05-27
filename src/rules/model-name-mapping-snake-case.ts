@@ -1,13 +1,13 @@
-import type { Model } from '@mrleebo/prisma-ast';
+import type { Model } from "@mrleebo/prisma-ast";
 
-import type { RuleConfig } from '#src/common/config.js';
+import type { RuleConfig } from "#src/common/config.js";
 import {
   findMapAttribute,
   findNameAttributeArg,
   listAttributes,
-} from '#src/common/prisma.js';
-import type { Context, RuleDefinition } from '#src/common/rule.js';
-import { getExpectedSnakeCase } from '#src/common/snake-case.js';
+} from "#src/common/prisma.js";
+import type { Context, RuleDefinition } from "#src/common/rule.js";
+import { getExpectedSnakeCase } from "#src/common/snake-case.js";
 
 /**
  * Requires that the mapped name of a model is the expected snake case.
@@ -69,7 +69,7 @@ export default {
       );
     }
     const compoundWords = (compoundWordsRaw as string[]) || undefined;
-    if (trimPrefixRaw && typeof trimPrefixRaw !== 'string') {
+    if (trimPrefixRaw && typeof trimPrefixRaw !== "string") {
       throw new Error(
         `Expected "trimPrefix" to be a string, but got ${trimPrefixRaw}.`
       );
@@ -82,7 +82,7 @@ export default {
         if (!mapAttribute) {
           context.report({
             node,
-            message: 'Model name must be mapped to snake case.',
+            message: "Model name must be mapped to snake case.",
           });
           return;
         }
@@ -90,12 +90,12 @@ export default {
         if (!nameAttribute) {
           context.report({
             node,
-            message: 'Model name must be mapped to snake case.',
+            message: "Model name must be mapped to snake case.",
           });
           return;
         }
         const nodeName = node.name;
-        const mappedName = nameAttribute.value.value.replaceAll('"', '');
+        const mappedName = nameAttribute.value.value.replaceAll('"', "");
         const expectedSnakeCase = getExpectedSnakeCase(nodeName, {
           compoundWords,
           trimPrefix,
@@ -104,7 +104,7 @@ export default {
           context.report({
             node,
             message:
-              'Expected mapped model name to be snake case consistent ' +
+              "Expected mapped model name to be snake case consistent " +
               `with the model name "${expectedSnakeCase}".`,
           });
         }

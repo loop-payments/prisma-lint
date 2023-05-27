@@ -1,6 +1,6 @@
-import type { Model } from '@mrleebo/prisma-ast';
+import type { Model } from "@mrleebo/prisma-ast";
 
-import type { RuleConfig } from '#src/common/config.js';
+import type { RuleConfig } from "#src/common/config.js";
 
 /**
  * Context passed to rules.
