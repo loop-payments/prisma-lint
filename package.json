@@ -26,6 +26,7 @@
     "eslint-plugin-canonical": "^4.2.2",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-jest": "^27.2.1",
+    "husky": "^8.0.3",
     "jest": "^29.3.1",
     "prettier": "2.8.3",
     "ts-jest": "^29.1.0",
@@ -36,6 +37,7 @@
   "scripts": {
     "build": "tsc",
     "test": "node ./node_modules/jest/bin/jest.js",
+    "setup:precommit-hooks": "husky install",
     "style:eslint": "eslint src --fix --max-warnings=0 --cache",
     "style:eslint:check": "eslint src --max-warnings=0 --cache",
     "style:prettier": "prettier --write src",
