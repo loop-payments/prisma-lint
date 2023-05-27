@@ -1,6 +1,12 @@
 import type { Model } from "@mrleebo/prisma-ast";
 import type { RuleConfig } from "#src/common/config.js";
 import type { Context, RuleDefinition } from "#src/common/rule.js";
+import {
+  findMapAttribute,
+  findNameAttributeArg,
+  listAttributes,
+} from "../common/prisma.js";
+import { getConsistentSnakeCase } from "../common/snake-case.js";
 
 /**
  * Requires model names to map to a value that match expectations.
@@ -48,22 +54,77 @@ export default {
     defaultMessage: undefined,
   },
   create: (config: RuleConfig, context: Context) => {
-    const { regex, enforceConsistentSnakeCase } = config;
+    const { regex, enforceConsistentSnakeCase: enforceConsistentSnakeCaseRaw } =
+      config;
     const regexList = Array.isArray(regex) ? regex : [];
     if (typeof regex === "string") {
       regexList.push(regex);
     }
-    if (
-      typeof enforceConsistentSnakeCase === "boolean" &&
-      enforceConsistentSnakeCase
-    ) {
-      regexList.push("^[a-z][a-z0-9_]*$");
-    }
+    const enforceConsistentSnakeCase =
+      typeof enforceConsistentSnakeCaseRaw === "boolean" &&
+      enforceConsistentSnakeCaseRaw;
     return {
       Model: (node: Model) => {
-        const message = `Expected mapping for model to match`;
-        context.report({ node, message });
+        const attributes = listAttributes(node);
+        const mapAttribute = findMapAttribute(attributes);
+        if (!mapAttribute) {
+          context.report({
+            node,
+            message: "Model name must be mapped.",
+          });
+          return;
+        }
+        const nameAttribute = findNameAttributeArg(mapAttribute.args);
+        if (!nameAttribute) {
+          context.report({
+            node,
+            message: "Model name must be mapped.",
+          });
+          return;
+        }
+
+        const nodeName = node.name;
+        const mappedName = nameAttribute.value.value;
+
+        const failedSnakeCaseMessage = enforceConsistentSnakeCase
+          ? getFailedSnakeCaseMessage(nodeName, mappedName)
+          : undefined;
+        const failedRegexMessage = getFailedRegexMessage(mappedName, regexList);
+        if (failedSnakeCaseMessage || failedRegexMessage) {
+          context.report({
+            node,
+            message: [failedSnakeCaseMessage, failedRegexMessage]
+              .filter(Boolean)
+              .join("\n"),
+          });
+        }
       },
     };
   },
 } satisfies RuleDefinition;
+
+function getFailedRegexMessage(
+  mappedName: string,
+  regexList: string[]
+): string | undefined {
+  const failedRegexes = regexList.filter((regex) => {
+    return !new RegExp(regex).test(mappedName);
+  });
+  return failedRegexes
+    .map((regex) => `Expected mapped model name to match "${regex}".`)
+    .join("\n");
+}
+
+function getFailedSnakeCaseMessage(
+  nodeName: string,
+  mappedName: string
+): string | undefined {
+  const expectedSnakeCase = getConsistentSnakeCase(nodeName);
+  if (mappedName !== expectedSnakeCase) {
+    return (
+      `Expected mapped model name to be snake case consistent ` +
+      `with the model name "${expectedSnakeCase}".`
+    );
+  }
+  return "";
+}

@@ -1,11 +1,36 @@
-export function toSnakeCase(inputString: string, compoundWords: string[] = []) {
-  const stringWithCompoundWords = compoundWords.reduce((s, compoundWord) => {
+/**
+ * Returns a snake case string constistent with input string,
+ * accounting for compound words and prefix.
+ */
+export function getConsistentSnakeCase(
+  input: string,
+  options: {
+    /**
+     * A prefix to remove from the input string
+     * before converting to snake case.
+     */
+    withoutPrefix?: string;
+    /**
+     * A list of words to keep as a single word
+     * when converting to snake case. For example,
+     * "GraphQL" will be converted to "graph_ql" by default,
+     * but if "GraphQL" is in this list, it will be converted
+     * to "graphql".
+     */
+    compoundWords?: string[];
+  } = {}
+) {
+  const { withoutPrefix = "", compoundWords = [] } = options;
+  const inputWithoutPrefix = input.startsWith(withoutPrefix)
+    ? input.slice(withoutPrefix.length)
+    : input;
+  const inputWithCompoundWords = compoundWords.reduce((s, compoundWord) => {
     return s.replace(
       compoundWord,
       compoundWord.charAt(0).toUpperCase() + compoundWord.slice(1).toLowerCase()
     );
-  }, inputString);
-  return stringWithCompoundWords
+  }, inputWithoutPrefix);
+  return inputWithCompoundWords
     .replace(/[\W]+/g, "_")
     .replace(/([A-Z])/g, (_, group) => `_${group.toLowerCase()}`)
     .replace(/^_/, "")
