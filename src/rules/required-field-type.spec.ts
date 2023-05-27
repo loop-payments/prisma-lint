@@ -19,7 +19,7 @@ describe('required-field-type', () => {
 
   describe('string literal field name', () => {
     const run = getRunner({
-      required: [{ fieldName: 'id', fieldType: 'String' }],
+      required: [{ ifName: 'id', type: 'String' }],
     });
 
     describe('correct type', () => {
@@ -47,7 +47,7 @@ describe('required-field-type', () => {
 
   describe('regex field name', () => {
     const run = getRunner({
-      required: [{ fieldName: /At$/, fieldType: 'DateTime' }],
+      required: [{ ifName: /At$/, type: 'DateTime' }],
     });
 
     describe('correct type', () => {
@@ -75,7 +75,7 @@ describe('required-field-type', () => {
 
   describe('regex string field name', () => {
     const run = getRunner({
-      required: [{ fieldName: '/At$/', fieldType: 'DateTime' }],
+      required: [{ ifName: '/At$/', type: 'DateTime' }],
     });
 
     describe('correct type', () => {

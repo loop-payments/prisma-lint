@@ -8,12 +8,12 @@ const RULE_NAME = 'required-field-type';
  *
  *   {
  *     requirements: [
- *       { fieldName: "id", fieldType: "String" },
- *       { fieldName: "/At$/", fieldType: "DateTime" },
+ *       { ifName: "id", type: "String" },
+ *       { ifName: "/At$/", type: "DateTime" },
  *     ]
  *   }
  *
- * @example { requirements: [{ fieldName: "id", fieldType: "String" }] }
+ * @example { requirements: [{ ifName: "id", type: "String" }] }
  *   // good
  *   type User {
  *     id String
@@ -24,7 +24,7 @@ const RULE_NAME = 'required-field-type';
  *     id Int
  *   }
  *
- * @example { requirements: [{ fieldName: "/At$/", fieldType: "DateTime" }] }
+ * @example { requirements: [{ ifName: "/At$/", type: "DateTime" }] }
  *   // good
  *   type User {
  *     createdAt DateTime
@@ -49,28 +49,30 @@ export default {
     }
     const rulesWithRegExp = required.map((r) => ({
       ...r,
-      regex: toRegExp(r.fieldName),
-    })) as { fieldName: string; fieldType: string; regex: RegExp }[];
+      ifNameRegex: toRegExp(r.ifName),
+    })) as { ifName: string; type: string; ifNameRegex: RegExp }[];
     return {
       Field: (model, field) => {
-        const matches = rulesWithRegExp.filter((r) => r.regex.test(field.name));
+        const matches = rulesWithRegExp.filter((r) =>
+          r.ifNameRegex.test(field.name),
+        );
         if (matches.length === 0) {
           return;
         }
         const areMatchesConflicting =
-          new Set(matches.map((m) => m.fieldType)).size > 1;
+          new Set(matches.map((m) => m.type)).size > 1;
         if (areMatchesConflicting) {
           const message = `Field has conflicting type requirements: ${JSON.stringify(
-            matches.map(({ fieldName, fieldType }) => ({
-              fieldName,
-              fieldType,
+            matches.map(({ ifName, type }) => ({
+              ifName,
+              type,
             })),
           )}`;
 
           context.report({ model, field, message });
         }
         const actualType = field.fieldType;
-        const expectedType = matches[0].fieldType;
+        const expectedType = matches[0].type;
         if (actualType !== expectedType) {
           const message = `Field type "${actualType}" does not match expected type "${expectedType}"`;
           context.report({ model, field, message });

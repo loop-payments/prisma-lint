@@ -10,7 +10,7 @@ datasource db {
 
 model DbUser {
   id         String @id
-  createdAt  String @map(name: "created_at")
+  createdAt  DateTime @map(name: "created_at")
   @@map(name: "user")
 }
 
