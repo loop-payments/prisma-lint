@@ -35,7 +35,7 @@ export default {
         if (model.name.startsWith(prefix)) {
           return;
         }
-        const message = `Model name "${model.name}" should start with "${prefix}"`;
+        const message = `Model name should start with "${prefix}"`;
         context.report({ model, message });
       },
     };

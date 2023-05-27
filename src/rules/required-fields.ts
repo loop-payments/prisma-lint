@@ -104,18 +104,26 @@ export default {
     return {
       Model: (model) => {
         const ruleIgnoreParams = getRuleIgnoreParams(model, RULE_NAME);
+        const ignoreNameSet = new Set(ruleIgnoreParams);
+
         const fields = listFields(model);
         const fieldNameSet = new Set(fields.map((f) => f.name));
-        for (const param of ruleIgnoreParams) {
-          fieldNameSet.delete(param);
-        }
+
         const missingFields = [];
+
         for (const requiredName of requiredNames) {
+          if (ignoreNameSet.has(requiredName)) {
+            continue;
+          }
           if (!fieldNameSet.has(requiredName)) {
             missingFields.push(requiredName);
           }
         }
+
         for (const condition of simpleIfFieldConditions) {
+          if (ignoreNameSet.has(condition.name)) {
+            continue;
+          }
           if (
             fieldNameSet.has(condition.ifField) &&
             !fieldNameSet.has(condition.name)
@@ -123,7 +131,11 @@ export default {
             missingFields.push(condition.name);
           }
         }
+
         for (const condition of regexIfFieldConditions) {
+          if (ignoreNameSet.has(condition.name)) {
+            continue;
+          }
           if (
             fields.some((f) => condition.ifFieldRegex.test(f.name)) &&
             !fieldNameSet.has(condition.name)
@@ -131,11 +143,10 @@ export default {
             missingFields.push(condition.name);
           }
         }
+
         if (missingFields.length > 0) {
           context.report({
-            message: `Model "${
-              model.name
-            }" is missing required fields: ${missingFields.join(', ')}`,
+            message: `Missing required fields: ${missingFields.join(', ')}`,
             model,
           });
         }
