@@ -41,7 +41,7 @@ describe('required-fields', () => {
     });
   });
 
-  describe('expecting tenant id', () => {
+  describe('simple field name', () => {
     const run = getRunner({ requiredFields: ['tenantId'] });
 
     describe('with field', () => {
@@ -64,6 +64,53 @@ describe('required-fields', () => {
       }
     `);
         expect(violations.length).toEqual(1);
+      });
+    });
+  });
+
+  describe('conditional ifField string', () => {
+    const run = getRunner({
+      requiredFields: [
+        {
+          ifField: 'amountD6',
+          name: 'currencyCode',
+        },
+      ],
+    });
+
+    describe('with field', () => {
+      it('returns no violations', async () => {
+        const violations = await run(`
+      model User {
+        id String
+        amountD6 Int
+        currencyCode String
+      }
+    `);
+        expect(violations.length).toEqual(0);
+      });
+    });
+
+    describe('with ifField without field', () => {
+      it('returns violation', async () => {
+        const violations = await run(`
+      model User {
+        id String
+        amountD6 Int
+      }
+    `);
+        expect(violations.length).toEqual(1);
+      });
+    });
+
+    describe('without ifField, without field', () => {
+      it('returns no violations', async () => {
+        const violations = await run(`
+      model User {
+        id string
+      }
+    `);
+        expect(violations.length).toEqual(0);
       });
     });
   });
