@@ -1,6 +1,6 @@
-# prisma-lint (WIP)
+# prisma-lint
 
-A work-in-progress linter for Prisma schema files.
+A linter for Prisma schema files.
 
 ## Installation
 
@@ -18,15 +18,16 @@ A work-in-progress linter for Prisma schema files.
 > yarn prisma-lint path/to/schema.prisma
 ```
 
+## Rules
+
+See [RULES.md](RULES.md). By default, no rules are enabled.
+
 ## Configuration
 
-In a `.prisma-lint.json` file:
+In a `.prisma-lint.json` file, something like:
 
 ```js
 {
-  "plugins": [
-    "prisma-lint-loop",
-  ],
   "rules": {
     "model-name-grammatical-number": ["error", {
       "enforcedStyle": "singular"
@@ -51,12 +52,6 @@ In a `.prisma-lint.json` file:
 ```
 
 ### TODO
-
-Features:
-
-- Disallowed field names
-- Required field order
-- Required index
 
 Internal:
 
