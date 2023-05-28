@@ -59,7 +59,7 @@ export default {
         const message = `Field "${field.name}" is forbidden by ${pluralize(
           'rule',
           matches.length,
-        )}: ${matches.map((m) => `"${  m.name  }"`).join(', ')}.`;
+        )}: ${matches.map((m) => `"${m.name}"`).join(', ')}.`;
         context.report({ model, field, message });
       },
     };
