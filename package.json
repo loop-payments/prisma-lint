@@ -2,15 +2,35 @@
   "name": "prisma-lint",
   "version": "0.0.2",
   "description": "A linter for Prisma schema files.",
+  "license": "MIT",
+  "author": "engineering@loop.com",
   "type": "module",
   "imports": {
     "#src/*": "./dist/*"
   },
-  "author": "engineering@loop.com",
+  "bin": "dist/cli.js",
   "files": [
     "dist"
   ],
-  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "docs": "node ./scripts/generate-docs.js",
+    "setup:precommit-hooks": "husky install",
+    "style:eslint": "eslint src --fix --max-warnings=0 --cache",
+    "style:eslint:check": "eslint src --max-warnings=0 --cache",
+    "style:prettier": "prettier --write src",
+    "style:prettier:check": "prettier --check src",
+    "test": "node ./node_modules/jest/bin/jest.js",
+    "test:cli:invalid": "dist/cli.js fixture/invalid.prisma"
+  },
+  "dependencies": {
+    "@kejistan/enum": "^0.0.2",
+    "@mrleebo/prisma-ast": "^0.5.1",
+    "commander": "^10.0.0",
+    "cosmiconfig": "^8.1.3",
+    "pluralize": "^8.0.0",
+    "zod": "^3.21.4"
+  },
   "devDependencies": {
     "@tsconfig/esm": "^1.0.3",
     "@tsconfig/node18": "^2.0.1",
@@ -33,25 +53,5 @@
     "ts-jest": "^29.1.0",
     "typescript": "^5.0.4"
   },
-  "bin": "dist/cli.js",
-  "packageManager": "yarn@3.3.1",
-  "scripts": {
-    "build": "tsc",
-    "test": "node ./node_modules/jest/bin/jest.js",
-    "docs": "node ./scripts/generate-docs.js",
-    "setup:precommit-hooks": "husky install",
-    "style:eslint": "eslint src --fix --max-warnings=0 --cache",
-    "style:eslint:check": "eslint src --max-warnings=0 --cache",
-    "style:prettier": "prettier --write src",
-    "style:prettier:check": "prettier --check src",
-    "test:cli:invalid": "dist/cli.js fixture/invalid.prisma"
-  },
-  "dependencies": {
-    "@kejistan/enum": "^0.0.2",
-    "@mrleebo/prisma-ast": "^0.5.1",
-    "commander": "^10.0.0",
-    "cosmiconfig": "^8.1.3",
-    "pluralize": "^8.0.0",
-    "zod": "^3.21.4"
-  }
+  "packageManager": "yarn@3.3.1"
 }
