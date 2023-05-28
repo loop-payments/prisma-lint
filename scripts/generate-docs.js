@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import glob from 'glob';
+import { glob } from 'glob';
 
 const rulesDirectory = 'src/rules';
 const outputFile = 'RULES.md';
