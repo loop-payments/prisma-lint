@@ -61,9 +61,76 @@ describe('required-field-index', () => {
       expect(violations.length).toEqual(0);
     });
   });
+
   describe('string literal field name', () => {
     const run = getRunner({
       required: [{ ifName: 'tenantQid' }],
+    });
+
+    describe('with @unique tag', () => {
+      it('returns no violations', async () => {
+        const violations = await run(`
+      model User {
+        tenantQid String @unique
+      }
+    `);
+        expect(violations.length).toEqual(0);
+      });
+    });
+
+    describe('with @@index', () => {
+      it('returns no violations', async () => {
+        const violations = await run(`
+      model User {
+        tenantQid String
+        @@index(tenantQid)
+      }
+    `);
+        expect(violations.length).toEqual(0);
+      });
+    });
+
+    describe('with first in compound @@index', () => {
+      it('returns no violations', async () => {
+        const violations = await run(`
+      model User {
+        tenantQid String
+        createdAt DateTime
+        @@index([tenantQid, createdAt])
+      }
+    `);
+        expect(violations.length).toEqual(0);
+      });
+    });
+
+    describe('with second in compound @@index', () => {
+      it('returns violation', async () => {
+        const violations = await run(`
+      model Users {
+        tenantQid String
+        createdAt DateTime
+        @@index([createdAt, tenantQid])
+      }
+    `);
+        expect(violations.length).toEqual(1);
+      });
+    });
+
+    describe('with no index', () => {
+      it('returns violation', async () => {
+        const violations = await run(`
+      model Users {
+        tenantQid String
+      }
+    `);
+        expect(violations.length).toEqual(1);
+      });
+    });
+  });
+
+  describe('regex field name', () => {
+    const run = getRunner({
+      required: ['/.*Qid$/'],
     });
 
     describe('with @unique tag', () => {

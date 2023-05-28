@@ -22,9 +22,12 @@ const RULE_NAME = 'required-field-index';
 
 const Config = z.object({
   required: z.array(
-    z.object({
-      ifName: z.union([z.string(), z.instanceof(RegExp)]),
-    }),
+    z.union([
+      z.string(),
+      z.object({
+        ifName: z.union([z.string(), z.instanceof(RegExp)]),
+      }),
+    ]),
   ),
 });
 
@@ -47,7 +50,7 @@ const Config = z.object({
  * required indices will still be enforced. A comma-separated list of fields
  * can be provided to ignore multiple fields.
  *
- * @example { required: [{ ifName: "createdAt" }] }
+ * @example { required: ["createdAt"] }
  *   // good
  *   type User {
  *     createdAt DateTime @unique
@@ -92,10 +95,18 @@ export default {
   ruleName: RULE_NAME,
   create: (config, context) => {
     const parsedConfig = Config.parse(config, RULE_CONFIG_PARSE_PARAMS);
-    const requiredWithRegExp = parsedConfig.required.map((r) => ({
-      ...r,
-      ifNameRegExp: toRegExp(r.ifName),
-    })) as { ifName: string; ifNameRegExp: RegExp }[];
+    const requiredWithRegExp = parsedConfig.required.map((r) => {
+      if (typeof r === 'string') {
+        return {
+          ifName: r,
+          ifNameRegExp: toRegExp(r),
+        };
+      }
+      return {
+        ...r,
+        ifNameRegExp: toRegExp(r.ifName),
+      };
+    }) as { ifName: string; ifNameRegExp: RegExp }[];
     // Each file gets its own instance of the rule, so we don't need
     // to worry about model name collisions across files.
     const indexSetByModelName = new Map<string, IndexSet>();
