@@ -23,19 +23,6 @@ const Config = z.object({
 /**
  * Checks that a model has certain fields.
  *
- * The `required` config option is an array of strings or objects.
- * Each string is the name of a field that must be present. Each object
- * defines a field that must be present if another field is present.
- *
- * The `ifSibling` property of an object can be a string or a regular expression.
- * For example, to require a model to have a field named "currencyCode"
- * if it has a field ending in "amountD6":
- *
- *     {
- *       name: "currencyCode";
- *       ifSibling: "/[a|A]mountD6$/";
- *     }
- *
  * This rules supports selective ignoring via the `prisma-lint-ignore-model`
  * comment, like so:
  *

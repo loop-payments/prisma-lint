@@ -34,13 +34,6 @@ const Config = z.object({
 /**
  * Checks that certain fields have indices.
  *
- *     {
- *       required: [
- *         { ifName: "createdAt" },
- *         { ifName: "/Id$/" },
- *       ]
- *     }
- *
  * This rules supports selective ignoring via the `prisma-lint-ignore-model`
  * comment, like so:
  *
