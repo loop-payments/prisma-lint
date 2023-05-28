@@ -19,13 +19,13 @@ const Config = z.object({
  * Requires certain fields to have a specific type.
  *
  *   {
- *     requirements: [
+ *     required: [
  *       { ifName: "id", type: "String" },
  *       { ifName: "/At$/", type: "DateTime" },
  *     ]
  *   }
  *
- * @example { requirements: [{ ifName: "id", type: "String" }] }
+ * @example { required: [{ ifName: "id", type: "String" }] }
  *   // good
  *   type User {
  *     id String
@@ -36,7 +36,7 @@ const Config = z.object({
  *     id Int
  *   }
  *
- * @example { requirements: [{ ifName: "/At$/", type: "DateTime" }] }
+ * @example { required: [{ ifName: "/At$/", type: "DateTime" }] }
  *   // good
  *   type User {
  *     createdAt DateTime
@@ -68,7 +68,7 @@ export default {
         const areMatchesConflicting =
           new Set(matches.map((m) => m.type)).size > 1;
         if (areMatchesConflicting) {
-          const message = `Field has conflicting type requirements: ${JSON.stringify(
+          const message = `Field has conflicting type required: ${JSON.stringify(
             matches.map(({ ifName, type }) => ({
               ifName,
               type,

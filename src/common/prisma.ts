@@ -6,6 +6,7 @@ import type {
   Model,
   ModelAttribute,
   Schema,
+  Value,
 } from '@mrleebo/prisma-ast';
 
 export function listFields(model: Model): Field[] {
@@ -73,4 +74,34 @@ export function findNameAttributeArg(
     );
   }
   return filtered[0];
+}
+
+export function isValue(value: Value | KeyValue): value is Value {
+  return !isKeyValue(value);
+}
+
+export function isKeyValue(value: Value | KeyValue): value is KeyValue {
+  if (
+    typeof value === 'object' &&
+    !Array.isArray(value) &&
+    value.type === 'keyValue'
+  ) {
+    return true;
+  }
+
+  return false;
+}
+
+export function assertValueIsStringArray(value: Value): Array<string> {
+  if (Array.isArray(value)) {
+    return value as Array<string>;
+  }
+
+  if (typeof value === 'object') {
+    if (value.type === 'array') {
+      return value.args;
+    }
+  }
+
+  throw new Error(`value is not a string array ${JSON.stringify(value)}`);
 }
