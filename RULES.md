@@ -5,6 +5,7 @@
 
 Configuration option schemas are written with [Zod](
 <https://github.com/colinhacks/zod>).
+
 - [field-name-mapping-snake-case](#field-name-mapping-snake-case)
 - [field-order](#field-order)
 - [forbidden-field](#forbidden-field)

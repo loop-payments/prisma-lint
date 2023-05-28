@@ -39,6 +39,7 @@
   "scripts": {
     "build": "tsc",
     "test": "node ./node_modules/jest/bin/jest.js",
+    "docs": "node ./scripts/generate-docs.js",
     "setup:precommit-hooks": "husky install",
     "style:eslint": "eslint src --fix --max-warnings=0 --cache",
     "style:eslint:check": "eslint src --max-warnings=0 --cache",
