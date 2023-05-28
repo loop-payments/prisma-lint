@@ -4,6 +4,9 @@
     "moduleResolution": "nodenext",
     "outDir": "./dist",
     "rootDir": "./src",
+    "paths": {
+      "#src/*": ["./src/*"]
+    },
     "noImplicitAny": true
   },
   "include": ["src/**/*"],
