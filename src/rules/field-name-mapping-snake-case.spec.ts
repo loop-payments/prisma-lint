@@ -65,6 +65,26 @@ describe('field-name-mapping-snake-case', () => {
     });
   });
 
+  describe('with invalid config', () => {
+    it('throws error', async () => {
+      expect(() => {
+        fieldNameMappingSnakeCase.create({ compoundWords: 1 }, {} as any);
+      }).toThrowErrorMatchingInlineSnapshot(`
+        "[
+          {
+            "code": "invalid_type",
+            "expected": "array",
+            "received": "number",
+            "path": [
+              "compoundWords"
+            ],
+            "message": "Invalid rule configuration"
+          }
+        ]"
+      `);
+    });
+  });
+
   describe('without config', () => {
     const run = getRunner();
 
