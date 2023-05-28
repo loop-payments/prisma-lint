@@ -10,18 +10,6 @@ A linter for Prisma schema files.
 > yarn add --dev prisma-lint
 ```
 
-## Usage
-
-```sh
-> npm prisma-lint path/to/schema.prisma
-# or
-> yarn prisma-lint path/to/schema.prisma
-```
-
-## Rules
-
-See [RULES.md](RULES.md). By default, no rules are enabled.
-
 ## Configuration
 
 In a `.prisma-lint.json` file, something like:
@@ -43,9 +31,19 @@ In a `.prisma-lint.json` file, something like:
 }
 ```
 
-### Ignoring rules
+See [RULES.md](RULES.md) for a list of supported rules. By default, no rules are enabled.
 
-Rules can be ignored with comments inside models.
+## Usage
+
+```sh
+> npm prisma-lint path/to/schema.prisma
+# or
+> yarn prisma-lint path/to/schema.prisma
+```
+
+## Ignoring models with comments
+
+Rules can be ignored with three-slash (`///`) comments inside models.
 
 Ignore all lint rules for a model and its fields:
 
