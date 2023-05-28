@@ -86,7 +86,7 @@ const run = async () => {
       config,
       ruleRegistry,
     });
-    if (violations.length > 1) {
+    if (violations.length > 0) {
       printFileViolations(schemaFile, violations);
     }
   }
