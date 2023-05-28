@@ -8,7 +8,7 @@ import {
   findNameAttributeArg,
 } from '#src/common/prisma.js';
 import type { FieldRuleDefinition } from '#src/common/rule.js';
-import { getExpectedSnakeCase } from '#src/common/snake-case.js';
+import { toSnakeCase } from '#src/common/snake-case.js';
 
 const RULE_NAME = 'field-name-mapping-snake-case';
 
@@ -85,7 +85,7 @@ export default {
         }
         const fieldName = field.name;
         const mappedName = nameAttribute.value.value.replaceAll('"', '');
-        const expectedSnakeCase = getExpectedSnakeCase(fieldName, {
+        const expectedSnakeCase = toSnakeCase(fieldName, {
           compoundWords,
         });
         if (mappedName !== expectedSnakeCase) {

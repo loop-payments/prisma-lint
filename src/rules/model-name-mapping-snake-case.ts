@@ -5,7 +5,7 @@ import { z } from 'zod';
 import { RULE_CONFIG_PARSE_PARAMS } from '#src/common/config.js';
 import { findNameAttributeArg, listAttributes } from '#src/common/prisma.js';
 import type { ModelRuleDefinition } from '#src/common/rule.js';
-import { getExpectedSnakeCase } from '#src/common/snake-case.js';
+import { toSnakeCase } from '#src/common/snake-case.js';
 
 const RULE_NAME = 'model-name-mapping-snake-case';
 
@@ -93,7 +93,7 @@ export default {
         }
         const nodeName = model.name;
         const mappedName = nameAttribute.value.value.replaceAll('"', '');
-        const expectedSnakeCase = getExpectedSnakeCase(nodeName, {
+        const expectedSnakeCase = toSnakeCase(nodeName, {
           compoundWords,
           trimPrefix,
         });

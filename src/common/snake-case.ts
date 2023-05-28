@@ -2,7 +2,7 @@
  * Returns a snake case string expected based on input string,
  * accounting for compound words and prefix.
  */
-export function getExpectedSnakeCase(
+export function toSnakeCase(
   input: string,
   options: {
     /**
@@ -20,21 +20,24 @@ export function getExpectedSnakeCase(
      */
     compoundWords?: string[];
   } = {},
-) {
+): string {
   const { trimPrefix = '', compoundWords = [] } = options;
   const inputWithoutPrefix = input.startsWith(trimPrefix)
     ? input.slice(trimPrefix.length)
     : input;
-  const inputWithCompoundWords = compoundWords.reduce((s, compoundWord) => {
-    return s.replace(
-      compoundWord,
-      compoundWord.charAt(0).toUpperCase() +
-        compoundWord.slice(1).toLowerCase(),
-    );
-  }, inputWithoutPrefix);
-  return inputWithCompoundWords
+  const compountWordsAsSnakeCase = compoundWords.map((compoundWord) =>
+    toSnakeCase(compoundWord),
+  );
+  const snakeCase = inputWithoutPrefix
     .replace(/[\W]+/g, '_')
     .replace(/([A-Z])/g, (_, group) => `_${group.toLowerCase()}`)
+    .replace(/\d+/g, '_$&')
     .replace(/^_/, '')
     .replace(/_+/g, '_');
+  const snakeCaseWithCompoundWords = compountWordsAsSnakeCase.reduce(
+    (acc, compoundWord) =>
+      acc.replace(compoundWord, compoundWord.replace(/_/g, '')),
+    snakeCase,
+  );
+  return snakeCaseWithCompoundWords;
 }
