@@ -54,13 +54,10 @@ In a `.prisma-lint.json` file:
 
 Features:
 
-- Support for configuration file
-- Support for plugins
-- Plugin repository template
-- Support for ignore comments
-- Prettier CLI output
+- Disallowed field names
+- Required field order
+- Required index
 
 Internal:
 
-- GitHub Actions
 - package.json sorting
