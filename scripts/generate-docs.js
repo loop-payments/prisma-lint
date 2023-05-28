@@ -1,6 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 import glob from 'glob';
+import { z } from 'zod';
+import { zodToTs, printNode } from 'zod-to-ts';
 
 const rulesDirectory = 'src/rules';
 const outputFile = 'RULES.md';
@@ -11,6 +13,11 @@ function trimBlankNewLines(str) {
 
 const RULES_HEADER = `
 # Rules
+
+> This document is automatically generated from the source code. Do not edit it directly.
+
+Configuration option schemas are written with [Zod](
+<https://github.com/colinhacks/zod>).
 
 `;
 
@@ -36,7 +43,8 @@ function listExamples(exampleLines) {
         rawTitle === '' ? 'Default' : `With \`${rawTitle}\``;
       currentExampleCode = '';
     } else {
-      currentExampleCode += `${line}\n`;
+      // Remove the first 2 spaces.
+      currentExampleCode += `${line.slice(2)}\n`;
     }
   }
   if (currentExampleTitle !== '' && currentExampleCode !== '') {
@@ -52,6 +60,7 @@ function extractRulesFromTSFile(filePath) {
   const fileContent = fs.readFileSync(filePath, 'utf-8');
   const ruleNameMatch = fileContent.match(/const RULE_NAME = '(.*)';/);
   const descriptionMatch = fileContent.match(/\/\*\*\n([\s\S]*?)\n\s*\*\//);
+  const configMatch = fileContent.match(/const Config =([\s\S]*?);/);
 
   if (ruleNameMatch && descriptionMatch) {
     const ruleName = ruleNameMatch[1];
@@ -65,10 +74,16 @@ function extractRulesFromTSFile(filePath) {
     const description = descriptionLines.slice(0, firstExampleIndex).join('\n');
     const examples = listExamples(descriptionLines.slice(firstExampleIndex));
 
+    const configCode = configMatch[1].trim();
+    const parsedConfig = eval(`${configCode}`);
+    const { node } = zodToTs(parsedConfig, 'Config');
+    const configSchema = printNode(node);
+
     return {
       ruleName,
       description,
       examples,
+      configSchema: configCode,
     };
   }
 
@@ -89,6 +104,12 @@ function buildRulesMarkdownFile(rules) {
   rules.forEach((rule) => {
     markdownContent += `## ${rule.ruleName}\n\n`;
     markdownContent += `${rule.description}\n\n`;
+    if (rule.configSchema !== '{}') {
+      markdownContent += '### Configuration\n\n';
+      markdownContent += '```ts\n';
+      markdownContent += `${rule.configSchema}\n`;
+      markdownContent += '```\n\n';
+    }
     if (rule.examples.length > 0) {
       markdownContent += '### Examples\n\n';
     }

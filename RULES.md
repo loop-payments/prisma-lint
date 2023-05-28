@@ -1,6 +1,10 @@
 
 # Rules
 
+> This document is automatically generated from the source code. Do not edit it directly.
+
+Configuration option schemas are written with [Zod](
+<https://github.com/colinhacks/zod>).
 - [field-name-mapping-snake-case](#field-name-mapping-snake-case)
 - [field-order](#field-order)
 - [forbidden-field](#forbidden-field)
@@ -16,45 +20,55 @@
 Requires that the mapped name of a field is the expected snake case.
 
 
+### Configuration
+
+```ts
+z
+  .object({
+    compoundWords: z.array(z.string()).optional(),
+  })
+  .optional()
+```
+
 ### Examples
 
 #### Default
 
 ```prisma
-  // good
-  model UserRole {
-    userId String @map(name: "user_id")
-  }
+// good
+model UserRole {
+  userId String @map(name: "user_id")
+}
 
-  // good
-  model UserRole {
-    // No mapping needed.
-    id String
-  }
+// good
+model UserRole {
+  // No mapping needed.
+  id String
+}
 
-  // bad
-  model UserRole {
-    userId String
-  }
+// bad
+model UserRole {
+  userId String
+}
 
-  // bad
-  model UserRole {
-    userId String @map(name: "user_i_d")
-  }
+// bad
+model UserRole {
+  userId String @map(name: "user_i_d")
+}
 ```
 
 #### With `{ compoundWords: ["GraphQL"] }`
 
 ```prisma
-  // good
-  model PersistedQuery {
-    graphQLId String @map(name: "graphql_id")
-  }
+// good
+model PersistedQuery {
+  graphQLId String @map(name: "graphql_id")
+}
 
-  // bad
-  model PersistedQuery {
-    graphQLId String @map(name: "graph_q_l_id")
-  }
+// bad
+model PersistedQuery {
+  graphQLId String @map(name: "graph_q_l_id")
+}
 ```
 
 ## field-order
@@ -72,52 +86,60 @@ The special field name `...` can be used to indicate that any
 number of fields can appear in the model at that point.
 
 
+### Configuration
+
+```ts
+z.object({
+  order: z.array(z.string()),
+})
+```
+
 ### Examples
 
 #### With `{ order: ['tenantId', 'id', createdAt', 'updatedAt', '...'] }`
 
 ```prisma
-  // good
-  model User {
-    tenantId String
-    id String @id
-    email String
-  }
+// good
+model User {
+  tenantId String
+  id String @id
+  email String
+}
 
-  model User {
-    tenantId String
-    id String @id
-    createdAt DateTime
-    email String
-  }
+model User {
+  tenantId String
+  id String @id
+  createdAt DateTime
+  email String
+}
 
-  // bad
-  model Users {
-    id String @id
-    email String
-    tenantId String
-  }
+// bad
+model Users {
+  id String @id
+  email String
+  tenantId String
+}
 ```
 
 #### With `{ order: ['tenantId', 'id', '...', 'createdAt', 'updatedAt'] }`
 
 ```prisma
-  // good
-  model User {
-    tenantId String
-    id String
-    email String
-    createdAt DateTime
-    updatedAt DateTime
-  }
+// good
+model User {
+  tenantId String
+  id String
+  email String
+  createdAt DateTime
+  updatedAt DateTime
+}
 
-  // good
-  model User {
-    tenantId String
-    id String
-    email String
-    createdAt DateTime
-  }
+// good
+model User {
+  tenantId String
+  id String
+  email String
+  createdAt DateTime
+}
 ```
 
 ## forbidden-field
@@ -125,36 +147,44 @@ number of fields can appear in the model at that point.
 Forbids fields with certain names.
 
 
+### Configuration
+
+```ts
+z.object({
+  forbidden: z.array(z.union([z.string(), z.instanceof(RegExp)])),
+})
+```
+
 ### Examples
 
 #### With `{ forbidden: ["id"] }`
 
 ```prisma
-  // good
-  type Product {
-    uuid String
-  }
+// good
+type Product {
+  uuid String
+}
 
-  // bad
-  type Product {
-    id String
-  }
+// bad
+type Product {
+  id String
+}
 ```
 
 #### With `{ forbidden: ["/^(?!.*[a|A]mountD6$).*D6$/"] }`
 
 ```prisma
-  // good
-  type Product {
-    id String
-    priceAmountD6 Int
-  }
+// good
+type Product {
+  id String
+  priceAmountD6 Int
+}
 
-  // bad
-  type Product {
-    id Int
-    priceD6 Int
-  }
+// bad
+type Product {
+  id Int
+  priceD6 Int
+}
 ```
 
 ## model-name-grammatical-number
@@ -164,34 +194,42 @@ Checks that each model name matches the plural or singlar enforced style.
 <https://en.wikipedia.org/wiki/Grammatical_number>
 
 
+### Configuration
+
+```ts
+z.object({
+  enforcedStyle: z.enum(['singular', 'plural']),
+})
+```
+
 ### Examples
 
 #### With `{ enforcedStyle: "singular" }`
 
 ```prisma
-  // good
-  model User {
-    id String @id
-  }
+// good
+model User {
+  id String @id
+}
 
-  // bad
-  model Users {
-    id String @id
-  }
+// bad
+model Users {
+  id String @id
+}
 ```
 
 #### With `{ enforcedStyle: "plural" }`
 
 ```prisma
-  // good
-  model Users {
-    id String @id
-  }
+// good
+model Users {
+  id String @id
+}
 
-  // bad
-  model User {
-    id String @id
-  }
+// bad
+model User {
+  id String @id
+}
 ```
 
 ## model-name-mapping-snake-case
@@ -199,59 +237,70 @@ Checks that each model name matches the plural or singlar enforced style.
 Checks that the mapped name of a model is the expected snake case.
 
 
+### Configuration
+
+```ts
+z
+  .object({
+    compoundWords: z.array(z.string()).optional(),
+    trimPrefix: z.string().optional(),
+  })
+  .optional()
+```
+
 ### Examples
 
 #### Default
 
 ```prisma
-  // good
-  model UserRole {
-    id String @id
-    @@map(name: "user_role")
-  }
+// good
+model UserRole {
+  id String @id
+  @@map(name: "user_role")
+}
 
-  // bad
-  model UserRole {
-    id String @id
-  }
+// bad
+model UserRole {
+  id String @id
+}
 
-  // bad
-  model UserRole {
-    id String @id
-    @@map(name: "user_roles")
-  }
+// bad
+model UserRole {
+  id String @id
+  @@map(name: "user_roles")
+}
 ```
 
 #### With `{ trimPrefix: "Db" }`
 
 ```prisma
-  // good
-  model DbUserRole {
-    id String @id
-    @@map(name: "user_role")
-  }
+// good
+model DbUserRole {
+  id String @id
+  @@map(name: "user_role")
+}
 
-  // bad
-  model DbUserRole {
-    id String @id
-    @@map(name: "db_user_role")
-  }
+// bad
+model DbUserRole {
+  id String @id
+  @@map(name: "db_user_role")
+}
 ```
 
 #### With `{ compoundWords: ["GraphQL"] }`
 
 ```prisma
-  // good
-  model GraphQLPersistedQuery {
-    id String @id
-    @@map(name: "graphql_persisted_query")
-  }
+// good
+model GraphQLPersistedQuery {
+  id String @id
+  @@map(name: "graphql_persisted_query")
+}
 
-  // bad
-  model GraphQLPersistedQuery {
-    id String @id
-    @@map(name: "graph_q_l_persisted_query")
-  }
+// bad
+model GraphQLPersistedQuery {
+  id String @id
+  @@map(name: "graph_q_l_persisted_query")
+}
 ```
 
 ## model-name-prefix
@@ -265,32 +314,33 @@ and the application type differs from the table
 structure.
 
 
+### Configuration
+
+```ts
+z.object({
+  prefix: z.string(),
+})
+```
+
 ### Examples
 
 #### With `{ prefix: "Db" }`
 
 ```prisma
-  // good
-  model DbUser {
-    id String @id
-  }
+// good
+model DbUser {
+  id String @id
+}
 
-  // bad
-  model Users {
-    id String @id
-  }
+// bad
+model Users {
+  id String @id
+}
 ```
 
 ## required-field-index
 
 Checks that certain fields have indices.
-
-    {
-      required: [
-        { ifName: "createdAt" },
-        { ifName: "/Id$/" },
-      ]
-    }
 
 This rules supports selective ignoring via the `prisma-lint-ignore-model`
 comment, like so:
@@ -302,52 +352,67 @@ required indices will still be enforced. A comma-separated list of fields
 can be provided to ignore multiple fields.
 
 
+### Configuration
+
+```ts
+z.object({
+  required: z.array(
+    z.union([
+      z.string(),
+      z.object({
+        ifName: z.union([z.string(), z.instanceof(RegExp)]),
+      }),
+    ]),
+  ),
+})
+```
+
 ### Examples
 
 #### With `{ required: ["createdAt"] }`
 
 ```prisma
-  // good
-  type User {
-    createdAt DateTime @unique
-  }
+// good
+type User {
+  createdAt DateTime @unique
+}
 
-  type User {
-    createdAt DateTime
-    @@index([createdAt])
-  }
+type User {
+  createdAt DateTime
+  @@index([createdAt])
+}
 
-  type User {
-    createdAt DateTime
-    id String
-    @@index([createdAt, id])
-  }
+type User {
+  createdAt DateTime
+  id String
+  @@index([createdAt, id])
+}
 
-  // bad
-  type User {
-    createdAt string
-  }
+// bad
+type User {
+  createdAt string
+}
 
-  type User {
-    createdAt DateTime
-    id String
-    @@index([id, createdAt])
-  }
+type User {
+  createdAt DateTime
+  id String
+  @@index([id, createdAt])
+}
 ```
 
 #### With `{ required: [{ ifName: "/Id$/" }] }`
 
 ```prisma
-  // good
-  type User {
-    tenantId String
-    @@index([tenantId])
-  }
+// good
+type User {
+  tenantId String
+  @@index([tenantId])
+}
 
-  // bad
-  type User {
-    tenantId String
-  }
+// bad
+type User {
+  tenantId String
+}
 ```
 
 ## required-field-type
@@ -355,54 +420,54 @@ can be provided to ignore multiple fields.
 Checks that certain fields have a specific type.
 
 
+### Configuration
+
+```ts
+z.object({
+  required: z.array(
+    z.object({
+      ifName: z.union([z.string(), z.instanceof(RegExp)]),
+      type: z.string(),
+    }),
+  ),
+})
+```
+
 ### Examples
 
 #### With `{ required: [{ ifName: "id", type: "String" }] }`
 
 ```prisma
-  // good
-  type User {
-    id String
-  }
+// good
+type User {
+  id String
+}
 
-  // bad
-  type User {
-    id Int
-  }
+// bad
+type User {
+  id Int
+}
 ```
 
 #### With `{ required: [{ ifName: "/At$/", type: "DateTime" }] }`
 
 ```prisma
-  // good
-  type User {
-    createdAt DateTime
-    updatedAt DateTime
-  }
+// good
+type User {
+  createdAt DateTime
+  updatedAt DateTime
+}
 
-  // bad
-  type User {
-    createdAt string
-    updatedAt string
-  }
+// bad
+type User {
+  createdAt string
+  updatedAt string
+}
 ```
 
 ## required-field
 
 Checks that a model has certain fields.
-
-The `required` config option is an array of strings or objects.
-Each string is the name of a field that must be present. Each object
-defines a field that must be present if another field is present.
-
-The `ifSibling` property of an object can be a string or a regular expression.
-For example, to require a model to have a field named "currencyCode"
-if it has a field ending in "amountD6":
-
-    {
-      name: "currencyCode";
-      ifSibling: "/[a|A]mountD6$/";
-    }
 
 This rules supports selective ignoring via the `prisma-lint-ignore-model`
 comment, like so:
@@ -414,34 +479,49 @@ required fields will still be enforced. A comma-separated list of fields
 can be provided to ignore multiple required fields.
 
 
+### Configuration
+
+```ts
+z.object({
+  required: z.array(
+    z.union([
+      z.string(),
+      z.object({
+        name: z.string(),
+        ifSibling: z.union([z.string(), z.instanceof(RegExp)]),
+      }),
+    ]),
+  ),
+})
+```
+
 ### Examples
 
 #### With `{ required: ["id"] }`
 
 ```prisma
-  // good
-  model User {
-    id Int @id
-  }
+// good
+model User {
+  id Int @id
+}
 
-  // bad
-  model User {
-    name string
-  }
+// bad
+model User {
+  name string
+}
 ```
 
 #### With `{ required: [{ name: "currencyCode", ifSibling: "/mountD6$/" }] }`
 
 ```prisma
-  // good
-  model Product {
-    currencyCode string
-    priceAmountD6 Int
-  }
+// good
+model Product {
+  currencyCode string
+  priceAmountD6 Int
+}
 
- // bad
- model Product {
-   priceAmountD6 Int
- }
+/ bad
+odel Product {
+ priceAmountD6 Int
 ```
 
