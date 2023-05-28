@@ -121,6 +121,7 @@ function extractAndBuildRulesMarkdown() {
   const ruleFiles = glob.sync(`${rulesDirectory}/**/*.ts`);
 
   const rules = ruleFiles
+    .sort()
     .map((file) => extractRulesFromTSFile(file))
     .filter((rule) => rule !== null);
 
