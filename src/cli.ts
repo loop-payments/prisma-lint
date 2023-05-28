@@ -15,7 +15,7 @@ program
 
 program.parse();
 
-const explorer = cosmiconfig('prisma-lint');
+const explorer = cosmiconfig('prismalint');
 
 const options = program.opts();
 const { args } = program;
