@@ -1,17 +1,24 @@
 #!/usr/bin/env node
 
-import { program } from 'commander';
+import fs from 'fs';
+import path from 'path';
 
+import { program } from 'commander';
 import { cosmiconfig } from 'cosmiconfig';
+import { glob } from 'glob';
 
 import { renderViolations } from '#src/common/render.js';
+import type { Violation } from '#src/common/violation.js';
 import { lintSchemaFile } from '#src/lint.js';
 import ruleRegistry from '#src/rule-registry.js';
 
 program
   .description('A linter for Prisma schema files.')
-  .option('-c, --config <path>', 'Path to config file.')
-  .argument('<paths...>', 'One or more schema files to lint.');
+  .option('-c, --config <configPath>', 'Path to config file.')
+  .argument(
+    '[paths...]',
+    'One or more schema files, directories, or globs to lint.',
+  );
 
 program.parse();
 
@@ -36,18 +43,51 @@ const getConfig = async () => {
   return result.config;
 };
 
+const resolveSchemaFiles = (schemaFiles: string[]) => {
+  const resolvedFiles = [];
+
+  for (const file of schemaFiles) {
+    const isDirectory = fs.existsSync(file) && fs.lstatSync(file).isDirectory();
+    const isGlob = file.includes('*');
+
+    if (isDirectory) {
+      const filesInDirectory = glob.sync(path.join(file, '**/*.prisma'));
+      resolvedFiles.push(...filesInDirectory);
+    } else if (isGlob) {
+      const filesMatchingGlob = glob.sync(file);
+      resolvedFiles.push(...filesMatchingGlob);
+    } else {
+      resolvedFiles.push(file);
+    }
+  }
+
+  return resolvedFiles;
+};
+
+const printFileViolations = (schemaFile: string, violations: Violation[]) => {
+  /* eslint-disable no-console */
+  console.log(schemaFile);
+  const lines = renderViolations(violations);
+  for (const line of lines) {
+    console.log(line);
+  }
+  console.log('');
+  /* eslint-enable no-console */
+};
+
 const run = async () => {
   const config = await getConfig();
-  for (const arg of args) {
+  const schemaFiles =
+    args.length > 0 ? resolveSchemaFiles(args) : ['prisma/schema.prisma'];
+
+  for (const schemaFile of schemaFiles) {
     const violations = await lintSchemaFile({
-      schemaFile: arg,
+      schemaFile,
       config,
       ruleRegistry,
     });
-    const lines = renderViolations(violations);
-    for (const line of lines) {
-      // eslint-disable-next-line no-console
-      console.log(line);
+    if (violations.length > 1) {
+      printFileViolations(schemaFile, violations);
     }
   }
 };

@@ -10,11 +10,11 @@ export const renderViolations = (violations: Violation[]) => {
   return Object.entries(groupedByKey)
     .sort()
     .flatMap(([key, violations]) => {
-      return [`${key}`, ...violations.flatMap(renderViolation), ''];
+      return [`  ${key}`, ...violations.flatMap(renderViolation)];
     });
 };
 
 const renderViolation = ({ ruleName, message }: Violation) => [
-  `  ${ruleName}`,
-  `    ${message}`,
+  `    ${ruleName}`,
+  `      ${message}`,
 ];
