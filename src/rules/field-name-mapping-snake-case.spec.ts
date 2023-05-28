@@ -17,6 +17,54 @@ describe('field-name-mapping-snake-case', () => {
       },
     });
 
+  describe('with config', () => {
+    const run = getRunner({ compoundWords: ['graphQL'] });
+
+    describe('valid with mapping', () => {
+      it('returns no violations', async () => {
+        const violations = await run(`
+      model User {
+        graphQLId String @map(name: "graphql_id")
+      }
+    `);
+        expect(violations.length).toEqual(0);
+      });
+    });
+
+    describe('valid without mapping', () => {
+      it('returns no violations', async () => {
+        const violations = await run(`
+      model User {
+        id String
+      }
+    `);
+        expect(violations.length).toEqual(0);
+      });
+    });
+
+    describe('missing @map', () => {
+      it('returns violation', async () => {
+        const violations = await run(`
+      model User {
+        graphQLId String
+      }
+    `);
+        expect(violations.length).toEqual(1);
+      });
+    });
+
+    describe('@@map with wrong name', () => {
+      it('returns violation', async () => {
+        const violations = await run(`
+      model User {
+        graphQLId String @map(name: "graph_q_l_id")
+      }
+    `);
+        expect(violations.length).toEqual(1);
+      });
+    });
+  });
+
   describe('without config', () => {
     const run = getRunner();
 

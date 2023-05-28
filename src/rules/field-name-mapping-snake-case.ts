@@ -1,5 +1,8 @@
 import type { Attribute, Field } from '@mrleebo/prisma-ast';
 
+import { z } from 'zod';
+
+import { RULE_CONFIG_PARSE_PARAMS } from '#src/common/config.js';
 import {
   PRISMA_SCALAR_TYPES,
   findNameAttributeArg,
@@ -8,6 +11,12 @@ import type { FieldRuleDefinition } from '#src/common/rule.js';
 import { getExpectedSnakeCase } from '#src/common/snake-case.js';
 
 const RULE_NAME = 'field-name-mapping-snake-case';
+
+const Config = z
+  .object({
+    compoundWords: z.array(z.string()).optional(),
+  })
+  .optional();
 
 /**
  * Requires that the mapped name of a field is the expected snake case.
@@ -50,13 +59,8 @@ const RULE_NAME = 'field-name-mapping-snake-case';
 export default {
   ruleName: RULE_NAME,
   create: (config, context) => {
-    const { compoundWords: compoundWordsRaw } = config;
-    if (compoundWordsRaw && !Array.isArray(compoundWordsRaw)) {
-      throw new Error(
-        `Expected "compoundWords" to be an array, but got ${compoundWordsRaw}.`,
-      );
-    }
-    const compoundWords = (compoundWordsRaw as string[]) || undefined;
+    const parsedConfig = Config.parse(config, RULE_CONFIG_PARSE_PARAMS);
+    const compoundWords = parsedConfig?.compoundWords;
     return {
       Field: (model, field) => {
         if (allowedToHaveNoMapping(field)) {
