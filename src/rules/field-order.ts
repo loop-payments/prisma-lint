@@ -23,7 +23,7 @@ const Config = z.object({
  * The special field name `...` can be used to indicate that any
  * number of fields can appear in the model at that point.
  *
- * @example order: ['tenantId', 'id', createdAt', 'updatedAt', '...']
+ * @example { order: ['tenantId', 'id', createdAt', 'updatedAt', '...'] }
  *   // good
  *   model User {
  *     tenantId String
@@ -45,7 +45,7 @@ const Config = z.object({
  *     tenantId String
  *   }
  *
- * @example order: ['tenantId', 'id', '...', 'createdAt', 'updatedAt']
+ * @example { order: ['tenantId', 'id', '...', 'createdAt', 'updatedAt'] }
  *   // good
  *   model User {
  *     tenantId String

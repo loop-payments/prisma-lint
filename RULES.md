@@ -1,6 +1,16 @@
 
 # Rules
 
+- [field-name-mapping-snake-case](#field-name-mapping-snake-case)
+- [field-order](#field-order)
+- [forbidden-field](#forbidden-field)
+- [model-name-grammatical-number](#model-name-grammatical-number)
+- [model-name-mapping-snake-case](#model-name-mapping-snake-case)
+- [model-name-prefix](#model-name-prefix)
+- [required-field-index](#required-field-index)
+- [required-field-type](#required-field-type)
+- [required-field](#required-field)
+
 ## field-name-mapping-snake-case
 
 Requires that the mapped name of a field is the expected snake case.
@@ -8,7 +18,32 @@ Requires that the mapped name of a field is the expected snake case.
 
 ### Examples
 
-### compoundWords: ["GraphQL"]
+#### Default
+
+```prisma
+  // good
+  model UserRole {
+    userId String @map(name: "user_id")
+  }
+
+  // good
+  model UserRole {
+    // No mapping needed.
+    id String
+  }
+
+  // bad
+  model UserRole {
+    userId String
+  }
+
+  // bad
+  model UserRole {
+    userId String @map(name: "user_i_d")
+  }
+```
+
+#### With `{ compoundWords: ["GraphQL"] }`
 
 ```prisma
   // good
@@ -39,7 +74,7 @@ number of fields can appear in the model at that point.
 
 ### Examples
 
-### order: ['tenantId', 'id', createdAt', 'updatedAt', '...']
+#### With `{ order: ['tenantId', 'id', createdAt', 'updatedAt', '...'] }`
 
 ```prisma
   // good
@@ -64,7 +99,7 @@ number of fields can appear in the model at that point.
   }
 ```
 
-### order: ['tenantId', 'id', '...', 'createdAt', 'updatedAt']
+#### With `{ order: ['tenantId', 'id', '...', 'createdAt', 'updatedAt'] }`
 
 ```prisma
   // good
@@ -92,7 +127,7 @@ Forbids fields with certain names.
 
 ### Examples
 
-### { forbidden: ["id"] }
+#### With `{ forbidden: ["id"] }`
 
 ```prisma
   // good
@@ -106,7 +141,7 @@ Forbids fields with certain names.
   }
 ```
 
-### { forbidden: ["/^(?!.*[a|A]mountD6$).*D6$/"] }
+#### With `{ forbidden: ["/^(?!.*[a|A]mountD6$).*D6$/"] }`
 
 ```prisma
   // good
@@ -124,14 +159,14 @@ Forbids fields with certain names.
 
 ## model-name-grammatical-number
 
-Requires model name to match plural or singlar enforced style.
+Checks that each model name matches the plural or singlar enforced style.
 
-https://en.wikipedia.org/wiki/Grammatical_number
+<https://en.wikipedia.org/wiki/Grammatical_number>
 
 
 ### Examples
 
-### enforcedStyle: "singular"
+#### With `{ enforcedStyle: "singular" }`
 
 ```prisma
   // good
@@ -145,7 +180,7 @@ https://en.wikipedia.org/wiki/Grammatical_number
   }
 ```
 
-### enforcedStyle: "plural"
+#### With `{ enforcedStyle: "plural" }`
 
 ```prisma
   // good
@@ -161,12 +196,33 @@ https://en.wikipedia.org/wiki/Grammatical_number
 
 ## model-name-mapping-snake-case
 
-Requires that the mapped name of a model is the expected snake case.
+Checks that the mapped name of a model is the expected snake case.
 
 
 ### Examples
 
-### trimPrefix: "Db"
+#### Default
+
+```prisma
+  // good
+  model UserRole {
+    id String @id
+    @@map(name: "user_role")
+  }
+
+  // bad
+  model UserRole {
+    id String @id
+  }
+
+  // bad
+  model UserRole {
+    id String @id
+    @@map(name: "user_roles")
+  }
+```
+
+#### With `{ trimPrefix: "Db" }`
 
 ```prisma
   // good
@@ -182,7 +238,7 @@ Requires that the mapped name of a model is the expected snake case.
   }
 ```
 
-### compoundWords: ["GraphQL"]
+#### With `{ compoundWords: ["GraphQL"] }`
 
 ```prisma
   // good
@@ -200,7 +256,7 @@ Requires that the mapped name of a model is the expected snake case.
 
 ## model-name-prefix
 
-Requires model names to include a prefix.
+Check that model names include a required prefix.
 
 This is useful for avoiding name collisions with
 application-level types in cases where a single
@@ -211,7 +267,7 @@ structure.
 
 ### Examples
 
-### prefix: "Db"
+#### With `{ prefix: "Db" }`
 
 ```prisma
   // good
@@ -229,17 +285,17 @@ structure.
 
 Checks that certain fields have indices.
 
-  {
-    required: [
-      { ifName: "createdAt" },
-      { ifName: "/Id$/" },
-    ]
-  }
+    {
+      required: [
+        { ifName: "createdAt" },
+        { ifName: "/Id$/" },
+      ]
+    }
 
 This rules supports selective ignoring via the `prisma-lint-ignore-model`
 comment, like so:
 
-  /// prisma-lint-ignore-model required-field-index tenantId
+    /// prisma-lint-ignore-model required-field-index tenantId
 
 That will ignore only `tenantId` violations for the model. Other
 required indices will still be enforced. A comma-separated list of fields
@@ -248,7 +304,7 @@ can be provided to ignore multiple fields.
 
 ### Examples
 
-### { required: ["createdAt"] }
+#### With `{ required: ["createdAt"] }`
 
 ```prisma
   // good
@@ -279,7 +335,7 @@ can be provided to ignore multiple fields.
   }
 ```
 
-### { required: [{ ifName: "/Id$/" }] }
+#### With `{ required: [{ ifName: "/Id$/" }] }`
 
 ```prisma
   // good
@@ -296,19 +352,12 @@ can be provided to ignore multiple fields.
 
 ## required-field-type
 
-Requires certain fields to have a specific type.
-
-  {
-    required: [
-      { ifName: "id", type: "String" },
-      { ifName: "/At$/", type: "DateTime" },
-    ]
-  }
+Checks that certain fields have a specific type.
 
 
 ### Examples
 
-### { required: [{ ifName: "id", type: "String" }] }
+#### With `{ required: [{ ifName: "id", type: "String" }] }`
 
 ```prisma
   // good
@@ -322,7 +371,7 @@ Requires certain fields to have a specific type.
   }
 ```
 
-### { required: [{ ifName: "/At$/", type: "DateTime" }] }
+#### With `{ required: [{ ifName: "/At$/", type: "DateTime" }] }`
 
 ```prisma
   // good
@@ -340,30 +389,25 @@ Requires certain fields to have a specific type.
 
 ## required-field
 
-Requires that a model has certain fields.
+Checks that a model has certain fields.
 
 The `required` config option is an array of strings or objects.
 Each string is the name of a field that must be present. Each object
 defines a field that must be present if another field is present.
 
-  required: (
-    string |
-    { name: string; ifSibling: string; }
-  )[];
-
 The `ifSibling` property of an object can be a string or a regular expression.
 For example, to require a model to have a field named "currencyCode"
 if it has a field ending in "amountD6":
 
-  {
-    name: "currencyCode";
-    ifSibling: "/[a|A]mountD6$/";
-  }
+    {
+      name: "currencyCode";
+      ifSibling: "/[a|A]mountD6$/";
+    }
 
 This rules supports selective ignoring via the `prisma-lint-ignore-model`
 comment, like so:
 
-  /// prisma-lint-ignore-model required-field tenantId
+    /// prisma-lint-ignore-model required-field tenantId
 
 That will ignore only `tenantId` field violations for the model. Other
 required fields will still be enforced. A comma-separated list of fields
@@ -372,7 +416,7 @@ can be provided to ignore multiple required fields.
 
 ### Examples
 
-### required: ["id"]
+#### With `{ required: ["id"] }`
 
 ```prisma
   // good
@@ -386,7 +430,7 @@ can be provided to ignore multiple required fields.
   }
 ```
 
-### required: [{ name: "currencyCode", ifSibling: "/mountD6$/" }]
+#### With `{ required: [{ name: "currencyCode", ifSibling: "/mountD6$/" }] }`
 
 ```prisma
   // good

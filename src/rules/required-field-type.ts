@@ -16,14 +16,7 @@ const Config = z.object({
 });
 
 /**
- * Requires certain fields to have a specific type.
- *
- *   {
- *     required: [
- *       { ifName: "id", type: "String" },
- *       { ifName: "/At$/", type: "DateTime" },
- *     ]
- *   }
+ * Checks that certain fields have a specific type.
  *
  * @example { required: [{ ifName: "id", type: "String" }] }
  *   // good

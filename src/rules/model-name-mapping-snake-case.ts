@@ -17,7 +17,7 @@ const Config = z
   .optional();
 
 /**
- * Requires that the mapped name of a model is the expected snake case.
+ * Checks that the mapped name of a model is the expected snake case.
  *
  * @example
  *   // good
@@ -38,7 +38,7 @@ const Config = z
  *   }
  *
  *
- * @example trimPrefix: "Db"
+ * @example { trimPrefix: "Db" }
  *   // good
  *   model DbUserRole {
  *     id String @id
@@ -52,7 +52,7 @@ const Config = z
  *   }
  *
  *
- * @example compoundWords: ["GraphQL"]
+ * @example { compoundWords: ["GraphQL"] }
  *   // good
  *   model GraphQLPersistedQuery {
  *     id String @id

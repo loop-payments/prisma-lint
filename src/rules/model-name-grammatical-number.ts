@@ -12,11 +12,11 @@ const Config = z.object({
 });
 
 /**
- * Requires model name to match plural or singlar enforced style.
+ * Checks that each model name matches the plural or singlar enforced style.
  *
- * https://en.wikipedia.org/wiki/Grammatical_number
+ * <https://en.wikipedia.org/wiki/Grammatical_number>
  *
- * @example enforcedStyle: "singular"
+ * @example { enforcedStyle: "singular" }
  *   // good
  *   model User {
  *     id String @id
@@ -27,7 +27,7 @@ const Config = z.object({
  *     id String @id
  *   }
  *
- * @example enforcedStyle: "plural"
+ * @example { enforcedStyle: "plural" }
  *   // good
  *   model Users {
  *     id String @id

@@ -31,7 +31,9 @@ function listExamples(exampleLines) {
           code: trimBlankNewLines(currentExampleCode),
         });
       }
-      currentExampleTitle = line.replace('@example', '').trim();
+      const rawTitle = line.replace('@example', '').trim();
+      currentExampleTitle =
+        rawTitle === '' ? 'Default' : `With \`${rawTitle}\``;
       currentExampleCode = '';
     } else {
       currentExampleCode += `${line}\n`;
@@ -77,13 +79,21 @@ function buildRulesMarkdownFile(rules) {
   let markdownContent = RULES_HEADER;
 
   rules.forEach((rule) => {
+    markdownContent += `- [${
+      rule.ruleName
+    }](#${rule.ruleName.toLowerCase()})\n`;
+  });
+
+  markdownContent += '\n';
+
+  rules.forEach((rule) => {
     markdownContent += `## ${rule.ruleName}\n\n`;
     markdownContent += `${rule.description}\n\n`;
     if (rule.examples.length > 0) {
       markdownContent += '### Examples\n\n';
     }
     rule.examples.forEach((example) => {
-      markdownContent += `### ${example.title}\n\n`;
+      markdownContent += `#### ${example.title}\n\n`;
       markdownContent += `\`\`\`prisma\n${example.code}\n\`\`\`\n\n`;
     });
   });

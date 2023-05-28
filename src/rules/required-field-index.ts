@@ -34,17 +34,17 @@ const Config = z.object({
 /**
  * Checks that certain fields have indices.
  *
- *   {
- *     required: [
- *       { ifName: "createdAt" },
- *       { ifName: "/Id$/" },
- *     ]
- *   }
+ *     {
+ *       required: [
+ *         { ifName: "createdAt" },
+ *         { ifName: "/Id$/" },
+ *       ]
+ *     }
  *
  * This rules supports selective ignoring via the `prisma-lint-ignore-model`
  * comment, like so:
  *
- *   /// prisma-lint-ignore-model required-field-index tenantId
+ *     /// prisma-lint-ignore-model required-field-index tenantId
  *
  * That will ignore only `tenantId` violations for the model. Other
  * required indices will still be enforced. A comma-separated list of fields

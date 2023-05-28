@@ -21,36 +21,31 @@ const Config = z.object({
 });
 
 /**
- * Requires that a model has certain fields.
+ * Checks that a model has certain fields.
  *
  * The `required` config option is an array of strings or objects.
  * Each string is the name of a field that must be present. Each object
  * defines a field that must be present if another field is present.
  *
- *   required: (
- *     string |
- *     { name: string; ifSibling: string; }
- *   )[];
- *
  * The `ifSibling` property of an object can be a string or a regular expression.
  * For example, to require a model to have a field named "currencyCode"
  * if it has a field ending in "amountD6":
  *
- *   {
- *     name: "currencyCode";
- *     ifSibling: "/[a|A]mountD6$/";
- *   }
+ *     {
+ *       name: "currencyCode";
+ *       ifSibling: "/[a|A]mountD6$/";
+ *     }
  *
  * This rules supports selective ignoring via the `prisma-lint-ignore-model`
  * comment, like so:
  *
- *   /// prisma-lint-ignore-model required-field tenantId
+ *     /// prisma-lint-ignore-model required-field tenantId
  *
  * That will ignore only `tenantId` field violations for the model. Other
  * required fields will still be enforced. A comma-separated list of fields
  * can be provided to ignore multiple required fields.
  *
- * @example required: ["id"]
+ * @example { required: ["id"] }
  *   // good
  *   model User {
  *     id Int @id
@@ -62,7 +57,7 @@ const Config = z.object({
  *   }
  *
  *
- * @example required: [{ name: "currencyCode", ifSibling: "/mountD6$/" }]
+ * @example { required: [{ name: "currencyCode", ifSibling: "/mountD6$/" }] }
  *   // good
  *   model Product {
  *     currencyCode string

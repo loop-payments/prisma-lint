@@ -44,7 +44,7 @@ const Config = z
  *   }
  *
  *
- * @example compoundWords: ["GraphQL"]
+ * @example { compoundWords: ["GraphQL"] }
  *   // good
  *   model PersistedQuery {
  *     graphQLId String @map(name: "graphql_id")

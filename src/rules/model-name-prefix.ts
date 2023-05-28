@@ -10,7 +10,7 @@ const Config = z.object({
 });
 
 /**
- * Requires model names to include a prefix.
+ * Check that model names include a required prefix.
  *
  * This is useful for avoiding name collisions with
  * application-level types in cases where a single
@@ -18,7 +18,7 @@ const Config = z.object({
  * and the application type differs from the table
  * structure.
  *
- * @example prefix: "Db"
+ * @example { prefix: "Db" }
  *   // good
  *   model DbUser {
  *     id String @id
