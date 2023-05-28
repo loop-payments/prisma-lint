@@ -11,9 +11,6 @@ fi
 echo "Checking types..."
 yarn build 
 
-echo "Running tests..."
-yarn test
-
 echo "Linting staged files..."
 yarn lint-staged
 
