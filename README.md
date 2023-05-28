@@ -42,17 +42,3 @@ In a `.prisma-lint.json` file, something like:
   }
 }
 ```
-
-## Development
-
-### Local testing
-
-```
-> yarn build && node ./dist/cli.js -c fixture/.prisma-lint.json fixture/invalid.prisma
-```
-
-### TODO
-
-Internal:
-
-- package.json sorting
