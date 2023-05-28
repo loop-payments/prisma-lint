@@ -1,7 +1,19 @@
+import { z } from 'zod';
+
+import { RULE_CONFIG_PARSE_PARAMS } from '#src/common/config.js';
 import { toRegExp } from '#src/common/regex.js';
 import type { FieldRuleDefinition } from '#src/common/rule.js';
 
 const RULE_NAME = 'required-field-type';
+
+const Config = z.object({
+  required: z.array(
+    z.object({
+      ifName: z.union([z.string(), z.instanceof(RegExp)]),
+      type: z.string(),
+    }),
+  ),
+});
 
 /**
  * Requires certain fields to have a specific type.
@@ -40,21 +52,15 @@ const RULE_NAME = 'required-field-type';
 export default {
   ruleName: RULE_NAME,
   create: (config, context) => {
-    const { required } = config;
-    if (required == null) {
-      throw new Error('Missing "required" key in configuration');
-    }
-    if (!Array.isArray(required)) {
-      throw new Error('Config "required" value must be an array');
-    }
-    const rulesWithRegExp = required.map((r) => ({
+    const parsedConfig = Config.parse(config, RULE_CONFIG_PARSE_PARAMS);
+    const requiredWithRegExp = parsedConfig.required.map((r) => ({
       ...r,
-      ifNameRegex: toRegExp(r.ifName),
-    })) as { ifName: string; type: string; ifNameRegex: RegExp }[];
+      ifNameRegExp: toRegExp(r.ifName),
+    })) as { ifName: string; type: string; ifNameRegExp: RegExp }[];
     return {
       Field: (model, field) => {
-        const matches = rulesWithRegExp.filter((r) =>
-          r.ifNameRegex.test(field.name),
+        const matches = requiredWithRegExp.filter((r) =>
+          r.ifNameRegExp.test(field.name),
         );
         if (matches.length === 0) {
           return;

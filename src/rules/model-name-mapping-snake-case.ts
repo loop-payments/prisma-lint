@@ -1,10 +1,20 @@
 import type { ModelAttribute } from '@mrleebo/prisma-ast';
 
+import { z } from 'zod';
+
+import { RULE_CONFIG_PARSE_PARAMS } from '#src/common/config.js';
 import { findNameAttributeArg, listAttributes } from '#src/common/prisma.js';
 import type { ModelRuleDefinition } from '#src/common/rule.js';
 import { getExpectedSnakeCase } from '#src/common/snake-case.js';
 
 const RULE_NAME = 'model-name-mapping-snake-case';
+
+const Config = z
+  .object({
+    compoundWords: z.array(z.string()).optional(),
+    trimPrefix: z.string().optional(),
+  })
+  .optional();
 
 /**
  * Requires that the mapped name of a model is the expected snake case.
@@ -59,20 +69,9 @@ const RULE_NAME = 'model-name-mapping-snake-case';
 export default {
   ruleName: RULE_NAME,
   create: (config, context) => {
-    const { compoundWords: compoundWordsRaw, trimPrefix: trimPrefixRaw } =
-      config;
-    if (compoundWordsRaw && !Array.isArray(compoundWordsRaw)) {
-      throw new Error(
-        `Expected "compoundWords" to be an array, but got ${compoundWordsRaw}.`,
-      );
-    }
-    const compoundWords = (compoundWordsRaw as string[]) || undefined;
-    if (trimPrefixRaw && typeof trimPrefixRaw !== 'string') {
-      throw new Error(
-        `Expected "trimPrefix" to be a string, but got ${trimPrefixRaw}.`,
-      );
-    }
-    const trimPrefix = (trimPrefixRaw as string) || undefined;
+    const parsedConfig = Config.parse(config, RULE_CONFIG_PARSE_PARAMS);
+    const compoundWords = parsedConfig?.compoundWords ?? [];
+    const trimPrefix = parsedConfig?.trimPrefix ?? '';
     return {
       Model: (model) => {
         const attributes = listAttributes(model);

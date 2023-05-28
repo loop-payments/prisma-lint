@@ -1,6 +1,13 @@
+import { z } from 'zod';
+
+import { RULE_CONFIG_PARSE_PARAMS } from '#src/common/config.js';
 import type { ModelRuleDefinition } from '#src/common/rule.js';
 
 const RULE_NAME = 'model-name-prefix';
+
+const Config = z.object({
+  prefix: z.string(),
+});
 
 /**
  * Requires model names to include a prefix.
@@ -26,10 +33,8 @@ const RULE_NAME = 'model-name-prefix';
 export default {
   ruleName: RULE_NAME,
   create: (config, context) => {
-    const { prefix } = config;
-    if (typeof prefix !== 'string') {
-      throw new Error(`Expected string prefix, got ${JSON.stringify(prefix)}`);
-    }
+    const parsedConfig = Config.parse(config, RULE_CONFIG_PARSE_PARAMS);
+    const { prefix } = parsedConfig;
     return {
       Model: (model) => {
         if (model.name.startsWith(prefix)) {
