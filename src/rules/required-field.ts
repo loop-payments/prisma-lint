@@ -1,9 +1,25 @@
+import { z } from 'zod';
+
+import { RULE_CONFIG_PARSE_PARAMS } from '#src/common/config.js';
 import { getRuleIgnoreParams } from '#src/common/ignore.js';
 import { listFields } from '#src/common/prisma.js';
 import { isRegexOrRegexStr } from '#src/common/regex.js';
 import type { ModelRuleDefinition } from '#src/common/rule.js';
 
+
 const RULE_NAME = 'required-field';
+
+const Config = z.object({
+  required: z.array(
+    z.union([
+      z.string(),
+      z.object({
+        name: z.string(),
+        ifSibling: z.union([z.string(), z.instanceof(RegExp)]),
+      }),
+    ]),
+  ),
+});
 
 /**
  * Requires that a model has certain fields.
@@ -64,44 +80,28 @@ const RULE_NAME = 'required-field';
 export default {
   ruleName: RULE_NAME,
   create: (config, context) => {
-    const { required } = config;
-    if (required == null) {
-      throw new Error('Missing "required" option');
-    }
-    if (!Array.isArray(required)) {
-      throw new Error('Config "required" value must be an array');
-    }
-    const requiredNames = required.filter((f) => typeof f === 'string');
-    const conditionalRequiredFields = required.filter(
-      (f) => typeof f === 'object',
-    );
-    conditionalRequiredFields.forEach((f) => {
-      if (f.name == null) {
-        throw new Error('Missing name in required object');
-      }
-      if (typeof f.name !== 'string') {
-        throw new Error('"required" object name must be a string');
-      }
-      if (f.ifSibling == null) {
-        throw new Error('Missing ifSibling in "required" object');
-      }
-      if (typeof f.ifSibling !== 'string' && !(f.ifSibling instanceof RegExp)) {
-        throw new Error('A required object "ifSibling" must be a string');
-      }
-    });
-    const simpleIfSiblingConditions = conditionalRequiredFields.filter(
+    const parsedConfig = Config.parse(config, RULE_CONFIG_PARSE_PARAMS);
+    const { required } = parsedConfig;
+    const requiredNames = required.filter(
+      (f) => typeof f === 'string',
+    ) as string[];
+    const conditions = required.filter((f) => typeof f === 'object') as {
+      name: string;
+      ifSibling: string | RegExp;
+    }[];
+    const simpleIfSiblingConditions = conditions.filter(
       (f) => !isRegexOrRegexStr(f.ifSibling),
-    );
-    const regexIfSiblingConditions = conditionalRequiredFields
+    ) as { name: string; ifSibling: string }[];
+    const regexIfSiblingConditions = conditions
       .filter((f) => isRegexOrRegexStr(f.ifSibling))
       .map((f) => {
         const { ifSibling } = f;
-        const ifSiblingRegex =
+        const ifSiblingRegExp =
           typeof ifSibling === 'string'
             ? new RegExp(ifSibling.slice(1, -1))
             : ifSibling;
-        return { ...f, ifSiblingRegex };
-      });
+        return { ...f, ifSiblingRegExp };
+      }) as { name: string; ifSiblingRegExp: RegExp }[];
     return {
       Model: (model) => {
         const ruleIgnoreParams = getRuleIgnoreParams(model, RULE_NAME);
@@ -138,7 +138,7 @@ export default {
             continue;
           }
           if (
-            fields.some((f) => condition.ifSiblingRegex.test(f.name)) &&
+            fields.some((f) => condition.ifSiblingRegExp.test(f.name)) &&
             !fieldNameSet.has(condition.name)
           ) {
             missingFields.push(condition.name);
