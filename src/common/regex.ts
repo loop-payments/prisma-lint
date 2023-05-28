@@ -11,5 +11,5 @@ export const toRegExp = (value: string | RegExp) => {
   if (value.startsWith('/') && value.endsWith('/')) {
     return new RegExp(value.slice(1, -1));
   }
-  return new RegExp(`^${  value  }$`);
+  return new RegExp(`^${value}$`);
 };
