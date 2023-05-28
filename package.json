@@ -10,7 +10,8 @@
   },
   "bin": "dist/cli.js",
   "files": [
-    "dist"
+    "dist/**/*",
+    "!dist/**/*.test.js"
   ],
   "scripts": {
     "build": "tsc",

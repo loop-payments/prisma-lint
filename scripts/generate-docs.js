@@ -1,8 +1,6 @@
 import fs from 'fs';
 import path from 'path';
 import glob from 'glob';
-import { z } from 'zod';
-import { zodToTs, printNode } from 'zod-to-ts';
 
 const rulesDirectory = 'src/rules';
 const outputFile = 'RULES.md';
@@ -74,16 +72,13 @@ function extractRulesFromTSFile(filePath) {
     const description = descriptionLines.slice(0, firstExampleIndex).join('\n');
     const examples = listExamples(descriptionLines.slice(firstExampleIndex));
 
-    const configCode = configMatch[1].trim();
-    const parsedConfig = eval(`${configCode}`);
-    const { node } = zodToTs(parsedConfig, 'Config');
-    const configSchema = printNode(node);
+    const configSchema = configMatch[1].trim();
 
     return {
       ruleName,
       description,
       examples,
-      configSchema: configCode,
+      configSchema,
     };
   }
 

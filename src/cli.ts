@@ -24,14 +24,14 @@ const getConfig = async () => {
   if (options.config != null) {
     const result = await explorer.load(options.config);
     if (result == null) {
-      throw new Error('Failed to load config');
+      throw new Error('Configuration file for prisma-lint not found');
     }
     return result.config;
   }
 
   const result = await explorer.search();
   if (result == null) {
-    throw new Error('Failed to load config');
+    throw new Error('Configuration file for prisma-lint not found');
   }
   return result.config;
 };
