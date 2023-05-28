@@ -17,6 +17,50 @@ describe('required-field-index', () => {
       },
     });
 
+  describe('ignore comments', () => {
+    const run = getRunner({
+      required: [
+        { ifName: 'qid' },
+        { ifName: 'tenantQid' },
+        { ifName: 'createdAt' },
+      ],
+    });
+
+    it('respects rule-specific ignore comments', async () => {
+      const violations = await run(`
+        model Products {
+          /// prisma-lint-ignore-model required-field-index
+          tenantQid String
+        }
+        `);
+      expect(violations.length).toEqual(0);
+    });
+
+    it('respects field-specific ignore comments with comma', async () => {
+      const violations = await run(`
+        model Products {
+          /// prisma-lint-ignore-model required-field-index tenantQid,createdAt
+          tenantQid String
+          createdAt DateTime
+          qid String
+        }
+        `);
+      expect(violations.length).toEqual(1);
+      expect(violations[0].message).toContain('qid');
+      expect(violations[0].message).not.toContain('tenantQid');
+      expect(violations[0].message).not.toContain('createdAt');
+    });
+
+    it('respects model-wide ignore comments', async () => {
+      const violations = await run(`
+        model Products {
+          /// prisma-lint-ignore-model
+          id String @id
+        }
+      `);
+      expect(violations.length).toEqual(0);
+    });
+  });
   describe('string literal field name', () => {
     const run = getRunner({
       required: [{ ifName: 'tenantQid' }],

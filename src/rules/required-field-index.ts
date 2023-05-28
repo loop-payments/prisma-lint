@@ -8,6 +8,7 @@ import type {
 import { z } from 'zod';
 
 import { RULE_CONFIG_PARSE_PARAMS } from '#src/common/config.js';
+import { getRuleIgnoreParams as listRuleIgnoreParams } from '#src/common/ignore.js';
 import {
   assertValueIsStringArray,
   isKeyValue,
@@ -36,6 +37,15 @@ const Config = z.object({
  *       { ifName: "/Id$/" },
  *     ]
  *   }
+ *
+ * This rules supports selective ignoring via the `prisma-lint-ignore-model`
+ * comment, like so:
+ *
+ *   /// prisma-lint-ignore-model required-field-index tenantId
+ *
+ * That will ignore only `tenantId` violations for the model. Other
+ * required indices will still be enforced. A comma-separated list of fields
+ * can be provided to ignore multiple fields.
  *
  * @example { required: [{ ifName: "createdAt" }] }
  *   // good
@@ -91,7 +101,12 @@ export default {
     const indexSetByModelName = new Map<string, IndexSet>();
     return {
       Field: (model, field) => {
+        const ruleIgnoreParams = listRuleIgnoreParams(model, RULE_NAME);
+        const ignoreNameSet = new Set(ruleIgnoreParams);
         const fieldName = field.name;
+        if (ignoreNameSet.has(fieldName)) {
+          return;
+        }
         const matches = requiredWithRegExp.filter((r) =>
           r.ifNameRegExp.test(fieldName),
         );
@@ -107,7 +122,7 @@ export default {
         }
         const indexSet = indexSetByModelName.get(modelName);
         if (!indexSet) {
-          throw new Error(`Expected index set for ${  modelName}`);
+          throw new Error(`Expected index set for ${modelName}`);
         }
         if (indexSet.has(fieldName)) {
           return;
