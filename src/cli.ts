@@ -91,8 +91,8 @@ const run = async () => {
     for (const parseIssue of parseIssues) {
       // eslint-disable-next-line no-console
       console.error(parseIssue);
-      process.exit(1);
     }
+    process.exit(1);
   }
 
   const fileNames = resolvePrismaFiles(args);

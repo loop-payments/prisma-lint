@@ -3,10 +3,10 @@ import { testLintPrismaSource } from '#src/common/test.js';
 import modelNameMappingSnakeCase from '#src/rules/model-name-mapping-snake-case.js';
 
 describe('model-name-mapping-snake-case', () => {
-  const getRunner = (config?: RuleConfig) => async (schemaSource: string) =>
+  const getRunner = (config?: RuleConfig) => async (sourceCode: string) =>
     await testLintPrismaSource({
       fileName: 'fake.ts',
-      schemaSource,
+      sourceCode,
       config: {
         rules: {
           'model-name-mapping-snake-case': ['error', config],

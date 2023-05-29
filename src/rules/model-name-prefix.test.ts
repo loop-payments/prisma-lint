@@ -3,10 +3,10 @@ import { testLintPrismaSource } from '#src/common/test.js';
 import modelNamePrefix from '#src/rules/model-name-prefix.js';
 
 describe('model-name-prefix', () => {
-  const getRunner = (config: RuleConfig) => async (schemaSource: string) =>
+  const getRunner = (config: RuleConfig) => async (sourceCode: string) =>
     await testLintPrismaSource({
       fileName: 'fake.ts',
-      schemaSource,
+      sourceCode,
       config: {
         rules: {
           'model-name-prefix': ['error', config],

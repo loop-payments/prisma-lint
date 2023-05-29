@@ -3,10 +3,10 @@ import { testLintPrismaSource } from '#src/common/test.js';
 import modelNameGrammaticalNumber from '#src/rules/model-name-grammatical-number.js';
 
 describe('model-name-grammatical-number', () => {
-  const getRunner = (config: RuleConfig) => async (schemaSource: string) =>
+  const getRunner = (config: RuleConfig) => async (sourceCode: string) =>
     await testLintPrismaSource({
       fileName: 'fake.ts',
-      schemaSource,
+      sourceCode,
       config: {
         rules: {
           'model-name-grammatical-number': ['error', config],

@@ -3,10 +3,10 @@ import { testLintPrismaSource } from '#src/common/test.js';
 import fieldOrder from '#src/rules/field-order.js';
 
 describe('field-order', () => {
-  const getRunner = (config: RuleConfig) => async (schemaSource: string) =>
+  const getRunner = (config: RuleConfig) => async (sourceCode: string) =>
     await testLintPrismaSource({
       fileName: 'fake.ts',
-      schemaSource,
+      sourceCode,
       config: {
         rules: {
           'field-order': ['error', config],

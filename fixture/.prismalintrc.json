@@ -13,6 +13,7 @@
     "require-field-index": [
       "error",
       {
+        "blah": 1,
         "forAllRelations": true,
         "forNames": ["tenantQid", "qid", "id", "/^.*Id$/"]
       }
@@ -20,6 +21,7 @@
     "require-field-type": [
       "error",
       {
+        "ALMOST": 1,
         "require": [
           {
             "type": "DateTime",

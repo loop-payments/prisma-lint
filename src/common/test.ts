@@ -3,18 +3,18 @@ import {
   type PrismaLintConfig,
 } from '#src/common/config.js';
 import type { RuleRegistry } from '#src/common/rule.js';
-import { lintPrismaSource } from '#src/lint.js';
+import { lintPrismaSourceCode } from '#src/lint.js';
 
 export async function testLintPrismaSource({
-  fileName,
-  schemaSource,
-  config,
   ruleRegistry,
+  config,
+  fileName,
+  sourceCode,
 }: {
-  fileName: string;
-  schemaSource: string;
-  config: PrismaLintConfig;
   ruleRegistry: RuleRegistry;
+  config: PrismaLintConfig;
+  fileName: string;
+  sourceCode: string;
 }) {
   const { ruleConfigList, parseIssues } = parseRuleConfigList(
     config,
@@ -27,8 +27,8 @@ export async function testLintPrismaSource({
         .join('\n')}`,
     );
   }
-  const violations = await lintPrismaSource({
-    schemaSource,
+  const violations = await lintPrismaSourceCode({
+    sourceCode,
     fileName,
     ruleConfigList,
     ruleRegistry,

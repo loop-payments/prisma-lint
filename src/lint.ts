@@ -3,7 +3,7 @@ import path from 'path';
 
 import { promisify } from 'util';
 
-import { getSchema } from '@mrleebo/prisma-ast';
+import { getSchema as getPrismaSchema } from '@mrleebo/prisma-ast';
 
 import { type RuleName, type RuleConfigList } from '#src/common/config.js';
 import {
@@ -16,22 +16,22 @@ import type { RuleInstance, RuleRegistry } from '#src/common/rule.js';
 
 import type { Violation, NodeViolation } from '#src/common/violation.js';
 
-export type FileName = string;
-export type FileViolationList = [FileName, Violation[]][];
-export type RuleInstanceList = [RuleName, RuleInstance][];
+type FileName = string;
+type FileViolationList = [FileName, Violation[]][];
+type RuleInstanceList = [RuleName, RuleInstance][];
 
-export async function lintPrismaSource({
-  fileName,
-  schemaSource,
-  ruleConfigList,
+export async function lintPrismaSourceCode({
   ruleRegistry,
+  ruleConfigList,
+  fileName,
+  sourceCode,
 }: {
-  fileName: string;
-  schemaSource: string;
-  ruleConfigList: RuleConfigList;
   ruleRegistry: RuleRegistry;
+  ruleConfigList: RuleConfigList;
+  fileName: string;
+  sourceCode: string;
 }) {
-  const schema = getSchema(schemaSource);
+  const prismaSchema = getPrismaSchema(sourceCode);
 
   // Mutatable list of violations added to by rule instances.
   const violations: Violation[] = [];
@@ -52,7 +52,7 @@ export async function lintPrismaSource({
   );
 
   // Run each rule instance for each AST node.
-  const models = listModelBlocks(schema);
+  const models = listModelBlocks(prismaSchema);
   models.forEach((model) => {
     const comments = listIgnoreModelComments(model);
     if (isModelEntirelyIgnored(comments)) {
@@ -72,47 +72,39 @@ export async function lintPrismaSource({
         }
       });
   });
+
   return violations;
 }
 
 export const lintPrismaFiles = async ({
+  ruleRegistry,
   ruleConfigList,
   fileNames,
-  ruleRegistry,
 }: {
+  ruleRegistry: RuleRegistry;
   ruleConfigList: RuleConfigList;
   fileNames: string[];
-  ruleRegistry: RuleRegistry;
 }): Promise<FileViolationList> => {
   const fileViolationList: FileViolationList = [];
   for (const fileName of fileNames) {
     const fileViolations = await lintPrismaFile({
+      ruleRegistry,
       ruleConfigList,
       fileName,
-      ruleRegistry,
     });
     fileViolationList.push([fileName, fileViolations]);
   }
   return fileViolationList;
 };
 
-export const lintPrismaFile = async ({
-  ruleConfigList,
-  fileName,
-  ruleRegistry,
-}: {
-  fileName: string;
-  ruleConfigList: RuleConfigList;
+export const lintPrismaFile = async (params: {
   ruleRegistry: RuleRegistry;
+  ruleConfigList: RuleConfigList;
+  fileName: string;
 }): Promise<Violation[]> => {
-  const filePath = path.resolve(fileName);
-  const schemaSource = await promisify(fs.readFile)(filePath, {
+  const filePath = path.resolve(params.fileName);
+  const sourceCode = await promisify(fs.readFile)(filePath, {
     encoding: 'utf8',
   });
-  return await lintPrismaSource({
-    schemaSource,
-    fileName,
-    ruleConfigList,
-    ruleRegistry,
-  });
+  return lintPrismaSourceCode({ ...params, sourceCode });
 };

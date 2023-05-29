@@ -3,10 +3,10 @@ import { testLintPrismaSource } from '#src/common/test.js';
 import requireField from '#src/rules/require-field.js';
 
 describe('require-field', () => {
-  const getRunner = (config: RuleConfig) => async (schemaSource: string) =>
+  const getRunner = (config: RuleConfig) => async (sourceCode: string) =>
     await testLintPrismaSource({
       fileName: 'fake.ts',
-      schemaSource,
+      sourceCode,
       config: {
         rules: {
           'require-field': ['error', config],

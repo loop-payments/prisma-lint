@@ -3,10 +3,10 @@ import { testLintPrismaSource } from '#src/common/test.js';
 import forbidField from '#src/rules/forbid-field.js';
 
 describe('forbid-field', () => {
-  const getRunner = (config: RuleConfig) => async (schemaSource: string) =>
+  const getRunner = (config: RuleConfig) => async (sourceCode: string) =>
     await testLintPrismaSource({
       fileName: 'fake.ts',
-      schemaSource,
+      sourceCode,
       config: {
         rules: {
           'forbid-field': ['error', config],
