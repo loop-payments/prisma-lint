@@ -58,6 +58,35 @@ describe('required-field-index', () => {
     });
   });
 
+  describe('relations', () => {
+    const run = getRunner({
+      forAllRelations: true,
+    });
+
+    it('returns no violations for indexed relation fields', async () => {
+      const violations = await run(`
+        model Foo {
+          qid String @id
+          barRef String
+          bar Bar @relation(fields: [barRef], references: [ref])
+          @@index([barRef])
+        }
+      `);
+      expect(violations.length).toEqual(0);
+    });
+
+    it('returns violations for non-indexed relation fields', async () => {
+      const violations = await run(`
+        model Foo {
+          qid String @id
+          barRef String
+          bar Bar @relation(fields: [barRef], references: [ref])
+        }
+      `);
+      expect(violations.length).toEqual(1);
+    });
+  });
+
   describe('string literal field name', () => {
     const run = getRunner({
       forNames: ['tenantQid'],

@@ -97,44 +97,57 @@ export default {
     const relationSetByModelName = new Map<string, RelationSet>();
     return {
       Field: (model, field) => {
+        const fieldName = field.name;
+        const modelName = model.name;
+
         const ruleIgnoreParams = listRuleIgnoreParams(model, RULE_NAME);
         const ignoreNameSet = new Set(ruleIgnoreParams);
-        const fieldName = field.name;
         if (ignoreNameSet.has(fieldName)) {
           return;
         }
-        const matches = ifFieldNameRexExpList.filter((r) => r.test(fieldName));
-        if (matches.length === 0) {
-          return;
-        }
+
         if (isUniqueField(field)) {
           return;
         }
-        const modelName = model.name;
-        if (!indexSetByModelName.has(modelName)) {
-          indexSetByModelName.set(modelName, getIndexSet(model));
+
+        const report = () => {
+          const message = `Field "${fieldName}" is must have an index.`;
+          context.report({ model, field, message });
+        };
+
+        const getIndexSet = () => {
+          if (!indexSetByModelName.has(modelName)) {
+            indexSetByModelName.set(modelName, extractIndexSet(model));
+          }
+          const indexSet = indexSetByModelName.get(modelName);
+          if (!indexSet) {
+            throw new Error(`Expected index set for ${modelName}`);
+          }
+          return indexSet;
+        };
+
+        const matches = ifFieldNameRexExpList.filter((r) => r.test(fieldName));
+        if (matches.length > 0) {
+          const indexSet = getIndexSet();
+          if (!indexSet.has(fieldName)) {
+            report();
+            return;
+          }
         }
-        const indexSet = indexSetByModelName.get(modelName);
-        if (!indexSet) {
-          throw new Error(`Expected index set for ${modelName}`);
-        }
-        if (indexSet.has(fieldName)) {
-          return;
-        }
+
         if (forAllRelations) {
+          const indexSet = getIndexSet();
           if (!relationSetByModelName.has(modelName)) {
-            relationSetByModelName.set(modelName, getRelationSet(model));
+            relationSetByModelName.set(modelName, extractRelationSet(model));
           }
           const relationSet = relationSetByModelName.get(modelName);
           if (!relationSet) {
             throw new Error(`Expected relation set for ${modelName}`);
           }
-          if (relationSet.has(fieldName)) {
-            return;
+          if (relationSet.has(fieldName) && !indexSet.has(fieldName)) {
+            report();
           }
         }
-        const message = `Field "${fieldName}" is must have an index.`;
-        context.report({ model, field, message });
       },
     };
   },
@@ -143,7 +156,7 @@ export default {
 type IndexSet = Set<string>;
 type RelationSet = Set<string>;
 
-function getRelationSet(model: Model): RelationSet {
+function extractRelationSet(model: Model): RelationSet {
   const fields = listFields(model);
   const set = new Set<string>();
   fields.forEach((field) => {
@@ -155,7 +168,7 @@ function getRelationSet(model: Model): RelationSet {
   return set;
 }
 
-function getIndexSet(model: Model): IndexSet {
+function extractIndexSet(model: Model): IndexSet {
   const modelAttributes = listAttributes(model);
   const set = new Set<string>();
   modelAttributes.forEach((value) => {
