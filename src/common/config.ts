@@ -1,6 +1,5 @@
 export type RootConfig = {
   rules: Record<RuleName, RuleConfigValue>;
-  plugins?: string[];
 };
 
 type RuleName = string;
