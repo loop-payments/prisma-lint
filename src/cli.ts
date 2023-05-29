@@ -36,7 +36,7 @@ const explorer = cosmiconfig('prismalint');
 const options = program.opts();
 const { args } = program;
 
-const getConfig = async () => {
+const getRootConfig = async () => {
   if (options.explicitConfig != null) {
     const result = await explorer.load(options.explicitConfig);
     if (result == null) {
@@ -91,8 +91,8 @@ const printFileViolations = (fileName: string, violations: Violation[]) => {
 };
 
 const run = async () => {
-  const config = await getConfig();
-  const { rules, parseIssues } = parseRules(ruleDefinitions, config);
+  const rootConfig = await getRootConfig();
+  const { rules, parseIssues } = parseRules(ruleDefinitions, rootConfig);
   if (parseIssues.length > 0) {
     for (const parseIssue of parseIssues) {
       // eslint-disable-next-line no-console
