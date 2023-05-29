@@ -10,6 +10,13 @@
       }
     ],
     "model-name-prefix": ["error", { "prefix": "Db" }],
+    "required-field-index": [
+      "error",
+      {
+        "forAllRelations": true,
+        "ifNameIn": ["tenantQid", "qid"]
+      }
+    ],
     "required-field-type": [
       "error",
       {

@@ -14,6 +14,7 @@ import {
   isKeyValue,
   isValue,
   listAttributes,
+  listFields,
 } from '#src/common/prisma.js';
 import { toRegExp } from '#src/common/regex.js';
 import type { FieldRuleDefinition } from '#src/common/rule.js';
@@ -21,14 +22,10 @@ import type { FieldRuleDefinition } from '#src/common/rule.js';
 const RULE_NAME = 'required-field-index';
 
 const Config = z.object({
-  required: z.array(
-    z.union([
-      z.string(),
-      z.object({
-        ifName: z.union([z.string(), z.instanceof(RegExp)]),
-      }),
-    ]),
-  ),
+  forAllRelations: z.boolean().optional(),
+  forNames: z
+    .union([z.string(), z.array(z.union([z.string(), z.instanceof(RegExp)]))])
+    .optional(),
 });
 
 /**
@@ -88,21 +85,16 @@ export default {
   ruleName: RULE_NAME,
   create: (config, context) => {
     const parsedConfig = Config.parse(config, RULE_CONFIG_PARSE_PARAMS);
-    const requiredWithRegExp = parsedConfig.required.map((r) => {
-      if (typeof r === 'string') {
-        return {
-          ifName: r,
-          ifNameRegExp: toRegExp(r),
-        };
-      }
-      return {
-        ...r,
-        ifNameRegExp: toRegExp(r.ifName),
-      };
-    }) as { ifName: string; ifNameRegExp: RegExp }[];
+    const forAllRelations = parsedConfig.forAllRelations ?? false;
+    const ifFieldName = parsedConfig.forNames ?? [];
+    const ifFieldNameList = Array.isArray(ifFieldName)
+      ? ifFieldName
+      : [ifFieldName];
+    const ifFieldNameRexExpList = ifFieldNameList.map((r) => toRegExp(r));
     // Each file gets its own instance of the rule, so we don't need
     // to worry about model name collisions across files.
     const indexSetByModelName = new Map<string, IndexSet>();
+    const relationSetByModelName = new Map<string, RelationSet>();
     return {
       Field: (model, field) => {
         const ruleIgnoreParams = listRuleIgnoreParams(model, RULE_NAME);
@@ -111,9 +103,7 @@ export default {
         if (ignoreNameSet.has(fieldName)) {
           return;
         }
-        const matches = requiredWithRegExp.filter((r) =>
-          r.ifNameRegExp.test(fieldName),
-        );
+        const matches = ifFieldNameRexExpList.filter((r) => r.test(fieldName));
         if (matches.length === 0) {
           return;
         }
@@ -131,6 +121,18 @@ export default {
         if (indexSet.has(fieldName)) {
           return;
         }
+        if (forAllRelations) {
+          if (!relationSetByModelName.has(modelName)) {
+            relationSetByModelName.set(modelName, getRelationSet(model));
+          }
+          const relationSet = relationSetByModelName.get(modelName);
+          if (!relationSet) {
+            throw new Error(`Expected relation set for ${modelName}`);
+          }
+          if (relationSet.has(fieldName)) {
+            return;
+          }
+        }
         const message = `Field "${fieldName}" is must have an index.`;
         context.report({ model, field, message });
       },
@@ -139,6 +141,19 @@ export default {
 } satisfies FieldRuleDefinition;
 
 type IndexSet = Set<string>;
+type RelationSet = Set<string>;
+
+function getRelationSet(model: Model): RelationSet {
+  const fields = listFields(model);
+  const set = new Set<string>();
+  fields.forEach((field) => {
+    const relations = extractRelationFieldNames(field);
+    relations.forEach((relation) => {
+      set.add(relation);
+    });
+  });
+  return set;
+}
 
 function getIndexSet(model: Model): IndexSet {
   const modelAttributes = listAttributes(model);
@@ -201,4 +216,24 @@ function extractPrimaryFieldNameFromRelationListAttribute(
   }
 
   throw new Error('Failed to parse attribute, first value is not a string');
+}
+
+function extractRelationFieldNames(field: Field): Array<string> {
+  const relationAttribute = field.attributes?.find(
+    (attribute) => attribute.name === 'relation',
+  );
+  const fieldsArg = relationAttribute?.args?.find((arg) => {
+    if (isKeyValue(arg.value)) {
+      return arg.value.key === 'fields';
+    }
+
+    return false;
+  });
+
+  if (fieldsArg == null) {
+    return [];
+  }
+
+  const fieldsArgValue = (fieldsArg.value as KeyValue).value;
+  return assertValueIsStringArray(fieldsArgValue);
 }

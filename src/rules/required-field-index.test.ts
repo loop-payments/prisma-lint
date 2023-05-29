@@ -19,11 +19,7 @@ describe('required-field-index', () => {
 
   describe('ignore comments', () => {
     const run = getRunner({
-      required: [
-        { ifName: 'qid' },
-        { ifName: 'tenantQid' },
-        { ifName: 'createdAt' },
-      ],
+      forNames: ['qid', 'tenantQid', 'createdAt'],
     });
 
     it('respects rule-specific ignore comments', async () => {
@@ -64,7 +60,7 @@ describe('required-field-index', () => {
 
   describe('string literal field name', () => {
     const run = getRunner({
-      required: [{ ifName: 'tenantQid' }],
+      forNames: ['tenantQid'],
     });
 
     describe('with @unique tag', () => {
@@ -130,7 +126,7 @@ describe('required-field-index', () => {
 
   describe('regex field name', () => {
     const run = getRunner({
-      required: ['/.*Qid$/'],
+      forNames: ['/.*Qid$/'],
     });
 
     describe('with @unique tag', () => {
