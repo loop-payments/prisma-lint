@@ -26,7 +26,7 @@ const Config = z.object({
  *   }
  *
  *
- * @example { forbidden: ["/^(?!.*[a|A]mountD6$).*D6$/"] }
+ * @example { forbidden: ["/^(?!.*[aA]mountD6$).*D6$/"] }
  *   // good
  *   type Product {
  *     id String

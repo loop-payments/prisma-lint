@@ -47,7 +47,7 @@ describe('forbidden-field', () => {
 
   describe('regex d6 fields without amount', () => {
     const run = getRunner({
-      forbidden: ['/^(?!.*[a|A]mountD6$).*D6$/'],
+      forbidden: ['/^(?!.*[aA]mountD6$).*D6$/'],
     });
 
     describe('with amount d6', () => {

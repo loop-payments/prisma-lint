@@ -155,7 +155,18 @@ describe('required-field-index', () => {
 
   describe('regex field name', () => {
     const run = getRunner({
-      forNames: ['/.*Qid$/'],
+      forNames: ['/.*[Qq]id$/'],
+    });
+
+    describe('with @id tag', () => {
+      it('returns no violations', async () => {
+        const violations = await run(`
+      model User {
+        qid String @id
+      }
+    `);
+        expect(violations.length).toEqual(0);
+      });
     });
 
     describe('with @unique tag', () => {

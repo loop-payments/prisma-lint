@@ -40,7 +40,7 @@ const Config = z.object({
  * required indices will still be enforced. A comma-separated list of fields
  * can be provided to ignore multiple fields.
  *
- * @example { required: ["createdAt"] }
+ * @example { forNames: ["createdAt"] }
  *   // good
  *   type User {
  *     createdAt DateTime @unique
@@ -68,7 +68,7 @@ const Config = z.object({
  *     @@index([id, createdAt])
  *   }
  *
- * @example { required: [{ ifName: "/Id$/" }] }
+ * @example { forNames: "/Id$/" ] }
  *   // good
  *   type User {
  *     tenantId String
@@ -80,6 +80,19 @@ const Config = z.object({
  *     tenantId String
  *   }
  *
+ * @example { forAllRelations: true }
+ *   // good
+ *   type Bar {
+ *     fooId String
+ *     foo Foo @relation(fields: [fooId], references: [id])
+ *     @@index([fooId])
+ *   }
+ *
+ *   // bar
+ *   type Bar {
+ *     fooId String
+ *     foo Foo @relation(fields: [fooId], references: [id])
+ *   }
  */
 export default {
   ruleName: RULE_NAME,
@@ -104,7 +117,7 @@ export default {
           return;
         }
 
-        if (isUniqueField(field)) {
+        if (isIdField(field) || isUniqueField(field)) {
           return;
         }
 
@@ -178,6 +191,13 @@ function extractIndexSet(model: Model): IndexSet {
   });
   return set;
 }
+
+function isIdField(field: Field): boolean {
+  return Boolean(
+    field.attributes?.find((attribute) => attribute.name === 'id'),
+  );
+}
+
 function isUniqueField(field: Field): boolean {
   return Boolean(
     field.attributes?.find((attribute) => attribute.name === 'unique'),

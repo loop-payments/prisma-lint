@@ -1,10 +1,8 @@
-
 # Rules
 
 > This document is automatically generated from the source code. Do not edit it directly.
 
-Configuration option schemas are written with [Zod](
-<https://github.com/colinhacks/zod>).
+Configuration option schemas are written with [Zod](https://github.com/colinhacks/zod).
 
 - [field-name-mapping-snake-case](#field-name-mapping-snake-case)
 - [field-order](#field-order)
@@ -20,15 +18,12 @@ Configuration option schemas are written with [Zod](
 
 Requires that the mapped name of a field is the expected snake case.
 
-
 ### Configuration
 
 ```ts
-z
-  .object({
-    compoundWords: z.array(z.string()).optional(),
-  })
-  .optional()
+z.object({
+  compoundWords: z.array(z.string()).optional(),
+}).optional();
 ```
 
 ### Examples
@@ -86,13 +81,12 @@ interpreted to be required as the last field in the model.
 The special field name `...` can be used to indicate that any
 number of fields can appear in the model at that point.
 
-
 ### Configuration
 
 ```ts
 z.object({
   order: z.array(z.string()),
-})
+});
 ```
 
 ### Examples
@@ -147,13 +141,12 @@ model User {
 
 Forbids fields with certain names.
 
-
 ### Configuration
 
 ```ts
 z.object({
   forbidden: z.array(z.union([z.string(), z.instanceof(RegExp)])),
-})
+});
 ```
 
 ### Examples
@@ -172,7 +165,7 @@ type Product {
 }
 ```
 
-#### With `{ forbidden: ["/^(?!.*[a|A]mountD6$).*D6$/"] }`
+#### With `{ forbidden: ["/^(?!.*[aA]mountD6$).*D6$/"] }`
 
 ```prisma
 // good
@@ -194,13 +187,12 @@ Checks that each model name matches the plural or singlar enforced style.
 
 <https://en.wikipedia.org/wiki/Grammatical_number>
 
-
 ### Configuration
 
 ```ts
 z.object({
   enforcedStyle: z.enum(['singular', 'plural']),
-})
+});
 ```
 
 ### Examples
@@ -237,16 +229,13 @@ model User {
 
 Checks that the mapped name of a model is the expected snake case.
 
-
 ### Configuration
 
 ```ts
-z
-  .object({
-    compoundWords: z.array(z.string()).optional(),
-    trimPrefix: z.string().optional(),
-  })
-  .optional()
+z.object({
+  compoundWords: z.array(z.string()).optional(),
+  trimPrefix: z.string().optional(),
+}).optional();
 ```
 
 ### Examples
@@ -314,13 +303,12 @@ domain object is persisted in multiple tables,
 and the application type differs from the table
 structure.
 
-
 ### Configuration
 
 ```ts
 z.object({
   prefix: z.string(),
-})
+});
 ```
 
 ### Examples
@@ -352,7 +340,6 @@ That will ignore only `tenantId` violations for the model. Other
 required indices will still be enforced. A comma-separated list of fields
 can be provided to ignore multiple fields.
 
-
 ### Configuration
 
 ```ts
@@ -365,7 +352,7 @@ z.object({
       }),
     ]),
   ),
-})
+});
 ```
 
 ### Examples
@@ -420,7 +407,6 @@ type User {
 
 Checks that certain fields have a specific type.
 
-
 ### Configuration
 
 ```ts
@@ -431,7 +417,7 @@ z.object({
       type: z.string(),
     }),
   ),
-})
+});
 ```
 
 ### Examples
@@ -479,7 +465,6 @@ That will ignore only `tenantId` field violations for the model. Other
 required fields will still be enforced. A comma-separated list of fields
 can be provided to ignore multiple required fields.
 
-
 ### Configuration
 
 ```ts
@@ -493,7 +478,7 @@ z.object({
       }),
     ]),
   ),
-})
+});
 ```
 
 ### Examples
@@ -525,4 +510,3 @@ model Product {
 odel Product {
  priceAmountD6 Int
 ```
-
