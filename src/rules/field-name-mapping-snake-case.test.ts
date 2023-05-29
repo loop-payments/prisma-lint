@@ -70,17 +70,9 @@ describe('field-name-mapping-snake-case', () => {
       expect(() => {
         fieldNameMappingSnakeCase.create({ compoundWords: 1 }, {} as any);
       }).toThrowErrorMatchingInlineSnapshot(`
-        "[
-          {
-            "code": "invalid_type",
-            "expected": "array",
-            "received": "number",
-            "path": [
-              "compoundWords"
-            ],
-            "message": "Invalid rule configuration"
-          }
-        ]"
+        "Failed to parse config for rule 'field-name-mapping-snake-case'
+          Value: '{"compoundWords":1}'
+          Expected array, received number"
       `);
     });
   });

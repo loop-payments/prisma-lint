@@ -46,15 +46,9 @@ describe('model-name-grammatical-number', () => {
       expect(() => {
         modelNameGrammaticalNumber.create(undefined as any, {} as any);
       }).toThrowErrorMatchingInlineSnapshot(`
-        "[
-          {
-            "code": "invalid_type",
-            "expected": "object",
-            "received": "undefined",
-            "path": [],
-            "message": "A rule configuration is require"
-          }
-        ]"
+        "Failed to parse config for rule 'model-name-grammatical-number'
+          Value: 'undefined'
+          Required"
       `);
     });
 
@@ -62,17 +56,9 @@ describe('model-name-grammatical-number', () => {
       expect(() => {
         modelNameGrammaticalNumber.create({} as any, {} as any);
       }).toThrowErrorMatchingInlineSnapshot(`
-        "[
-          {
-            "expected": "'singular' | 'plural'",
-            "received": "undefined",
-            "code": "invalid_type",
-            "path": [
-              "style"
-            ],
-            "message": "Invalid rule configuration"
-          }
-        ]"
+        "Failed to parse config for rule 'model-name-grammatical-number'
+          Value: '{}'
+          Required"
       `);
     });
   });
