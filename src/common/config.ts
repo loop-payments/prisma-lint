@@ -29,10 +29,13 @@ export function getRuleConfig(value: RuleConfigValue) {
 
 export const RuleConfigParseError = class extends Error {
   constructor(ruleName: string, config: unknown, zodIssues: z.ZodIssue[]) {
+    if (zodIssues.length > 1 && zodIssues[0].message === 'Required') {
+      zodIssues = zodIssues.slice(1);
+    }
     const message = [
       `Failed to parse config for rule '${ruleName}'`,
       `  Value: '${JSON.stringify(config)}'`,
-      `  ${zodIssues.map((issue) => issue.message).join('\n')}`,
+      `  ${zodIssues.map((issue) => issue.message).join(',')}`,
     ].join('\n');
     super(message);
     this.name = 'RuleConfigParseError';
