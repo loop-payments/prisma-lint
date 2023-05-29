@@ -27,7 +27,6 @@ const Config = z
  *     userId String @map(name: "user_id")
  *   }
  *
- *   // good
  *   model UserRole {
  *     // No mapping needed.
  *     id String
@@ -38,7 +37,6 @@ const Config = z
  *     userId String
  *   }
  *
- *   // bad
  *   model UserRole {
  *     userId String @map(name: "user_i_d")
  *   }

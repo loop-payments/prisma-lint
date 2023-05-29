@@ -88,7 +88,7 @@ const Config = z.object({
  *     @@index([fooId])
  *   }
  *
- *   // bar
+ *   // bad
  *   type Bar {
  *     fooId String
  *     foo Foo @relation(fields: [fooId], references: [id])

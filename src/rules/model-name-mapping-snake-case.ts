@@ -31,7 +31,6 @@ const Config = z
  *     id String @id
  *   }
  *
- *   // bad
  *   model UserRole {
  *     id String @id
  *     @@map(name: "user_roles")
