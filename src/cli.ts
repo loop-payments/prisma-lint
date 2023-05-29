@@ -10,7 +10,7 @@ import { glob } from 'glob';
 import { parseRules } from '#src/common/parse-rules.js';
 import { renderViolations } from '#src/common/render.js';
 import type { Violation } from '#src/common/violation.js';
-import { lintPrismaFiles } from '#src/lint.js';
+import { lintPrismaFiles } from '#src/lint-prisma-files.js';
 import ruleDefinitions from '#src/rule-definitions.js';
 
 const DEFAULT_PRISMA_FILE_PATH = 'prisma/schema.prisma';

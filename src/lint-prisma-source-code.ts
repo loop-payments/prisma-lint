@@ -1,8 +1,3 @@
-import fs from 'fs';
-import path from 'path';
-
-import { promisify } from 'util';
-
 import { getSchema as getPrismaSchema } from '@mrleebo/prisma-ast';
 
 import {
@@ -15,7 +10,6 @@ import type { Rule, RuleInstance } from '#src/common/rule.js';
 
 import type { Violation, NodeViolation } from '#src/common/violation.js';
 
-type FileViolations = { fileName: string; violations: Violation[] }[];
 type RuleInstances = { ruleName: string; ruleInstance: RuleInstance }[];
 
 export async function lintPrismaSourceCode({
@@ -68,35 +62,3 @@ export async function lintPrismaSourceCode({
 
   return violations;
 }
-
-export const lintPrismaFiles = async ({
-  rules,
-  fileNames,
-}: {
-  rules: Rule[];
-  fileNames: string[];
-}): Promise<FileViolations> => {
-  const fileViolationList: FileViolations = [];
-  for (const fileName of fileNames) {
-    const violations = await lintPrismaFile({
-      rules,
-      fileName,
-    });
-    fileViolationList.push({ fileName, violations });
-  }
-  return fileViolationList;
-};
-
-export const lintPrismaFile = async ({
-  rules,
-  fileName,
-}: {
-  rules: Rule[];
-  fileName: string;
-}): Promise<Violation[]> => {
-  const filePath = path.resolve(fileName);
-  const sourceCode = await promisify(fs.readFile)(filePath, {
-    encoding: 'utf8',
-  });
-  return lintPrismaSourceCode({ rules, fileName, sourceCode });
-};
