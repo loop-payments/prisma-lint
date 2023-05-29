@@ -51,10 +51,10 @@ const Config = z.object({
  *     priceAmountD6 Int
  *   }
  *
- *  // bad
- *  model Product {
- *    priceAmountD6 Int
- *  }
+ *   // bad
+ *   model Product {
+ *     priceAmountD6 Int
+ *   }
  *
  *
  */

@@ -8,7 +8,7 @@ Configuration option schemas are written with [Zod](
 
 - [field-name-mapping-snake-case](#field-name-mapping-snake-case)
 - [field-order](#field-order)
-- [forbidden-field](#forbidden-field)
+- [forbid-field](#forbid-field)
 - [model-name-grammatical-number](#model-name-grammatical-number)
 - [model-name-mapping-snake-case](#model-name-mapping-snake-case)
 - [model-name-prefix](#model-name-prefix)
@@ -40,18 +40,15 @@ z
 model UserRole {
   userId String @map(name: "user_id")
 }
-
 // good
 model UserRole {
   // No mapping needed.
   id String
 }
-
 // bad
 model UserRole {
   userId String
 }
-
 // bad
 model UserRole {
   userId String @map(name: "user_i_d")
@@ -65,7 +62,6 @@ model UserRole {
 model PersistedQuery {
   graphQLId String @map(name: "graphql_id")
 }
-
 // bad
 model PersistedQuery {
   graphQLId String @map(name: "graph_q_l_id")
@@ -106,14 +102,12 @@ model User {
   id String @id
   email String
 }
-
 model User {
   tenantId String
   id String @id
   createdAt DateTime
   email String
 }
-
 // bad
 model Users {
   id String @id
@@ -133,7 +127,6 @@ model User {
   createdAt DateTime
   updatedAt DateTime
 }
-
 // good
 model User {
   tenantId String
@@ -143,7 +136,7 @@ model User {
 }
 ```
 
-## forbidden-field
+## forbid-field
 
 Forbids fields with certain names.
 
@@ -152,27 +145,26 @@ Forbids fields with certain names.
 
 ```ts
 z.object({
-  forbidden: z.array(z.union([z.string(), z.instanceof(RegExp)])),
+  forbid: z.array(z.union([z.string(), z.instanceof(RegExp)])),
 });
 ```
 
 ### Examples
 
-#### With `{ forbidden: ["id"] }`
+#### With `{ forbid: ["id"] }`
 
 ```prisma
 // good
 type Product {
   uuid String
 }
-
 // bad
 type Product {
   id String
 }
 ```
 
-#### With `{ forbidden: ["/^(?!.*[aA]mountD6$).*D6$/"] }`
+#### With `{ forbid: ["/^(?!.*[aA]mountD6$).*D6$/"] }`
 
 ```prisma
 // good
@@ -180,7 +172,6 @@ type Product {
   id String
   priceAmountD6 Int
 }
-
 // bad
 type Product {
   id Int
@@ -212,7 +203,6 @@ z.object({
 model User {
   id String @id
 }
-
 // bad
 model Users {
   id String @id
@@ -226,7 +216,6 @@ model Users {
 model Users {
   id String @id
 }
-
 // bad
 model User {
   id String @id
@@ -259,12 +248,10 @@ model UserRole {
   id String @id
   @@map(name: "user_role")
 }
-
 // bad
 model UserRole {
   id String @id
 }
-
 // bad
 model UserRole {
   id String @id
@@ -280,7 +267,6 @@ model DbUserRole {
   id String @id
   @@map(name: "user_role")
 }
-
 // bad
 model DbUserRole {
   id String @id
@@ -296,7 +282,6 @@ model GraphQLPersistedQuery {
   id String @id
   @@map(name: "graphql_persisted_query")
 }
-
 // bad
 model GraphQLPersistedQuery {
   id String @id
@@ -332,7 +317,6 @@ z.object({
 model DbUser {
   id String @id
 }
-
 // bad
 model Users {
   id String @id
@@ -373,23 +357,19 @@ z.object({
 type User {
   createdAt DateTime @unique
 }
-
 type User {
   createdAt DateTime
   @@index([createdAt])
 }
-
 type User {
   createdAt DateTime
   id String
   @@index([createdAt, id])
 }
-
 // bad
 type User {
   createdAt string
 }
-
 type User {
   createdAt DateTime
   id String
@@ -405,7 +385,6 @@ type User {
   tenantId String
   @@index([tenantId])
 }
-
 // bad
 type User {
   tenantId String
@@ -421,7 +400,6 @@ type Bar {
   foo Foo @relation(fields: [fooId], references: [id])
   @@index([fooId])
 }
-
 // bar
 type Bar {
   fooId String
@@ -456,7 +434,6 @@ z.object({
 type User {
   id String
 }
-
 // bad
 type User {
   id Int
@@ -471,7 +448,6 @@ type User {
   createdAt DateTime
   updatedAt DateTime
 }
-
 // bad
 type User {
   createdAt string
@@ -518,7 +494,6 @@ z.object({
 model User {
   id Int @id
 }
-
 // bad
 model User {
   name string
@@ -533,9 +508,9 @@ model Product {
   currencyCode string
   priceAmountD6 Int
 }
-
-/ bad
-odel Product {
- priceAmountD6 Int
+// bad
+model Product {
+  priceAmountD6 Int
+}
 ```
 

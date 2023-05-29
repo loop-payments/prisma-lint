@@ -43,6 +43,15 @@ function listExamples(exampleLines) {
       currentExampleCode = '';
     } else {
       // Remove the first 2 spaces.
+      if (line.trim() === '') {
+        continue;
+        currentExampleCode += '\n';
+      }
+      if (!line.startsWith('  ')) {
+        throw new Error(
+          `Expected line ${i} to start with 2 spaces, but got: "${line}"`,
+        );
+      }
       currentExampleCode += `${line.slice(2)}\n`;
     }
   }
@@ -119,11 +128,19 @@ function buildRulesMarkdownFile(rules) {
 }
 
 function extractAndBuildRulesMarkdown() {
-  const ruleFiles = glob.sync(`${rulesDirectory}/**/*.ts`);
+  const ruleFiles = glob.sync(`${rulesDirectory}/**/!(*.spec).ts`);
 
   const rules = ruleFiles
     .sort()
-    .map((file) => extractRulesFromTSFile(file))
+    .map((file) => {
+      try {
+        return extractRulesFromTSFile(file);
+      } catch (e) {
+        // eslint-disable-next-line no-console
+        console.error(`Error while processing rule file ${file}`);
+        throw e;
+      }
+    })
     .filter((rule) => rule !== null);
 
   buildRulesMarkdownFile(rules);
