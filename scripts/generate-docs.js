@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { glob } from 'glob';
+import { execSync } from 'child_process';
 
 const rulesDirectory = 'src/rules';
 const outputFile = 'RULES.md';
@@ -126,6 +127,8 @@ function extractAndBuildRulesMarkdown() {
     .filter((rule) => rule !== null);
 
   buildRulesMarkdownFile(rules);
+
+  execSync('yarn prettier RULES.md');
 }
 
 extractAndBuildRulesMarkdown();
