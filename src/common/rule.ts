@@ -2,11 +2,14 @@ import type { Field, Model } from '@mrleebo/prisma-ast';
 
 import type { z } from 'zod';
 
+import type { RuleConfig } from '#src/common/config.js';
 import type {
   FieldViolation,
   ModelViolation,
   NodeViolation,
 } from '#src/common/violation.js';
+
+export type Rule = { ruleConfig: RuleConfig; ruleDefinition: RuleDefinition };
 
 /**
  * Context passed to rules.

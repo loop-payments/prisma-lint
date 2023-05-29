@@ -7,7 +7,7 @@ import { program } from 'commander';
 import { cosmiconfig } from 'cosmiconfig';
 import { glob } from 'glob';
 
-import { parseRules } from '#src/common/config.js';
+import { parseRules } from '#src/common/parse-rules.js';
 import { renderViolations } from '#src/common/render.js';
 import type { Violation } from '#src/common/violation.js';
 import { lintPrismaFiles } from '#src/lint.js';

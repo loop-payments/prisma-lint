@@ -1,4 +1,5 @@
-import { parseRules, type PrismaLintConfig } from '#src/common/config.js';
+import { type PrismaLintConfig } from '#src/common/config.js';
+import { parseRules } from '#src/common/parse-rules.js';
 import type { RuleDefinition } from '#src/common/rule.js';
 import { lintPrismaSourceCode } from '#src/lint.js';
 

@@ -5,14 +5,13 @@ import { promisify } from 'util';
 
 import { getSchema as getPrismaSchema } from '@mrleebo/prisma-ast';
 
-import { type Rule } from '#src/common/config.js';
 import {
   isModelEntirelyIgnored,
   isRuleEntirelyIgnored,
   listIgnoreModelComments,
 } from '#src/common/ignore.js';
 import { listModelBlocks, listFields } from '#src/common/prisma.js';
-import type { RuleInstance } from '#src/common/rule.js';
+import type { Rule, RuleInstance } from '#src/common/rule.js';
 
 import type { Violation, NodeViolation } from '#src/common/violation.js';
 

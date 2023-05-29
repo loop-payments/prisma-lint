@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { parseRules } from '#src/common/config.js';
+import { parseRules } from '#src/common/parse-rules.js';
 import type { ModelRuleDefinition } from '#src/common/rule.js';
 
 describe('parse rule config list', () => {
