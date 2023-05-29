@@ -19,7 +19,7 @@ const Config = z
   .optional();
 
 /**
- * Requires that the mapped name of a field is the expected snake case.
+ * Checks that the mapped name of a field is the expected snake case.
  *
  * @example
  *   // good

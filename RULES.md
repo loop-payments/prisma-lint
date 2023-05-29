@@ -18,7 +18,7 @@ Configuration option schemas are written with [Zod](
 
 ## field-name-mapping-snake-case
 
-Requires that the mapped name of a field is the expected snake case.
+Checks that the mapped name of a field is the expected snake case.
 
 
 ### Configuration
@@ -78,9 +78,9 @@ Checks that fields within a model are in the correct order.
 Fields in the `order` that are not present in the model are ignored.
 To require fields, use the `require-field` rule.
 
-The first field in the `order` is interpreted to be require as
+The first field in the `order` is interpreted to be required as
 the first field in the model. The last field in the `order` is
-interpreted to be require as the last field in the model.
+interpreted to be required as the last field in the model.
 
 The special field name `...` can be used to indicate that any
 number of fields can appear in the model at that point.
@@ -116,7 +116,7 @@ model User {
 }
 
 // bad
-model Users {
+model User {
   id String @id
   email String
   tenantId String
@@ -135,12 +135,18 @@ model User {
   updatedAt DateTime
 }
 
-// good
 model User {
   tenantId String
   id String
   email String
   createdAt DateTime
+}
+
+// bad
+model User {
+  id String @id
+  createdAt DateTime
+  email String
 }
 ```
 
@@ -311,7 +317,7 @@ model GraphQLPersistedQuery {
 
 ## model-name-prefix
 
-Check that model names include a require prefix.
+Checks that model names include a required prefix.
 
 This is useful for avoiding name collisions with
 application-level types in cases where a single
@@ -356,7 +362,7 @@ comment, like so:
     /// prisma-lint-ignore-model require-field-index tenantId
 
 That will ignore only `tenantId` violations for the model. Other
-require indices will still be enforced. A comma-separated list of fields
+required indices will still be enforced. A comma-separated list of fields
 can be provided to ignore multiple fields.
 
 
@@ -500,8 +506,8 @@ comment, like so:
     /// prisma-lint-ignore-model require-field tenantId
 
 That will ignore only `tenantId` field violations for the model. Other
-require fields will still be enforced. A comma-separated list of fields
-can be provided to ignore multiple require fields.
+required fields will still be enforced. A comma-separated list of fields
+can be provided to ignore multiple required fields.
 
 
 ### Configuration
