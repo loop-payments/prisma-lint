@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { parseRuleConfigList } from '#src/common/config.js';
+import { parseRules } from '#src/common/config.js';
 import type { ModelRuleDefinition } from '#src/common/rule.js';
 
 describe('parse rule config list', () => {
@@ -16,27 +16,25 @@ describe('parse rule config list', () => {
       };
     },
   } satisfies ModelRuleDefinition<z.infer<typeof Config>>;
-  const ruleRegistry = {
-    'fake-rule': fakeRule,
-  };
+  const ruleDefinitions = [fakeRule];
 
   describe('valid config', () => {
     it('returns parsed config and no parse issues', () => {
-      const result = parseRuleConfigList(ruleRegistry, {
+      const result = parseRules(ruleDefinitions, {
         rules: {
           'fake-rule': ['error', { foo: 'bar' }],
         },
       });
       expect(result.parseIssues).toEqual([]);
-      expect(result.ruleConfigList.length).toEqual(1);
-      expect(result.ruleConfigList[0][0]).toEqual('fake-rule');
-      expect(result.ruleConfigList[0][1]).toEqual({ foo: 'bar' });
+      expect(result.rules.length).toEqual(1);
+      expect(result.rules[0].ruleDefinition.ruleName).toEqual('fake-rule');
+      expect(result.rules[0].ruleConfig).toEqual({ foo: 'bar' });
     });
   });
 
   describe('invalid config', () => {
     it('returns parse issues', () => {
-      const result = parseRuleConfigList(ruleRegistry, {
+      const result = parseRules(ruleDefinitions, {
         rules: {
           'fake-rule': ['error', { foo: 123 }],
         },
@@ -46,7 +44,7 @@ describe('parse rule config list', () => {
         "Failed to parse config for rule 'fake-rule':\n" +
           '  Expected string, received number',
       );
-      expect(result.ruleConfigList.length).toEqual(0);
+      expect(result.rules.length).toEqual(0);
     });
   });
 });

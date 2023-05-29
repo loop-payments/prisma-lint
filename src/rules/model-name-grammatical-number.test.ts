@@ -12,9 +12,7 @@ describe('model-name-grammatical-number', () => {
           'model-name-grammatical-number': ['error', config],
         },
       },
-      ruleRegistry: {
-        'model-name-grammatical-number': modelNameGrammaticalNumber,
-      },
+      ruleDefinitions: [modelNameGrammaticalNumber],
     });
 
   describe('ignore comments', () => {

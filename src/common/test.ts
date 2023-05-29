@@ -1,25 +1,19 @@
-import {
-  parseRuleConfigList,
-  type PrismaLintConfig,
-} from '#src/common/config.js';
-import type { RuleRegistry } from '#src/common/rule.js';
+import { parseRules, type PrismaLintConfig } from '#src/common/config.js';
+import type { RuleDefinition } from '#src/common/rule.js';
 import { lintPrismaSourceCode } from '#src/lint.js';
 
 export async function testLintPrismaSource({
-  ruleRegistry,
+  ruleDefinitions,
   config,
   fileName,
   sourceCode,
 }: {
-  ruleRegistry: RuleRegistry;
+  ruleDefinitions: RuleDefinition[];
   config: PrismaLintConfig;
   fileName: string;
   sourceCode: string;
 }) {
-  const { ruleConfigList, parseIssues } = parseRuleConfigList(
-    ruleRegistry,
-    config,
-  );
+  const { rules, parseIssues } = parseRules(ruleDefinitions, config);
   if (parseIssues.length > 0) {
     throw new Error(
       `Unable to parse test config for ${fileName}:\n${parseIssues
@@ -28,10 +22,9 @@ export async function testLintPrismaSource({
     );
   }
   const violations = await lintPrismaSourceCode({
-    sourceCode,
+    rules,
     fileName,
-    ruleConfigList,
-    ruleRegistry,
+    sourceCode,
   });
   return violations;
 }

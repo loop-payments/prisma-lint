@@ -1,6 +1,6 @@
-import type { RuleRegistry } from '#src/common/rule.js';
+import type { RuleDefinition } from '#src/common/rule.js';
 
-export type RuleName = string;
+type RuleName = string;
 export type RuleConfig = Record<string, unknown>;
 export type RuleConfigLevel = 'error' | 'off';
 export type RuleConfigValue =
@@ -27,20 +27,24 @@ export function getRuleConfig(value: RuleConfigValue) {
   return {};
 }
 
-export type RuleConfigList = [RuleName, RuleConfig][];
+export type Rule = { ruleConfig: RuleConfig; ruleDefinition: RuleDefinition };
 
-export const parseRuleConfigList = (
-  ruleRegistry: RuleRegistry,
+export const parseRules = (
+  ruleDefinitions: RuleDefinition[],
   config: PrismaLintConfig,
-): { ruleConfigList: RuleConfigList; parseIssues: string[] } => {
-  const ruleConfigList: [RuleName, RuleConfig][] = [];
+): { rules: Rule[]; parseIssues: string[] } => {
+  const rules: Rule[] = [];
   const parseIssues: string[] = [];
   const rawRuleValues = config.rules;
+  const ruleDefinitionMap = new Map(
+    ruleDefinitions.map((d) => [d.ruleName, d]),
+  );
   const sortedRuleNames = Object.keys(rawRuleValues).sort();
   for (const ruleName of sortedRuleNames) {
-    const ruleDefinition = ruleRegistry[ruleName];
+    const ruleDefinition = ruleDefinitionMap.get(ruleName);
     if (ruleDefinition == null) {
       parseIssues.push(`Unable to find rule for ${ruleName}`);
+      continue;
     }
     const rawRuleValue = rawRuleValues[ruleName];
     if (getRuleLevel(rawRuleValue) === 'off') {
@@ -49,7 +53,10 @@ export const parseRuleConfigList = (
     const rawRuleConfig = getRuleConfig(rawRuleValue);
     const parsed = ruleDefinition.configSchema.safeParse(rawRuleConfig);
     if (parsed.success) {
-      ruleConfigList.push([ruleName, parsed.data]);
+      rules.push({
+        ruleConfig: parsed.data,
+        ruleDefinition,
+      });
     } else {
       const issues = parsed.error.issues.map((issue) => issue.message);
       if (issues.length > 1 && issues[0] === 'Required') {
@@ -62,5 +69,5 @@ export const parseRuleConfigList = (
       parseIssues.push(parseIssue);
     }
   }
-  return { ruleConfigList, parseIssues };
+  return { rules, parseIssues };
 };

@@ -12,9 +12,7 @@ describe('require-field-type', () => {
           'require-field-type': ['error', config],
         },
       },
-      ruleRegistry: {
-        'require-field-type': requireFieldType,
-      },
+      ruleDefinitions: [requireFieldType],
     });
 
   describe('string literal field name', () => {

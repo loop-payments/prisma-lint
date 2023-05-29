@@ -12,9 +12,7 @@ describe('require-field-index', () => {
           'require-field-index': ['error', config],
         },
       },
-      ruleRegistry: {
-        'require-field-index': requireFieldType,
-      },
+      ruleDefinitions: [requireFieldType],
     });
 
   describe('ignore comments', () => {

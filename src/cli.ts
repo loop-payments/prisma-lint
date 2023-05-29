@@ -7,11 +7,11 @@ import { program } from 'commander';
 import { cosmiconfig } from 'cosmiconfig';
 import { glob } from 'glob';
 
-import { parseRuleConfigList } from '#src/common/config.js';
+import { parseRules } from '#src/common/config.js';
 import { renderViolations } from '#src/common/render.js';
 import type { Violation } from '#src/common/violation.js';
 import { lintPrismaFiles } from '#src/lint.js';
-import ruleRegistry from '#src/rule-registry.js';
+import ruleDefinitions from '#src/rule-definitions.js';
 
 const DEFAULT_PRISMA_FILE_PATH = 'prisma/schema.prisma';
 
@@ -79,9 +79,9 @@ const resolvePrismaFiles = (args: string[]) => {
   return resolvedFiles;
 };
 
-const printFileViolations = (schemaFile: string, violations: Violation[]) => {
+const printFileViolations = (fileName: string, violations: Violation[]) => {
   /* eslint-disable no-console */
-  console.log(schemaFile);
+  console.log(fileName);
   const lines = renderViolations(violations);
   for (const line of lines) {
     console.log(line);
@@ -92,10 +92,7 @@ const printFileViolations = (schemaFile: string, violations: Violation[]) => {
 
 const run = async () => {
   const config = await getConfig();
-  const { ruleConfigList, parseIssues } = parseRuleConfigList(
-    ruleRegistry,
-    config,
-  );
+  const { rules, parseIssues } = parseRules(ruleDefinitions, config);
   if (parseIssues.length > 0) {
     for (const parseIssue of parseIssues) {
       // eslint-disable-next-line no-console
@@ -106,12 +103,11 @@ const run = async () => {
 
   const fileNames = resolvePrismaFiles(args);
   const fileViolationList = await lintPrismaFiles({
-    ruleRegistry,
-    ruleConfigList,
+    rules,
     fileNames,
   });
   let hasViolations = false;
-  fileViolationList.forEach(([fileName, violations]) => {
+  fileViolationList.forEach(({ fileName, violations }) => {
     if (violations.length > 0) {
       hasViolations = true;
       printFileViolations(fileName, violations);

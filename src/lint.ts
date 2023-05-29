@@ -5,29 +5,26 @@ import { promisify } from 'util';
 
 import { getSchema as getPrismaSchema } from '@mrleebo/prisma-ast';
 
-import { type RuleName, type RuleConfigList } from '#src/common/config.js';
+import { type Rule } from '#src/common/config.js';
 import {
   isModelEntirelyIgnored,
   isRuleEntirelyIgnored,
   listIgnoreModelComments,
 } from '#src/common/ignore.js';
 import { listModelBlocks, listFields } from '#src/common/prisma.js';
-import type { RuleInstance, RuleRegistry } from '#src/common/rule.js';
+import type { RuleInstance } from '#src/common/rule.js';
 
 import type { Violation, NodeViolation } from '#src/common/violation.js';
 
-type FileName = string;
-type FileViolationList = [FileName, Violation[]][];
-type RuleInstanceList = [RuleName, RuleInstance][];
+type FileViolations = { fileName: string; violations: Violation[] }[];
+type RuleInstances = { ruleName: string; ruleInstance: RuleInstance }[];
 
 export async function lintPrismaSourceCode({
-  ruleRegistry,
-  ruleConfigList,
+  rules,
   fileName,
   sourceCode,
 }: {
-  ruleRegistry: RuleRegistry;
-  ruleConfigList: RuleConfigList;
+  rules: Rule[];
   fileName: string;
   sourceCode: string;
 }) {
@@ -37,17 +34,14 @@ export async function lintPrismaSourceCode({
   const violations: Violation[] = [];
 
   // Create rule instances.
-  const ruleInstanceList: RuleInstanceList = ruleConfigList.map(
-    ([ruleName, ruleConfig]) => {
-      const ruleDefinition = ruleRegistry[ruleName];
-      if (ruleDefinition == null) {
-        throw new Error(`Unable to find rule for ${ruleName}`);
-      }
+  const ruleInstanceList: RuleInstances = rules.map(
+    ({ ruleDefinition, ruleConfig }) => {
+      const { ruleName } = ruleDefinition;
       const report = (nodeViolation: NodeViolation) =>
         violations.push({ ruleName, fileName, ...nodeViolation });
       const context = { fileName, report };
       const ruleInstance = ruleDefinition.create(ruleConfig, context);
-      return [ruleName, ruleInstance];
+      return { ruleName, ruleInstance };
     },
   );
 
@@ -60,8 +54,8 @@ export async function lintPrismaSourceCode({
     }
     const fields = listFields(model);
     ruleInstanceList
-      .filter(([ruleName]) => !isRuleEntirelyIgnored(ruleName, comments))
-      .forEach(([_, ruleInstance]) => {
+      .filter(({ ruleName }) => !isRuleEntirelyIgnored(ruleName, comments))
+      .forEach(({ ruleInstance }) => {
         if ('Model' in ruleInstance) {
           ruleInstance.Model(model);
         }
@@ -77,34 +71,33 @@ export async function lintPrismaSourceCode({
 }
 
 export const lintPrismaFiles = async ({
-  ruleRegistry,
-  ruleConfigList,
+  rules,
   fileNames,
 }: {
-  ruleRegistry: RuleRegistry;
-  ruleConfigList: RuleConfigList;
+  rules: Rule[];
   fileNames: string[];
-}): Promise<FileViolationList> => {
-  const fileViolationList: FileViolationList = [];
+}): Promise<FileViolations> => {
+  const fileViolationList: FileViolations = [];
   for (const fileName of fileNames) {
-    const fileViolations = await lintPrismaFile({
-      ruleRegistry,
-      ruleConfigList,
+    const violations = await lintPrismaFile({
+      rules,
       fileName,
     });
-    fileViolationList.push([fileName, fileViolations]);
+    fileViolationList.push({ fileName, violations });
   }
   return fileViolationList;
 };
 
-export const lintPrismaFile = async (params: {
-  ruleRegistry: RuleRegistry;
-  ruleConfigList: RuleConfigList;
+export const lintPrismaFile = async ({
+  rules,
+  fileName,
+}: {
+  rules: Rule[];
   fileName: string;
 }): Promise<Violation[]> => {
-  const filePath = path.resolve(params.fileName);
+  const filePath = path.resolve(fileName);
   const sourceCode = await promisify(fs.readFile)(filePath, {
     encoding: 'utf8',
   });
-  return lintPrismaSourceCode({ ...params, sourceCode });
+  return lintPrismaSourceCode({ rules, fileName, sourceCode });
 };

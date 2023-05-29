@@ -12,9 +12,7 @@ describe('model-name-mapping-snake-case', () => {
           'model-name-mapping-snake-case': ['error', config],
         },
       },
-      ruleRegistry: {
-        'model-name-mapping-snake-case': modelNameMappingSnakeCase,
-      },
+      ruleDefinitions: [modelNameMappingSnakeCase],
     });
 
   describe('without config', () => {

@@ -42,7 +42,7 @@ export type FieldRuleInstance = {
   Field: (model: Model, field: Field) => void;
 };
 
-export type RuleDefinition<T> = ModelRuleDefinition<T> | FieldRuleDefinition<T>;
+export type RuleDefinition =
+  | ModelRuleDefinition<any>
+  | FieldRuleDefinition<any>;
 export type RuleInstance = ModelRuleInstance | FieldRuleInstance;
-
-export type RuleRegistry = Record<string, RuleDefinition<any>>;

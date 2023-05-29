@@ -12,9 +12,7 @@ describe('require-field', () => {
           'require-field': ['error', config],
         },
       },
-      ruleRegistry: {
-        'require-field': requireField,
-      },
+      ruleDefinitions: [requireField],
     });
 
   describe('ignore comments', () => {

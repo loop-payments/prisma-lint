@@ -12,9 +12,7 @@ describe('field-name-mapping-snake-case', () => {
           'field-name-mapping-snake-case': ['error', config],
         },
       },
-      ruleRegistry: {
-        'field-name-mapping-snake-case': fieldNameMappingSnakeCase,
-      },
+      ruleDefinitions: [fieldNameMappingSnakeCase],
     });
 
   describe('with config', () => {

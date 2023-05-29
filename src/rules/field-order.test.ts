@@ -12,9 +12,7 @@ describe('field-order', () => {
           'field-order': ['error', config],
         },
       },
-      ruleRegistry: {
-        'field-order': fieldOrder,
-      },
+      ruleDefinitions: [fieldOrder],
     });
 
   describe('expecting tenant qid first', () => {

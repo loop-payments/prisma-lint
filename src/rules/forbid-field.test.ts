@@ -12,9 +12,7 @@ describe('forbid-field', () => {
           'forbid-field': ['error', config],
         },
       },
-      ruleRegistry: {
-        'forbid-field': forbidField,
-      },
+      ruleDefinitions: [forbidField],
     });
 
   describe('forbidding id field with string', () => {

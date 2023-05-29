@@ -12,9 +12,7 @@ describe('model-name-prefix', () => {
           'model-name-prefix': ['error', config],
         },
       },
-      ruleRegistry: {
-        'model-name-prefix': modelNamePrefix,
-      },
+      ruleDefinitions: [modelNamePrefix],
     });
 
   describe('ignore comments', () => {
