@@ -10,6 +10,16 @@ A linter for Prisma schema files.
 > yarn add --dev prisma-lint
 ```
 
+## Usage
+
+```sh
+> npm prisma-lint path/to/schema.prisma
+# or
+> yarn prisma-lint path/to/schema.prisma
+```
+
+The arguments can be globs, directories, or file paths. The default path is `prisma/schema.prisma`.
+
 ## Configuration
 
 See [RULES.md](RULES.md) for a list of supported rules.
@@ -45,16 +55,6 @@ In a `.prismalintrc.json`:
   }
 }
 ```
-
-## Usage
-
-```sh
-> npm prisma-lint path/to/schema.prisma
-# or
-> yarn prisma-lint path/to/schema.prisma
-```
-
-The arguments can be globs, directories, or file paths. The default path is `prisma/schema.prisma`.
 
 ## Ignore comments
 
