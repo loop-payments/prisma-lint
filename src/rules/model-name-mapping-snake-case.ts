@@ -2,7 +2,6 @@ import type { ModelAttribute } from '@mrleebo/prisma-ast';
 
 import { z } from 'zod';
 
-import { parseRuleConfig } from '#src/common/config.js';
 import { findNameAttributeArg, listAttributes } from '#src/common/prisma.js';
 import type { ModelRuleDefinition } from '#src/common/rule.js';
 import { toSnakeCase } from '#src/common/snake-case.js';
@@ -68,10 +67,10 @@ const Config = z
  */
 export default {
   ruleName: RULE_NAME,
+  configSchema: Config,
   create: (config, context) => {
-    const parsedConfig = parseRuleConfig(RULE_NAME, Config, config);
-    const compoundWords = parsedConfig?.compoundWords ?? [];
-    const trimPrefix = parsedConfig?.trimPrefix ?? '';
+    const compoundWords = config?.compoundWords ?? [];
+    const trimPrefix = config?.trimPrefix ?? '';
     return {
       Model: (model) => {
         const attributes = listAttributes(model);
@@ -106,7 +105,7 @@ export default {
       },
     };
   },
-} satisfies ModelRuleDefinition;
+} satisfies ModelRuleDefinition<z.infer<typeof Config>>;
 
 function findMapAttribute(
   attributes: ModelAttribute[],

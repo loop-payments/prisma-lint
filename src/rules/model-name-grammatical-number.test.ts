@@ -1,10 +1,10 @@
 import type { RuleConfig } from '#src/common/config.js';
-import { lintSchemaSource } from '#src/lint.js';
+import { testLintPrismaSource } from '#src/common/test.js';
 import modelNameGrammaticalNumber from '#src/rules/model-name-grammatical-number.js';
 
 describe('model-name-grammatical-number', () => {
   const getRunner = (config: RuleConfig) => async (schemaSource: string) =>
-    await lintSchemaSource({
+    await testLintPrismaSource({
       fileName: 'fake.ts',
       schemaSource,
       config: {
@@ -38,28 +38,6 @@ describe('model-name-grammatical-number', () => {
     }
     `);
       expect(violations.length).toEqual(0);
-    });
-  });
-
-  describe('invalid config', () => {
-    describe('missing config', () => {
-      expect(() => {
-        modelNameGrammaticalNumber.create(undefined as any, {} as any);
-      }).toThrowErrorMatchingInlineSnapshot(`
-        "Failed to parse config for rule 'model-name-grammatical-number'
-          Value: 'undefined'
-          Required"
-      `);
-    });
-
-    describe('missing key in config', () => {
-      expect(() => {
-        modelNameGrammaticalNumber.create({} as any, {} as any);
-      }).toThrowErrorMatchingInlineSnapshot(`
-        "Failed to parse config for rule 'model-name-grammatical-number'
-          Value: '{}'
-          Required"
-      `);
     });
   });
 

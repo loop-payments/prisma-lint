@@ -1,6 +1,5 @@
 import { z } from 'zod';
 
-import { parseRuleConfig } from '#src/common/config.js';
 import { listFields } from '#src/common/prisma.js';
 import type { ModelRuleDefinition } from '#src/common/rule.js';
 
@@ -74,9 +73,9 @@ const Config = z
  */
 export default {
   ruleName: RULE_NAME,
+  configSchema: Config,
   create: (config, context) => {
-    const parsedConfig = parseRuleConfig(RULE_NAME, Config, config);
-    const { order } = parsedConfig;
+    const { order } = config;
     return {
       Model: (model) => {
         const fields = listFields(model);
@@ -122,4 +121,4 @@ export default {
       },
     };
   },
-} satisfies ModelRuleDefinition;
+} satisfies ModelRuleDefinition<z.infer<typeof Config>>;

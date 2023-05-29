@@ -1,7 +1,6 @@
 import pluralize from 'pluralize';
 import { z } from 'zod';
 
-import { parseRuleConfig } from '#src/common/config.js';
 import { toRegExp } from '#src/common/regex.js';
 import type { FieldRuleDefinition } from '#src/common/rule.js';
 
@@ -44,12 +43,12 @@ const Config = z
  */
 export default {
   ruleName: RULE_NAME,
+  configSchema: Config,
   create: (config, context) => {
-    const parsedConfig = parseRuleConfig(RULE_NAME, Config, config);
-    const forbidWithRegExp = parsedConfig.forbid.map((name) => ({
+    const forbidWithRegExp = config.forbid.map((name) => ({
       name,
       nameRegExp: toRegExp(name),
-    })) as { name: string; nameRegExp: RegExp }[];
+    }));
     return {
       Field: (model, field) => {
         const matches = forbidWithRegExp.filter((r) =>
@@ -66,4 +65,4 @@ export default {
       },
     };
   },
-} satisfies FieldRuleDefinition;
+} satisfies FieldRuleDefinition<z.infer<typeof Config>>;

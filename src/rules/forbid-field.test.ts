@@ -1,10 +1,10 @@
 import type { RuleConfig } from '#src/common/config.js';
-import { lintSchemaSource } from '#src/lint.js';
+import { testLintPrismaSource } from '#src/common/test.js';
 import forbidField from '#src/rules/forbid-field.js';
 
 describe('forbid-field', () => {
   const getRunner = (config: RuleConfig) => async (schemaSource: string) =>
-    await lintSchemaSource({
+    await testLintPrismaSource({
       fileName: 'fake.ts',
       schemaSource,
       config: {

@@ -2,7 +2,6 @@ import type { Attribute, Field } from '@mrleebo/prisma-ast';
 
 import { z } from 'zod';
 
-import { parseRuleConfig } from '#src/common/config.js';
 import {
   PRISMA_SCALAR_TYPES,
   findNameAttributeArg,
@@ -57,9 +56,9 @@ const Config = z
  */
 export default {
   ruleName: RULE_NAME,
+  configSchema: Config,
   create: (config, context) => {
-    const parsedConfig = parseRuleConfig(RULE_NAME, Config, config);
-    const compoundWords = parsedConfig?.compoundWords;
+    const compoundWords = config?.compoundWords;
     return {
       Field: (model, field) => {
         if (allowedToHaveNoMapping(field)) {
@@ -93,7 +92,7 @@ export default {
       },
     };
   },
-} satisfies FieldRuleDefinition;
+} satisfies FieldRuleDefinition<z.infer<typeof Config>>;
 
 function findMapAttribute(attributes: Attribute[]): Attribute | undefined {
   const filtered = attributes.filter((a) => a.name === 'map');

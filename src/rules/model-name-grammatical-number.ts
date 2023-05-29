@@ -2,7 +2,6 @@ import pluralize from 'pluralize';
 
 import { z } from 'zod';
 
-import { parseRuleConfig } from '#src/common/config.js';
 import type { ModelRuleDefinition } from '#src/common/rule.js';
 
 const RULE_NAME = 'model-name-grammatical-number';
@@ -43,9 +42,9 @@ const Config = z
  */
 export default {
   ruleName: RULE_NAME,
+  configSchema: Config,
   create: (config, context) => {
-    const parsedConfig = parseRuleConfig(RULE_NAME, Config, config);
-    const { style } = parsedConfig;
+    const { style } = config;
     return {
       Model: (model) => {
         const isPlural = pluralize.isPlural(model.name);
@@ -58,4 +57,4 @@ export default {
       },
     };
   },
-} satisfies ModelRuleDefinition;
+} satisfies ModelRuleDefinition<z.infer<typeof Config>>;

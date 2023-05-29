@@ -1,6 +1,5 @@
 import { z } from 'zod';
 
-import { parseRuleConfig } from '#src/common/config.js';
 import type { ModelRuleDefinition } from '#src/common/rule.js';
 
 const RULE_NAME = 'model-name-prefix';
@@ -34,9 +33,9 @@ const Config = z
  */
 export default {
   ruleName: RULE_NAME,
+  configSchema: Config,
   create: (config, context) => {
-    const parsedConfig = parseRuleConfig(RULE_NAME, Config, config);
-    const { prefix } = parsedConfig;
+    const { prefix } = config;
     return {
       Model: (model) => {
         if (model.name.startsWith(prefix)) {
@@ -47,4 +46,4 @@ export default {
       },
     };
   },
-} satisfies ModelRuleDefinition;
+} satisfies ModelRuleDefinition<z.infer<typeof Config>>;

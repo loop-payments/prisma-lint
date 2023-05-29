@@ -7,7 +7,6 @@ import type {
 } from '@mrleebo/prisma-ast';
 import { z } from 'zod';
 
-import { parseRuleConfig } from '#src/common/config.js';
 import { getRuleIgnoreParams as listRuleIgnoreParams } from '#src/common/ignore.js';
 import {
   assertValueIsStringArray,
@@ -98,10 +97,10 @@ const Config = z
  */
 export default {
   ruleName: RULE_NAME,
+  configSchema: Config,
   create: (config, context) => {
-    const parsedConfig = parseRuleConfig(RULE_NAME, Config, config);
-    const forAllRelations = parsedConfig.forAllRelations ?? false;
-    const forNames = parsedConfig.forNames ?? [];
+    const forAllRelations = config.forAllRelations ?? false;
+    const forNames = config.forNames ?? [];
     const forNamesList = Array.isArray(forNames) ? forNames : [forNames];
     const forNamesRexExpList = forNamesList.map((r) => toRegExp(r));
     // Each file gets its own instance of the rule, so we don't need
@@ -164,7 +163,7 @@ export default {
       },
     };
   },
-} satisfies FieldRuleDefinition;
+} satisfies FieldRuleDefinition<z.infer<typeof Config>>;
 
 type IndexSet = Set<string>;
 type RelationSet = Set<string>;

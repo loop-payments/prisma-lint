@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import type { RuleRegistry } from '#src/common/rule.js';
 
 export type RuleName = string;
 export type RuleConfig = Record<string, unknown>;
@@ -27,32 +27,37 @@ export function getRuleConfig(value: RuleConfigValue) {
   return {};
 }
 
-export const RuleConfigParseError = class extends Error {
-  constructor(ruleName: string, config: unknown, zodIssues: z.ZodIssue[]) {
-    if (zodIssues.length > 1 && zodIssues[0].message === 'Required') {
-      zodIssues = zodIssues.slice(1);
-    }
-    const message = [
-      `Failed to parse config for rule '${ruleName}'`,
-      `  Value: '${JSON.stringify(config)}'`,
-      `  ${zodIssues.map((issue) => issue.message).join(',')}`,
-    ].join('\n');
-    super(message);
-    this.name = 'RuleConfigParseError';
-  }
-};
+export type RuleConfigList = [RuleName, RuleConfig][];
 
-export const parseRuleConfig = function <T>(
-  ruleName: string,
-  schema: z.ZodSchema<T>,
-  config: unknown,
-): T {
-  if (config == null && schema.isOptional()) {
-    return undefined as T;
+export const parseRuleConfigList = (
+  config: PrismaLintConfig,
+  ruleRegistry: RuleRegistry,
+): { ruleConfigList: RuleConfigList; parseIssues: string[] } => {
+  const ruleConfigList: [RuleName, RuleConfig][] = [];
+  const parseIssues: string[] = [];
+  const rawRuleValues = config.rules;
+  const sortedRuleNames = Object.keys(rawRuleValues).sort();
+  for (const ruleName of sortedRuleNames) {
+    const ruleDefinition = ruleRegistry[ruleName];
+    if (ruleDefinition == null) {
+      parseIssues.push(`Unable to find rule for ${ruleName}`);
+    }
+    const rawRuleValue = rawRuleValues[ruleName];
+    if (getRuleLevel(rawRuleValue) === 'off') {
+      continue;
+    }
+    const rawRuleConfig = getRuleConfig(rawRuleValue);
+    const parsed = ruleDefinition.configSchema.safeParse(rawRuleConfig);
+    if (parsed.success) {
+      ruleConfigList.push([ruleName, parsed.data]);
+    } else {
+      const parseIssue = [
+        `Failed to parse config for rule '${ruleName}'`,
+        `  Value: '${JSON.stringify(config)}'`,
+        `  ${parsed.error.issues.map((issue) => issue.message).join(',')}`,
+      ].join('\n');
+      parseIssues.push(parseIssue);
+    }
   }
-  const parsed = schema.safeParse(config);
-  if (parsed.success) {
-    return parsed.data;
-  }
-  throw new RuleConfigParseError(ruleName, config, parsed.error.issues);
+  return { ruleConfigList, parseIssues };
 };

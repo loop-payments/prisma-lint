@@ -7,10 +7,10 @@ import { program } from 'commander';
 import { cosmiconfig } from 'cosmiconfig';
 import { glob } from 'glob';
 
-import { RuleConfigParseError } from '#src/common/config.js';
+import { parseRuleConfigList } from '#src/common/config.js';
 import { renderViolations } from '#src/common/render.js';
 import type { Violation } from '#src/common/violation.js';
-import { lintSchemaFile } from '#src/lint.js';
+import { lintPrismaFiles } from '#src/lint.js';
 import ruleRegistry from '#src/rule-registry.js';
 
 program
@@ -49,7 +49,7 @@ const getConfig = async () => {
   return result.config;
 };
 
-const resolveSchemaFiles = (schemaFiles: string[]) => {
+const resolvePrismaFiles = (schemaFiles: string[]) => {
   const resolvedFiles = [];
 
   for (const file of schemaFiles) {
@@ -83,31 +83,38 @@ const printFileViolations = (schemaFile: string, violations: Violation[]) => {
 
 const run = async () => {
   const config = await getConfig();
-  const schemaFiles = resolveSchemaFiles(args);
-  let hasViolations = false;
-  for (const schemaFile of schemaFiles) {
-    const violations = await lintSchemaFile({
-      schemaFile,
-      config,
-      ruleRegistry,
-    });
-    if (violations.length > 0) {
-      hasViolations = true;
-      printFileViolations(schemaFile, violations);
+  const { ruleConfigList, parseIssues } = parseRuleConfigList(
+    config,
+    ruleRegistry,
+  );
+  if (parseIssues.length > 0) {
+    for (const parseIssue of parseIssues) {
+      // eslint-disable-next-line no-console
+      console.error(parseIssue);
+      process.exit(1);
     }
   }
+
+  const fileNames = resolvePrismaFiles(args);
+  const fileViolationList = await lintPrismaFiles({
+    fileNames,
+    ruleConfigList,
+    ruleRegistry,
+  });
+  let hasViolations = false;
+  fileViolationList.forEach(([fileName, violations]) => {
+    if (violations.length > 0) {
+      hasViolations = true;
+      printFileViolations(fileName, violations);
+    }
+  });
   if (hasViolations) {
     process.exit(1);
   }
 };
 
 run().catch((err) => {
-  /* eslint-disable no-console */
-  if (err instanceof RuleConfigParseError) {
-    console.error(err.message);
-  } else {
-    console.error(err);
-  }
+  // eslint-disable-next-line no-console
+  console.error(err);
   process.exit(1);
-  /* eslint-enable no-console */
 });

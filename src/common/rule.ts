@@ -1,6 +1,6 @@
 import type { Field, Model } from '@mrleebo/prisma-ast';
 
-import type { RuleConfig } from '#src/common/config.js';
+import type { z } from 'zod';
 
 import type {
   FieldViolation,
@@ -16,10 +16,11 @@ export type RuleContext<T extends NodeViolation> = {
   report: (nodeViolation: T) => void;
 };
 
-export type ModelRuleDefinition = {
+export type ModelRuleDefinition<T> = {
   ruleName: string;
+  configSchema: z.ZodSchema<T>;
   create: (
-    config: RuleConfig,
+    config: T,
     context: RuleContext<ModelViolation>,
   ) => ModelRuleInstance;
 };
@@ -28,10 +29,11 @@ export type ModelRuleInstance = {
   Model: (model: Model) => void;
 };
 
-export type FieldRuleDefinition = {
+export type FieldRuleDefinition<T> = {
   ruleName: string;
+  configSchema: z.ZodSchema<T>;
   create: (
-    config: RuleConfig,
+    config: T,
     context: RuleContext<FieldViolation>,
   ) => FieldRuleInstance;
 };
@@ -40,7 +42,7 @@ export type FieldRuleInstance = {
   Field: (model: Model, field: Field) => void;
 };
 
-export type RuleDefinition = ModelRuleDefinition | FieldRuleDefinition;
+export type RuleDefinition<T> = ModelRuleDefinition<T> | FieldRuleDefinition<T>;
 export type RuleInstance = ModelRuleInstance | FieldRuleInstance;
 
-export type RuleRegistry = Record<string, RuleDefinition>;
+export type RuleRegistry = Record<string, RuleDefinition<any>>;

@@ -1,10 +1,10 @@
 import type { RuleConfig } from '#src/common/config.js';
-import { lintSchemaSource } from '#src/lint.js';
+import { testLintPrismaSource } from '#src/common/test.js';
 import fieldNameMappingSnakeCase from '#src/rules/field-name-mapping-snake-case.js';
 
 describe('field-name-mapping-snake-case', () => {
   const getRunner = (config?: RuleConfig) => async (schemaSource: string) =>
-    await lintSchemaSource({
+    await testLintPrismaSource({
       fileName: 'fake.ts',
       schemaSource,
       config: {
@@ -62,18 +62,6 @@ describe('field-name-mapping-snake-case', () => {
     `);
         expect(violations.length).toEqual(1);
       });
-    });
-  });
-
-  describe('with invalid config', () => {
-    it('throws error', async () => {
-      expect(() => {
-        fieldNameMappingSnakeCase.create({ compoundWords: 1 }, {} as any);
-      }).toThrowErrorMatchingInlineSnapshot(`
-        "Failed to parse config for rule 'field-name-mapping-snake-case'
-          Value: '{"compoundWords":1}'
-          Expected array, received number"
-      `);
     });
   });
 

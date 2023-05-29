@@ -5,13 +5,7 @@ import { promisify } from 'util';
 
 import { getSchema } from '@mrleebo/prisma-ast';
 
-import {
-  getRuleConfig,
-  getRuleLevel,
-  type PrismaLintConfig,
-  type RuleConfigValue,
-  type RuleName,
-} from '#src/common/config.js';
+import { type RuleName, type RuleConfigList } from '#src/common/config.js';
 import {
   isModelEntirelyIgnored,
   isRuleEntirelyIgnored,
@@ -22,19 +16,19 @@ import type { RuleInstance, RuleRegistry } from '#src/common/rule.js';
 
 import type { Violation, NodeViolation } from '#src/common/violation.js';
 
-function isRuleEnabled([_, value]: [RuleName, RuleConfigValue]) {
-  return getRuleLevel(value) !== 'off';
-}
+export type FileName = string;
+export type FileViolationList = [FileName, Violation[]][];
+export type RuleInstanceList = [RuleName, RuleInstance][];
 
-export async function lintSchemaSource({
+export async function lintPrismaSource({
   fileName,
   schemaSource,
-  config,
+  ruleConfigList,
   ruleRegistry,
 }: {
   fileName: string;
   schemaSource: string;
-  config: PrismaLintConfig;
+  ruleConfigList: RuleConfigList;
   ruleRegistry: RuleRegistry;
 }) {
   const schema = getSchema(schemaSource);
@@ -43,9 +37,8 @@ export async function lintSchemaSource({
   const violations: Violation[] = [];
 
   // Create rule instances.
-  const rules: [RuleName, RuleInstance][] = Object.entries(config.rules)
-    .filter(isRuleEnabled)
-    .map(([ruleName, ruleConfig]) => {
+  const ruleInstanceList: RuleInstanceList = ruleConfigList.map(
+    ([ruleName, ruleConfig]) => {
       const ruleDefinition = ruleRegistry[ruleName];
       if (ruleDefinition == null) {
         throw new Error(`Unable to find rule for ${ruleName}`);
@@ -53,10 +46,10 @@ export async function lintSchemaSource({
       const report = (nodeViolation: NodeViolation) =>
         violations.push({ ruleName, fileName, ...nodeViolation });
       const context = { fileName, report };
-      const config = getRuleConfig(ruleConfig);
-      const ruleInstance = ruleDefinition.create(config, context);
+      const ruleInstance = ruleDefinition.create(ruleConfig, context);
       return [ruleName, ruleInstance];
-    });
+    },
+  );
 
   // Run each rule instance for each AST node.
   const models = listModelBlocks(schema);
@@ -66,7 +59,7 @@ export async function lintSchemaSource({
       return;
     }
     const fields = listFields(model);
-    rules
+    ruleInstanceList
       .filter(([ruleName]) => !isRuleEntirelyIgnored(ruleName, comments))
       .forEach(([_, ruleInstance]) => {
         if ('Model' in ruleInstance) {
@@ -82,23 +75,44 @@ export async function lintSchemaSource({
   return violations;
 }
 
-export const lintSchemaFile = async ({
-  config,
-  schemaFile,
+export const lintPrismaFiles = async ({
+  ruleConfigList,
+  fileNames,
   ruleRegistry,
 }: {
-  schemaFile: string;
-  config: PrismaLintConfig;
+  ruleConfigList: RuleConfigList;
+  fileNames: string[];
+  ruleRegistry: RuleRegistry;
+}): Promise<FileViolationList> => {
+  const fileViolationList: FileViolationList = [];
+  for (const fileName of fileNames) {
+    const fileViolations = await lintPrismaFile({
+      ruleConfigList,
+      fileName,
+      ruleRegistry,
+    });
+    fileViolationList.push([fileName, fileViolations]);
+  }
+  return fileViolationList;
+};
+
+export const lintPrismaFile = async ({
+  ruleConfigList,
+  fileName,
+  ruleRegistry,
+}: {
+  fileName: string;
+  ruleConfigList: RuleConfigList;
   ruleRegistry: RuleRegistry;
 }): Promise<Violation[]> => {
-  const fileName = path.resolve(schemaFile);
-  const schemaSource = await promisify(fs.readFile)(fileName, {
+  const filePath = path.resolve(fileName);
+  const schemaSource = await promisify(fs.readFile)(filePath, {
     encoding: 'utf8',
   });
-  return await lintSchemaSource({
+  return await lintPrismaSource({
     schemaSource,
     fileName,
-    config,
+    ruleConfigList,
     ruleRegistry,
   });
 };
