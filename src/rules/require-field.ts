@@ -31,8 +31,8 @@ const Config = z
  *     /// prisma-lint-ignore-model require-field tenantId
  *
  * That will ignore only `tenantId` field violations for the model. Other
- * require fields will still be enforced. A comma-separated list of fields
- * can be provided to ignore multiple require fields.
+ * required fields will still be enforced. A comma-separated list of fields
+ * can be provided to ignore multiple required fields.
  *
  * @example { require: ["id"] }
  *   // good

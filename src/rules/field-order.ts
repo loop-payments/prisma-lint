@@ -18,9 +18,9 @@ const Config = z
  * Fields in the `order` that are not present in the model are ignored.
  * To require fields, use the `require-field` rule.
  *
- * The first field in the `order` is interpreted to be require as
+ * The first field in the `order` is interpreted to be required as
  * the first field in the model. The last field in the `order` is
- * interpreted to be require as the last field in the model.
+ * interpreted to be required as the last field in the model.
  *
  * The special field name `...` can be used to indicate that any
  * number of fields can appear in the model at that point.

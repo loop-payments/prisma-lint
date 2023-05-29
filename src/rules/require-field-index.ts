@@ -39,7 +39,7 @@ const Config = z
  *     /// prisma-lint-ignore-model require-field-index tenantId
  *
  * That will ignore only `tenantId` violations for the model. Other
- * require indices will still be enforced. A comma-separated list of fields
+ * required indices will still be enforced. A comma-separated list of fields
  * can be provided to ignore multiple fields.
  *
  * @example { forNames: ["createdAt"] }

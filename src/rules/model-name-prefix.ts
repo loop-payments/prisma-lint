@@ -12,7 +12,7 @@ const Config = z
   .strict();
 
 /**
- * Check that model names include a require prefix.
+ * Checks that model names include a required prefix.
  *
  * This is useful for avoiding name collisions with
  * application-level types in cases where a single
