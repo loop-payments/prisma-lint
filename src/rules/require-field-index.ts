@@ -44,27 +44,27 @@ const Config = z
  *
  * @example { forNames: ["createdAt"] }
  *   // good
- *   type User {
+ *   model User {
  *     createdAt DateTime @unique
  *   }
  *
- *   type User {
+ *   model User {
  *     createdAt DateTime
  *     @@index([createdAt])
  *   }
  *
- *   type User {
+ *   model User {
  *     createdAt DateTime
  *     id String
  *     @@index([createdAt, id])
  *   }
  *
  *   // bad
- *   type User {
+ *   model User {
  *     createdAt string
  *   }
  *
- *   type User {
+ *   model User {
  *     createdAt DateTime
  *     id String
  *     @@index([id, createdAt])
@@ -72,13 +72,13 @@ const Config = z
  *
  * @example { forNames: "/Id$/" ] }
  *   // good
- *   type User {
+ *   model User {
  *     tenantId String
  *     @@index([tenantId])
  *   }
  *
  *   // bad
- *   type User {
+ *   model User {
  *     tenantId String
  *   }
  *

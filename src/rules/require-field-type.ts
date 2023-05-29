@@ -22,24 +22,24 @@ const Config = z
  *
  * @example { require: [{ ifName: "id", type: "String" }] }
  *   // good
- *   type User {
+ *   model User {
  *     id String
  *   }
  *
  *   // bad
- *   type User {
+ *   model User {
  *     id Int
  *   }
  *
  * @example { require: [{ ifName: "/At$/", type: "DateTime" }] }
  *   // good
- *   type User {
+ *   model User {
  *     createdAt DateTime
  *     updatedAt DateTime
  *   }
  *
  *   // bad
- *   type User {
+ *   model User {
  *     createdAt string
  *     updatedAt string
  *   }
