@@ -12,26 +12,39 @@ A linter for Prisma schema files.
 
 ## Configuration
 
-In a `.prisma-lint.json` file, something like:
+See [RULES.md](RULES.md) for a list of supported rules.
 
-```js
+Configuration files are loaded with [comsiconfig](https://github.com/cosmiconfig/cosmiconfig).
+
+### Example
+
+In a `.prismalintrc.json`:
+
+```json
 {
   "rules": {
-    "model-name-grammatical-number": ["error", {
-      "enforcedStyle": "singular"
-    }],
-    "model-name-mapping-snake-case": ["error", {
-      "compoundWords": ["GraphQL"],
-      "trimPrefix": "Db"
-    }],
-    "model-name-prefix": ["error", {
-      "prefix": "Db"
-    }]
+    "model-name-grammatical-number": [
+      "error",
+      {
+        "enforcedStyle": "singular"
+      }
+    ],
+    "model-name-mapping-snake-case": [
+      "error",
+      {
+        "compoundWords": ["GraphQL"],
+        "trimPrefix": "Db"
+      }
+    ],
+    "model-name-prefix": [
+      "error",
+      {
+        "prefix": "Db"
+      }
+    ]
   }
 }
 ```
-
-See [RULES.md](RULES.md) for a list of supported rules. By default, no rules are enabled.
 
 ## Usage
 
@@ -41,7 +54,9 @@ See [RULES.md](RULES.md) for a list of supported rules. By default, no rules are
 > yarn prisma-lint path/to/schema.prisma
 ```
 
-## Ignoring models with comments
+The arguments can be globs, directories, or file paths. The default path is `prisma/schema.prisma`.
+
+## Ignore comments
 
 Rules can be ignored with three-slash (`///`) comments inside models.
 
