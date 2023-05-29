@@ -1,25 +1,25 @@
 import type { RuleConfig } from '#src/common/config.js';
 import { lintSchemaSource } from '#src/lint.js';
-import forbiddenField from '#src/rules/forbidden-field.js';
+import forbidField from '#src/rules/forbid-field.js';
 
-describe('forbidden-field', () => {
+describe('forbid-field', () => {
   const getRunner = (config: RuleConfig) => async (schemaSource: string) =>
     await lintSchemaSource({
       fileName: 'fake.ts',
       schemaSource,
       config: {
         rules: {
-          'forbidden-field': ['error', config],
+          'forbid-field': ['error', config],
         },
       },
       ruleRegistry: {
-        'forbidden-field': forbiddenField,
+        'forbid-field': forbidField,
       },
     });
 
   describe('forbidding id field with string', () => {
     const run = getRunner({
-      forbidden: ['id'],
+      forbid: ['id'],
     });
 
     describe('with uuid', () => {
@@ -47,7 +47,7 @@ describe('forbidden-field', () => {
 
   describe('regex d6 fields without amount', () => {
     const run = getRunner({
-      forbidden: ['/^(?!.*[aA]mountD6$).*D6$/'],
+      forbid: ['/^(?!.*[aA]mountD6$).*D6$/'],
     });
 
     describe('with amount d6', () => {
