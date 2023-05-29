@@ -17,8 +17,8 @@ export async function testLintPrismaSource({
   sourceCode: string;
 }) {
   const { ruleConfigList, parseIssues } = parseRuleConfigList(
-    config,
     ruleRegistry,
+    config,
   );
   if (parseIssues.length > 0) {
     throw new Error(

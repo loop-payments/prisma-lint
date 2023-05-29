@@ -84,8 +84,8 @@ const printFileViolations = (schemaFile: string, violations: Violation[]) => {
 const run = async () => {
   const config = await getConfig();
   const { ruleConfigList, parseIssues } = parseRuleConfigList(
-    config,
     ruleRegistry,
+    config,
   );
   if (parseIssues.length > 0) {
     for (const parseIssue of parseIssues) {

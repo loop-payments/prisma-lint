@@ -30,8 +30,8 @@ export function getRuleConfig(value: RuleConfigValue) {
 export type RuleConfigList = [RuleName, RuleConfig][];
 
 export const parseRuleConfigList = (
-  config: PrismaLintConfig,
   ruleRegistry: RuleRegistry,
+  config: PrismaLintConfig,
 ): { ruleConfigList: RuleConfigList; parseIssues: string[] } => {
   const ruleConfigList: [RuleName, RuleConfig][] = [];
   const parseIssues: string[] = [];
