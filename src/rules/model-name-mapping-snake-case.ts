@@ -14,6 +14,7 @@ const Config = z
     compoundWords: z.array(z.string()).optional(),
     trimPrefix: z.string().optional(),
   })
+  .strict()
   .optional();
 
 /**

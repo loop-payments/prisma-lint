@@ -16,6 +16,7 @@ const Config = z
   .object({
     compoundWords: z.array(z.string()).optional(),
   })
+  .strict()
   .optional();
 
 /**

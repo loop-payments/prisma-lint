@@ -6,14 +6,16 @@ import type { FieldRuleDefinition } from '#src/common/rule.js';
 
 const RULE_NAME = 'require-field-type';
 
-const Config = z.object({
-  require: z.array(
-    z.object({
-      ifName: z.union([z.string(), z.instanceof(RegExp)]),
-      type: z.string(),
-    }),
-  ),
-});
+const Config = z
+  .object({
+    require: z.array(
+      z.object({
+        ifName: z.union([z.string(), z.instanceof(RegExp)]),
+        type: z.string(),
+      }),
+    ),
+  })
+  .strict();
 
 /**
  * Checks that certain fields have a specific type.

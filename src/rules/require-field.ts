@@ -8,17 +8,19 @@ import type { ModelRuleDefinition } from '#src/common/rule.js';
 
 const RULE_NAME = 'require-field';
 
-const Config = z.object({
-  require: z.array(
-    z.union([
-      z.string(),
-      z.object({
-        name: z.string(),
-        ifSibling: z.union([z.string(), z.instanceof(RegExp)]),
-      }),
-    ]),
-  ),
-});
+const Config = z
+  .object({
+    require: z.array(
+      z.union([
+        z.string(),
+        z.object({
+          name: z.string(),
+          ifSibling: z.union([z.string(), z.instanceof(RegExp)]),
+        }),
+      ]),
+    ),
+  })
+  .strict();
 
 /**
  * Checks that a model has certain fields.

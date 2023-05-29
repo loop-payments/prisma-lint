@@ -5,9 +5,11 @@ import type { ModelRuleDefinition } from '#src/common/rule.js';
 
 const RULE_NAME = 'model-name-prefix';
 
-const Config = z.object({
-  prefix: z.string(),
-});
+const Config = z
+  .object({
+    prefix: z.string(),
+  })
+  .strict();
 
 /**
  * Check that model names include a require prefix.

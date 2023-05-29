@@ -7,9 +7,11 @@ import type { FieldRuleDefinition } from '#src/common/rule.js';
 
 const RULE_NAME = 'forbid-field';
 
-const Config = z.object({
-  forbid: z.array(z.union([z.string(), z.instanceof(RegExp)])),
-});
+const Config = z
+  .object({
+    forbid: z.array(z.union([z.string(), z.instanceof(RegExp)])),
+  })
+  .strict();
 
 /**
  * Forbids fields with certain names.

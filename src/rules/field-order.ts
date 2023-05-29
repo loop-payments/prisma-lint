@@ -6,9 +6,11 @@ import type { ModelRuleDefinition } from '#src/common/rule.js';
 
 const RULE_NAME = 'field-order';
 
-const Config = z.object({
-  order: z.array(z.string()),
-});
+const Config = z
+  .object({
+    order: z.array(z.string()),
+  })
+  .strict();
 
 /**
  * Checks that fields within a model are in the correct order.

@@ -21,12 +21,14 @@ import type { FieldRuleDefinition } from '#src/common/rule.js';
 
 const RULE_NAME = 'require-field-index';
 
-const Config = z.object({
-  forAllRelations: z.boolean().optional(),
-  forNames: z
-    .union([z.string(), z.array(z.union([z.string(), z.instanceof(RegExp)]))])
-    .optional(),
-});
+const Config = z
+  .object({
+    forAllRelations: z.boolean().optional(),
+    forNames: z
+      .union([z.string(), z.array(z.union([z.string(), z.instanceof(RegExp)]))])
+      .optional(),
+  })
+  .strict();
 
 /**
  * Checks that certain fields have indices.

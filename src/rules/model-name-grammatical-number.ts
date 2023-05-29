@@ -7,9 +7,11 @@ import type { ModelRuleDefinition } from '#src/common/rule.js';
 
 const RULE_NAME = 'model-name-grammatical-number';
 
-const Config = z.object({
-  style: z.enum(['singular', 'plural']),
-});
+const Config = z
+  .object({
+    style: z.enum(['singular', 'plural']),
+  })
+  .strict();
 
 /**
  * Checks that each model name matches the plural or singlar enforced style.
