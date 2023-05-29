@@ -18,7 +18,7 @@ describe('model-name-grammatical-number', () => {
     });
 
   describe('ignore comments', () => {
-    const run = getRunner({ enforcedStyle: 'singular' });
+    const run = getRunner({ style: 'singular' });
 
     it('respects rule-specific ignore comments', async () => {
       const violations = await run(`
@@ -68,7 +68,7 @@ describe('model-name-grammatical-number', () => {
             "received": "undefined",
             "code": "invalid_type",
             "path": [
-              "enforcedStyle"
+              "style"
             ],
             "message": "Invalid rule configuration"
           }
@@ -78,7 +78,7 @@ describe('model-name-grammatical-number', () => {
   });
 
   describe('expecting singular', () => {
-    const run = getRunner({ enforcedStyle: 'singular' });
+    const run = getRunner({ style: 'singular' });
 
     describe('singular', () => {
       it('returns no violations', async () => {
@@ -104,7 +104,7 @@ describe('model-name-grammatical-number', () => {
   });
 
   describe('expecting plural', () => {
-    const run = getRunner({ enforcedStyle: 'plural' });
+    const run = getRunner({ style: 'plural' });
     describe('singular', () => {
       it('returns violation', async () => {
         const violations = await run(`

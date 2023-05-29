@@ -26,7 +26,7 @@ In a `.prismalintrc.json`:
     "model-name-grammatical-number": [
       "error",
       {
-        "enforcedStyle": "singular"
+        "style": "singular"
       }
     ],
     "model-name-mapping-snake-case": [

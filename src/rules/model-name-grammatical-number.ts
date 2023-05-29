@@ -8,7 +8,7 @@ import type { ModelRuleDefinition } from '#src/common/rule.js';
 const RULE_NAME = 'model-name-grammatical-number';
 
 const Config = z.object({
-  enforcedStyle: z.enum(['singular', 'plural']),
+  style: z.enum(['singular', 'plural']),
 });
 
 /**
@@ -16,7 +16,7 @@ const Config = z.object({
  *
  * <https://en.wikipedia.org/wiki/Grammatical_number>
  *
- * @example { enforcedStyle: "singular" }
+ * @example { style: "singular" }
  *   // good
  *   model User {
  *     id String @id
@@ -27,7 +27,7 @@ const Config = z.object({
  *     id String @id
  *   }
  *
- * @example { enforcedStyle: "plural" }
+ * @example { style: "plural" }
  *   // good
  *   model Users {
  *     id String @id
@@ -43,14 +43,14 @@ export default {
   ruleName: RULE_NAME,
   create: (config, context) => {
     const parsedConfig = Config.parse(config, RULE_CONFIG_PARSE_PARAMS);
-    const { enforcedStyle } = parsedConfig;
+    const { style } = parsedConfig;
     return {
       Model: (model) => {
         const isPlural = pluralize.isPlural(model.name);
-        if (isPlural && enforcedStyle === 'singular') {
+        if (isPlural && style === 'singular') {
           context.report({ model, message: 'Expected singular model name.' });
         }
-        if (!isPlural && enforcedStyle === 'plural') {
+        if (!isPlural && style === 'plural') {
           context.report({ model, message: 'Expected plural model name.' });
         }
       },
