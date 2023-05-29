@@ -14,6 +14,7 @@ import { lintPrismaFiles } from '#src/lint.js';
 import ruleRegistry from '#src/rule-registry.js';
 
 program
+  .name('prisma-lint')
   .description('A linter for Prisma schema files.')
   .option(
     '-e, --explicit-config <path>',
