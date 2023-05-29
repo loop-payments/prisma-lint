@@ -86,11 +86,9 @@ export default {
   create: (config, context) => {
     const parsedConfig = Config.parse(config, RULE_CONFIG_PARSE_PARAMS);
     const forAllRelations = parsedConfig.forAllRelations ?? false;
-    const ifFieldName = parsedConfig.forNames ?? [];
-    const ifFieldNameList = Array.isArray(ifFieldName)
-      ? ifFieldName
-      : [ifFieldName];
-    const ifFieldNameRexExpList = ifFieldNameList.map((r) => toRegExp(r));
+    const forNames = parsedConfig.forNames ?? [];
+    const forNamesList = Array.isArray(forNames) ? forNames : [forNames];
+    const forNamesRexExpList = forNamesList.map((r) => toRegExp(r));
     // Each file gets its own instance of the rule, so we don't need
     // to worry about model name collisions across files.
     const indexSetByModelName = new Map<string, IndexSet>();
@@ -126,7 +124,7 @@ export default {
           return indexSet;
         };
 
-        const matches = ifFieldNameRexExpList.filter((r) => r.test(fieldName));
+        const matches = forNamesRexExpList.filter((r) => r.test(fieldName));
         if (matches.length > 0) {
           const indexSet = getIndexSet();
           if (!indexSet.has(fieldName)) {
