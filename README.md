@@ -22,13 +22,8 @@ The arguments can be globs, directories, or file paths. The default path is `pri
 
 ## Configuration
 
-See [RULES.md](RULES.md) for a list of supported rules.
-
 Configuration files are loaded with [comsiconfig](https://github.com/cosmiconfig/cosmiconfig).
-
-### Example
-
-In a `.prismalintrc.json`:
+Here's an example `.prismalintrc.json`:
 
 ```json
 {
@@ -55,6 +50,10 @@ In a `.prismalintrc.json`:
   }
 }
 ```
+
+### Rules
+
+See [RULES.md](RULES.md) for a full list of supported rules.
 
 ## Ignore comments
 
