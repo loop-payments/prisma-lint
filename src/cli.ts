@@ -14,10 +14,19 @@ import ruleRegistry from '#src/rule-registry.js';
 
 program
   .description('A linter for Prisma schema files.')
-  .option('-c, --config <configPath>', 'Path to config file.')
+  .option(
+    '-c, --check',
+    'Exit with a non-zero exit code if any violations are found.',
+  )
+  .option(
+    '-e, --explicit-config <path>',
+    'An explicit path to a config file. ' +
+      'If omitted, cosmiconfig is used to search for a config file.',
+  )
   .argument(
     '[paths...]',
     'One or more schema files, directories, or globs to lint.',
+    'prisma/schema.prisma',
   );
 
 program.parse();
@@ -28,8 +37,8 @@ const options = program.opts();
 const { args } = program;
 
 const getConfig = async () => {
-  if (options.config != null) {
-    const result = await explorer.load(options.config);
+  if (options.explicitConfig != null) {
+    const result = await explorer.load(options.explicitConfig);
     if (result == null) {
       throw new Error('Configuration file for prisma-lint not found');
     }
@@ -61,7 +70,7 @@ const resolveSchemaFiles = (schemaFiles: string[]) => {
     }
   }
 
-  return resolvedFiles;
+  return resolvedFiles.sort();
 };
 
 const printFileViolations = (schemaFile: string, violations: Violation[]) => {
@@ -77,9 +86,8 @@ const printFileViolations = (schemaFile: string, violations: Violation[]) => {
 
 const run = async () => {
   const config = await getConfig();
-  const schemaFiles =
-    args.length > 0 ? resolveSchemaFiles(args) : ['prisma/schema.prisma'];
-
+  const schemaFiles = resolveSchemaFiles(args);
+  let hasViolations = false;
   for (const schemaFile of schemaFiles) {
     const violations = await lintSchemaFile({
       schemaFile,
@@ -87,8 +95,12 @@ const run = async () => {
       ruleRegistry,
     });
     if (violations.length > 0) {
+      hasViolations = true;
       printFileViolations(schemaFile, violations);
     }
+  }
+  if (hasViolations) {
+    process.exit(1);
   }
 };
 
