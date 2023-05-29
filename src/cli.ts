@@ -24,7 +24,7 @@ program
   .argument(
     '[paths...]',
     'One or more schema files, directories, or globs to lint.',
-    'prisma/schema.prisma',
+    './prisma/schema.prisma',
   );
 
 program.parse();
@@ -32,7 +32,7 @@ program.parse();
 const explorer = cosmiconfig('prismalint');
 
 const options = program.opts();
-const { args } = program;
+const args = program.processedArgs;
 
 const getConfig = async () => {
   if (options.explicitConfig != null) {
