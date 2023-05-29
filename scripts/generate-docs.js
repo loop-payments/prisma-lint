@@ -58,7 +58,7 @@ function extractRulesFromTSFile(filePath) {
   const fileContent = fs.readFileSync(filePath, 'utf-8');
   const ruleNameMatch = fileContent.match(/const RULE_NAME = '(.*)';/);
   const descriptionMatch = fileContent.match(/\/\*\*\n([\s\S]*?)\n\s*\*\//);
-  const configMatch = fileContent.match(/const Config =([\s\S]*?);/);
+  const configMatch = fileContent.match(/const Config =([\s\S]*?;)/);
 
   if (ruleNameMatch && descriptionMatch) {
     const ruleName = ruleNameMatch[1];
