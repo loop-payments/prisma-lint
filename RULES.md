@@ -12,9 +12,9 @@ Configuration option schemas are written with [Zod](
 - [model-name-grammatical-number](#model-name-grammatical-number)
 - [model-name-mapping-snake-case](#model-name-mapping-snake-case)
 - [model-name-prefix](#model-name-prefix)
-- [required-field-index](#required-field-index)
-- [required-field-type](#required-field-type)
-- [required-field](#required-field)
+- [require-field-index](#require-field-index)
+- [require-field-type](#require-field-type)
+- [require-field](#require-field)
 
 ## field-name-mapping-snake-case
 
@@ -77,11 +77,11 @@ model PersistedQuery {
 Checks that fields within a model are in the correct order.
 
 Fields in the `order` that are not present in the model are ignored.
-To require fields, use the `required-field` rule.
+To require fields, use the `require-field` rule.
 
-The first field in the `order` is interpreted to be required as
+The first field in the `order` is interpreted to be require as
 the first field in the model. The last field in the `order` is
-interpreted to be required as the last field in the model.
+interpreted to be require as the last field in the model.
 
 The special field name `...` can be used to indicate that any
 number of fields can appear in the model at that point.
@@ -306,7 +306,7 @@ model GraphQLPersistedQuery {
 
 ## model-name-prefix
 
-Check that model names include a required prefix.
+Check that model names include a require prefix.
 
 This is useful for avoiding name collisions with
 application-level types in cases where a single
@@ -339,17 +339,17 @@ model Users {
 }
 ```
 
-## required-field-index
+## require-field-index
 
 Checks that certain fields have indices.
 
 This rules supports selective ignoring via the `prisma-lint-ignore-model`
 comment, like so:
 
-    /// prisma-lint-ignore-model required-field-index tenantId
+    /// prisma-lint-ignore-model require-field-index tenantId
 
 That will ignore only `tenantId` violations for the model. Other
-required indices will still be enforced. A comma-separated list of fields
+require indices will still be enforced. A comma-separated list of fields
 can be provided to ignore multiple fields.
 
 
@@ -429,7 +429,7 @@ type Bar {
 }
 ```
 
-## required-field-type
+## require-field-type
 
 Checks that certain fields have a specific type.
 
@@ -438,7 +438,7 @@ Checks that certain fields have a specific type.
 
 ```ts
 z.object({
-  required: z.array(
+  require: z.array(
     z.object({
       ifName: z.union([z.string(), z.instanceof(RegExp)]),
       type: z.string(),
@@ -449,7 +449,7 @@ z.object({
 
 ### Examples
 
-#### With `{ required: [{ ifName: "id", type: "String" }] }`
+#### With `{ require: [{ ifName: "id", type: "String" }] }`
 
 ```prisma
 // good
@@ -463,7 +463,7 @@ type User {
 }
 ```
 
-#### With `{ required: [{ ifName: "/At$/", type: "DateTime" }] }`
+#### With `{ require: [{ ifName: "/At$/", type: "DateTime" }] }`
 
 ```prisma
 // good
@@ -479,25 +479,25 @@ type User {
 }
 ```
 
-## required-field
+## require-field
 
 Checks that a model has certain fields.
 
 This rules supports selective ignoring via the `prisma-lint-ignore-model`
 comment, like so:
 
-    /// prisma-lint-ignore-model required-field tenantId
+    /// prisma-lint-ignore-model require-field tenantId
 
 That will ignore only `tenantId` field violations for the model. Other
-required fields will still be enforced. A comma-separated list of fields
-can be provided to ignore multiple required fields.
+require fields will still be enforced. A comma-separated list of fields
+can be provided to ignore multiple require fields.
 
 
 ### Configuration
 
 ```ts
 z.object({
-  required: z.array(
+  require: z.array(
     z.union([
       z.string(),
       z.object({
@@ -511,7 +511,7 @@ z.object({
 
 ### Examples
 
-#### With `{ required: ["id"] }`
+#### With `{ require: ["id"] }`
 
 ```prisma
 // good
@@ -525,7 +525,7 @@ model User {
 }
 ```
 
-#### With `{ required: [{ name: "currencyCode", ifSibling: "/mountD6$/" }] }`
+#### With `{ require: [{ name: "currencyCode", ifSibling: "/mountD6$/" }] }`
 
 ```prisma
 // good
