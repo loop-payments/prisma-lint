@@ -145,7 +145,7 @@ function extractAndBuildRulesMarkdown() {
 
   buildRulesMarkdownFile(rules);
 
-  execSync('yarn prettier RULES.md');
+  execSync('yarn prettier -w RULES.md');
 }
 
 extractAndBuildRulesMarkdown();

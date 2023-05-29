@@ -7,7 +7,7 @@ describe('require-field-index', () => {
     await testLintPrismaSource({
       fileName: 'fake.ts',
       sourceCode,
-      config: {
+      rootConfig: {
         rules: {
           'require-field-index': ['error', config],
         },

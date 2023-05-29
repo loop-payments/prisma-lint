@@ -7,7 +7,7 @@ describe('field-name-mapping-snake-case', () => {
     await testLintPrismaSource({
       fileName: 'fake.ts',
       sourceCode,
-      config: {
+      rootConfig: {
         rules: {
           'field-name-mapping-snake-case': ['error', config],
         },

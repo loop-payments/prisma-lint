@@ -1,4 +1,4 @@
-export type PrismaLintConfig = {
+export type RootConfig = {
   rules: Record<RuleName, RuleConfigValue>;
   plugins?: string[];
 };

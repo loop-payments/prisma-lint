@@ -1,17 +1,17 @@
 import {
   getRuleConfig,
   getRuleLevel,
-  type PrismaLintConfig,
+  type RootConfig,
 } from '#src/common/config.js';
 import type { Rule, RuleDefinition } from '#src/common/rule.js';
 
 export const parseRules = (
   ruleDefinitions: RuleDefinition[],
-  config: PrismaLintConfig,
+  rootConfig: RootConfig,
 ): { rules: Rule[]; parseIssues: string[] } => {
   const rules: Rule[] = [];
   const parseIssues: string[] = [];
-  const rawRuleValues = config.rules;
+  const rawRuleValues = rootConfig.rules;
   const ruleDefinitionMap = new Map(
     ruleDefinitions.map((d) => [d.ruleName, d]),
   );

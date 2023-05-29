@@ -7,7 +7,7 @@ describe('require-field', () => {
     await testLintPrismaSource({
       fileName: 'fake.ts',
       sourceCode,
-      config: {
+      rootConfig: {
         rules: {
           'require-field': ['error', config],
         },
