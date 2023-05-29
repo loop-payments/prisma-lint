@@ -51,9 +51,13 @@ export const parseRuleConfigList = (
     if (parsed.success) {
       ruleConfigList.push([ruleName, parsed.data]);
     } else {
+      const issues = parsed.error.issues.map((issue) => issue.message);
+      if (issues.length > 1 && issues[0] === 'Required') {
+        issues.shift();
+      }
       const parseIssue = [
         `Failed to parse config for rule '${ruleName}':`,
-        `  ${parsed.error.issues.map((issue) => issue.message).join(',')}`,
+        `  ${issues.join(',')}`,
       ].join('\n');
       parseIssues.push(parseIssue);
     }
