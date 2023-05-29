@@ -23,7 +23,7 @@ export async function lintPrismaSourceCode({
 }) {
   const prismaSchema = getPrismaSchema(sourceCode);
 
-  // Mutatable list of violations added to by rule instances.
+  // Mutable list of violations added to by rule instances.
   const violations: Violation[] = [];
 
   // Create rule instances.
