@@ -14,7 +14,7 @@
       "error",
       {
         "forAllRelations": true,
-        "ifNameIn": ["tenantQid", "qid"]
+        "forNames": ["tenantQid", "qid", "id", "/^.*Id$/"]
       }
     ],
     "required-field-type": [

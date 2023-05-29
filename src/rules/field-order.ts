@@ -107,9 +107,9 @@ export default {
         if (outOfOrderFieldNames.length === 0) {
           return;
         }
-        const message = `Fields are not in the expected order: ${expectedNames.join(
-          ', ',
-        )}`;
+        const message = `Fields are not in the expected order: ${expectedNames
+          .map((f) => `"${f}"`)
+          .join(', ')}.`;
         context.report({ model, message });
       },
     };

@@ -11,7 +11,15 @@ datasource db {
 model Users {
   id         String @id
   emailAddress String
+  tenantId   String
+  tenant     Tenant @relation(fields: [tenantId], references: [id])
   @@map(name: "users")
+}
+
+model Tenant {
+  id         String @id
+  name       String
+  @@map(name: "tenant")
 }
 
 model UserRoleFoo {
@@ -21,5 +29,6 @@ model UserRoleFoo {
 
 model UserRole {
   id         String @id
+  userId     String
   // No mapping.
 }

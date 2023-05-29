@@ -70,17 +70,17 @@ export default {
           context.report({ model, field, message });
         const { attributes } = field;
         if (!attributes) {
-          report('Field name must be mapped to snake case');
+          report('Field name must be mapped to snake case.');
           return;
         }
         const mapAttribute = findMapAttribute(attributes);
         if (!mapAttribute || !mapAttribute.args) {
-          report('Field name must be mapped to snake case');
+          report('Field name must be mapped to snake case.');
           return;
         }
         const nameAttribute = findNameAttributeArg(mapAttribute.args);
         if (!nameAttribute) {
-          report('Field name must be mapped to snake case');
+          report('Field name must be mapped to snake case.');
           return;
         }
         const fieldName = field.name;
@@ -89,7 +89,7 @@ export default {
           compoundWords,
         });
         if (mappedName !== expectedSnakeCase) {
-          report(`Field name must be mapped to "${expectedSnakeCase}"`);
+          report(`Field name must be mapped to "${expectedSnakeCase}".`);
         }
       },
     };

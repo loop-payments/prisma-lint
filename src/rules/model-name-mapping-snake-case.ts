@@ -79,7 +79,7 @@ export default {
         if (!mapAttribute) {
           context.report({
             model,
-            message: 'Model name must be mapped to snake case',
+            message: 'Model name must be mapped to snake case.',
           });
           return;
         }
@@ -87,7 +87,7 @@ export default {
         if (!nameAttribute) {
           context.report({
             model,
-            message: 'Model name must be mapped to snake case',
+            message: 'Model name must be mapped to snake case.',
           });
           return;
         }
@@ -100,7 +100,7 @@ export default {
         if (mappedName !== expectedSnakeCase) {
           context.report({
             model,
-            message: `Model name must be mapped to "${expectedSnakeCase}"`,
+            message: `Model name must be mapped to "${expectedSnakeCase}".`,
           });
         }
       },

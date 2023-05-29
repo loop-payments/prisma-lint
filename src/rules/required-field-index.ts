@@ -122,7 +122,7 @@ export default {
         }
 
         const report = () => {
-          const message = `Field "${fieldName}" is must have an index.`;
+          const message = `Field "${fieldName}" must have an index.`;
           context.report({ model, field, message });
         };
 
@@ -132,7 +132,7 @@ export default {
           }
           const indexSet = indexSetByModelName.get(modelName);
           if (!indexSet) {
-            throw new Error(`Expected index set for ${modelName}`);
+            throw new Error(`Expected index set for ${modelName}.`);
           }
           return indexSet;
         };
@@ -153,7 +153,7 @@ export default {
           }
           const relationSet = relationSetByModelName.get(modelName);
           if (!relationSet) {
-            throw new Error(`Expected relation set for ${modelName}`);
+            throw new Error(`Expected relation set for ${modelName}.`);
           }
           if (relationSet.has(fieldName) && !indexSet.has(fieldName)) {
             report();

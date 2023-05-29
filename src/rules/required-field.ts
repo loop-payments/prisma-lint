@@ -128,7 +128,9 @@ export default {
 
         if (missingFields.length > 0) {
           context.report({
-            message: `Missing required fields: ${missingFields.join(', ')}`,
+            message: `Missing required fields: ${missingFields
+              .map((f) => `"${f}"`)
+              .join(', ')}.`,
             model,
           });
         }

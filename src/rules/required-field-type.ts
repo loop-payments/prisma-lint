@@ -66,14 +66,14 @@ export default {
               ifName,
               type,
             })),
-          )}`;
+          )}.`;
 
           context.report({ model, field, message });
         }
         const actualType = field.fieldType;
         const expectedType = matches[0].type;
         if (actualType !== expectedType) {
-          const message = `Field type "${actualType}" does not match expected type "${expectedType}"`;
+          const message = `Field type "${actualType}" does not match expected type "${expectedType}".`;
           context.report({ model, field, message });
         }
       },

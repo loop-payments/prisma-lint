@@ -11,6 +11,9 @@ datasource db {
 model DbUser {
   id         String @id
   createdAt  DateTime @map(name: "created_at")
+  tenantId   String @map(name: "tenant_id")
+  tenant     DbTenant @relation(fields: [tenantId], references: [id])
+  @@index(tenantId)
   @@map(name: "user")
 }
 
