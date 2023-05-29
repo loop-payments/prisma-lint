@@ -13,6 +13,8 @@ import type { Violation } from '#src/common/violation.js';
 import { lintPrismaFiles } from '#src/lint.js';
 import ruleRegistry from '#src/rule-registry.js';
 
+const DEFAULT_PRISMA_FILE_PATH = 'prisma/schema.prisma';
+
 program
   .name('prisma-lint')
   .description('A linter for Prisma schema files.')
@@ -24,7 +26,7 @@ program
   .argument(
     '[paths...]',
     'One or more schema files, directories, or globs to lint.',
-    './prisma/schema.prisma',
+    DEFAULT_PRISMA_FILE_PATH,
   );
 
 program.parse();
@@ -32,7 +34,7 @@ program.parse();
 const explorer = cosmiconfig('prismalint');
 
 const options = program.opts();
-const args = program.processedArgs;
+const { args } = program;
 
 const getConfig = async () => {
   if (options.explicitConfig != null) {
@@ -50,10 +52,14 @@ const getConfig = async () => {
   return result.config;
 };
 
-const resolvePrismaFiles = (schemaFiles: string[]) => {
+const resolvePrismaFiles = (args: string[]) => {
+  if (args == null) {
+    return [DEFAULT_PRISMA_FILE_PATH];
+  }
+
   const resolvedFiles = [];
 
-  for (const file of schemaFiles) {
+  for (const file of args) {
     const isDirectory = fs.existsSync(file) && fs.lstatSync(file).isDirectory();
     const isGlob = file.includes('*');
 
@@ -68,7 +74,9 @@ const resolvePrismaFiles = (schemaFiles: string[]) => {
     }
   }
 
-  return resolvedFiles.sort();
+  resolvedFiles.sort();
+
+  return resolvedFiles;
 };
 
 const printFileViolations = (schemaFile: string, violations: Violation[]) => {
@@ -98,9 +106,9 @@ const run = async () => {
 
   const fileNames = resolvePrismaFiles(args);
   const fileViolationList = await lintPrismaFiles({
-    fileNames,
-    ruleConfigList,
     ruleRegistry,
+    ruleConfigList,
+    fileNames,
   });
   let hasViolations = false;
   fileViolationList.forEach(([fileName, violations]) => {
