@@ -1,6 +1,6 @@
-# prisma-lint (WIP)
+# prisma-lint
 
-A work-in-progress linter for Prisma schema files.
+A linter for Prisma schema files.
 
 ## Installation
 
@@ -18,41 +18,70 @@ A work-in-progress linter for Prisma schema files.
 > yarn prisma-lint path/to/schema.prisma
 ```
 
+The arguments can be globs, directories, or file paths. The default path is `prisma/schema.prisma`.
+
 ## Configuration
 
-In a `.prisma-lint.js` file:
+Configuration files are loaded with [comsiconfig](https://github.com/cosmiconfig/cosmiconfig).
+Here's an example `.prismalintrc.json`:
 
-```js
+```json
 {
-  plugins: [
-    "prisma-lint-loop",
-  ],
-  rules: {
-    "singular-model-names": ["error"],
+  "rules": {
+    "model-name-grammatical-number": [
+      "error",
+      {
+        "style": "singular"
+      }
+    ],
+    "model-name-mapping-snake-case": [
+      "error",
+      {
+        "compoundWords": ["GraphQL"],
+        "trimPrefix": "Db"
+      }
+    ],
+    "model-name-prefix": [
+      "error",
+      {
+        "prefix": "Db"
+      }
+    ]
   }
 }
 ```
 
-## Development
+### Rules
 
-### Local testing
+See [RULES.md](RULES.md) for a full list of supported rules.
 
+## Ignore comments
+
+Rules can be ignored with three-slash (`///`) comments inside models.
+
+To ignore all lint rules for a model and its fields:
+
+```prisma
+model User {
+  /// prisma-lint-ignore-model
+}
 ```
-> node ./dist/cli.js fixture/valid.prisma
-> node ./dist/cli.js fixture/invalid.prisma
+
+To ignore specific lint rules for a model and its fields:
+
+```prisma
+model User {
+  /// prisma-lint-ignore-model require-field
+  /// prisma-lint-ignore-model require-field-type
+}
 ```
 
-### TODO
+Some rules support parameterized ignore comments like this:
 
-Features:
+```prisma
+model User {
+  /// prisma-lint-ignore-model require-field revisionNumber,revisionCreatedAt
+}
+```
 
-- Support for configuration file
-- Support for plugins
-- Plugin repository template
-- Support for ignore comments
-- Prettier CLI output
-
-Internal:
-
-- GitHub Actions
-- package.json sorting
+Omitting `revisionNumber` and `revisionCreatedAt` fields from this model will not result in a violation. Other required fields remain required.

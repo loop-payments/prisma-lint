@@ -15,13 +15,17 @@ jobs:
     timeout-minutes: 20
     runs-on: ubuntu-latest
     env:
-      NODE_OPTIONS: "--max_old_space_size=6096"
+      NODE_OPTIONS: '--max_old_space_size=6096'
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: "18.13.0"
-          cache: "yarn"
+          node-version: '18.13.0'
+          cache: 'yarn'
       - run: yarn install
       - run: yarn tsc
+      - run: yarn docs
+      - run: git diff --exit-code RULES.md
+      - run: yarn style:eslint:check
+      - run: yarn style:prettier:check
       - run: yarn test

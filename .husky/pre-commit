@@ -1,0 +1,16 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+current_branch=$(git rev-parse --abbrev-ref HEAD)
+if [[ $current_branch = 'main' ]]
+then
+  echo "Do not commit directly to the main branch!"
+  exit 1
+fi
+
+echo "Checking types..."
+yarn build 
+
+echo "Linting staged files..."
+yarn lint-staged
+

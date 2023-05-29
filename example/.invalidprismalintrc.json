@@ -1,0 +1,55 @@
+{
+  "rules": {
+    "field-name-mapping-snake-case": ["error"],
+    "model-name-grammatical-number": ["error", { "style": "singular" }],
+    "model-name-mapping-snake-case": [
+      "error",
+      {
+        "compoundWords": ["GraphQL"],
+        "trimPrefixed": "Db"
+      }
+    ],
+    "model-name-prefix": ["error", { "prefix": "Db" }],
+    "require-field-index": [
+      "error",
+      {
+        "blah": 1,
+        "forAllRelations": true,
+        "forNames": ["tenantQid", "qid", "id", "/^.*Id$/"]
+      }
+    ],
+    "require-field-type": [
+      "error",
+      {
+        "ALMOST": 1,
+        "require": [
+          {
+            "type": "DateTime",
+            "ifName": "/At$/"
+          }
+        ]
+      }
+    ],
+    "require-field": [
+      "error",
+      {
+        "require": [
+          "id",
+          "createdAt",
+          {
+            "name": "revisionCreatedAt",
+            "ifSibling": "revisionNumber"
+          },
+          {
+            "name": "revisionNumber",
+            "ifSibling": "revisionCreatedAt"
+          },
+          {
+            "name": "currencyCode",
+            "ifSibling": "/[A|a]mountD6$/"
+          }
+        ]
+      }
+    ]
+  }
+}
