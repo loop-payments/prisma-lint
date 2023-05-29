@@ -1,6 +1,6 @@
 import type { RuleConfig } from '#src/common/config.js';
 import { testLintPrismaSource } from '#src/common/test.js';
-import requireFieldType from '#src/rules/require-field-index.js';
+import requireFieldIndex from '#src/rules/require-field-index.js';
 
 describe('require-field-index', () => {
   const getRunner = (config: RuleConfig) => async (sourceCode: string) =>
@@ -12,7 +12,7 @@ describe('require-field-index', () => {
           'require-field-index': ['error', config],
         },
       },
-      ruleDefinitions: [requireFieldType],
+      ruleDefinitions: [requireFieldIndex],
     });
 
   describe('ignore comments', () => {
