@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { RULE_CONFIG_PARSE_PARAMS } from '#src/common/config.js';
+import { parseRuleConfig } from '#src/common/config.js';
 import { listFields } from '#src/common/prisma.js';
 import type { ModelRuleDefinition } from '#src/common/rule.js';
 
@@ -69,7 +69,7 @@ const Config = z
 export default {
   ruleName: RULE_NAME,
   create: (config, context) => {
-    const parsedConfig = Config.parse(config, RULE_CONFIG_PARSE_PARAMS);
+    const parsedConfig = parseRuleConfig(RULE_NAME, Config, config);
     const { order } = parsedConfig;
     return {
       Model: (model) => {

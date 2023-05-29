@@ -7,6 +7,7 @@ import { program } from 'commander';
 import { cosmiconfig } from 'cosmiconfig';
 import { glob } from 'glob';
 
+import { RuleConfigParseError } from '#src/common/config.js';
 import { renderViolations } from '#src/common/render.js';
 import type { Violation } from '#src/common/violation.js';
 import { lintSchemaFile } from '#src/lint.js';
@@ -101,6 +102,12 @@ const run = async () => {
 };
 
 run().catch((err) => {
-  // eslint-disable-next-line no-console
-  console.error(err);
+  /* eslint-disable no-console */
+  if (err instanceof RuleConfigParseError) {
+    console.error(err.message);
+  } else {
+    console.error(err);
+  }
+  process.exit(1);
+  /* eslint-enable no-console */
 });

@@ -7,7 +7,7 @@ import type {
 } from '@mrleebo/prisma-ast';
 import { z } from 'zod';
 
-import { RULE_CONFIG_PARSE_PARAMS } from '#src/common/config.js';
+import { parseRuleConfig } from '#src/common/config.js';
 import { getRuleIgnoreParams as listRuleIgnoreParams } from '#src/common/ignore.js';
 import {
   assertValueIsStringArray,
@@ -99,7 +99,7 @@ const Config = z
 export default {
   ruleName: RULE_NAME,
   create: (config, context) => {
-    const parsedConfig = Config.parse(config, RULE_CONFIG_PARSE_PARAMS);
+    const parsedConfig = parseRuleConfig(RULE_NAME, Config, config);
     const forAllRelations = parsedConfig.forAllRelations ?? false;
     const forNames = parsedConfig.forNames ?? [];
     const forNamesList = Array.isArray(forNames) ? forNames : [forNames];

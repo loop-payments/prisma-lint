@@ -27,11 +27,29 @@ export function getRuleConfig(value: RuleConfigValue) {
   return {};
 }
 
-const errorMap: z.ZodErrorMap = (issue) => {
-  if (issue.code === z.ZodIssueCode.invalid_type && issue.path.length === 0) {
-    return { message: 'A rule configuration is require' };
+export const RuleConfigParseError = class extends Error {
+  constructor(ruleName: string, config: unknown, zodIssues: z.ZodIssue[]) {
+    const message = [
+      `Failed to parse config for rule '${ruleName}'`,
+      `  Value: '${JSON.stringify(config)}'`,
+      `  ${zodIssues.map((issue) => issue.message).join('\n')}`,
+    ].join('\n');
+    super(message);
+    this.name = 'RuleConfigParseError';
   }
-  return { message: 'Invalid rule configuration' };
 };
 
-export const RULE_CONFIG_PARSE_PARAMS = { errorMap };
+export const parseRuleConfig = function <T>(
+  ruleName: string,
+  schema: z.ZodSchema<T>,
+  config: unknown,
+): T {
+  if (config == null && schema.isOptional()) {
+    return undefined as T;
+  }
+  const parsed = schema.safeParse(config);
+  if (parsed.success) {
+    return parsed.data;
+  }
+  throw new RuleConfigParseError(ruleName, config, parsed.error.issues);
+};

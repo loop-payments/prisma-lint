@@ -1,7 +1,7 @@
 import pluralize from 'pluralize';
 import { z } from 'zod';
 
-import { RULE_CONFIG_PARSE_PARAMS } from '#src/common/config.js';
+import { parseRuleConfig } from '#src/common/config.js';
 import { toRegExp } from '#src/common/regex.js';
 import type { FieldRuleDefinition } from '#src/common/rule.js';
 
@@ -45,7 +45,7 @@ const Config = z
 export default {
   ruleName: RULE_NAME,
   create: (config, context) => {
-    const parsedConfig = Config.parse(config, RULE_CONFIG_PARSE_PARAMS);
+    const parsedConfig = parseRuleConfig(RULE_NAME, Config, config);
     const forbidWithRegExp = parsedConfig.forbid.map((name) => ({
       name,
       nameRegExp: toRegExp(name),

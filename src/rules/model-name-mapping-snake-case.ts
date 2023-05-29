@@ -2,7 +2,7 @@ import type { ModelAttribute } from '@mrleebo/prisma-ast';
 
 import { z } from 'zod';
 
-import { RULE_CONFIG_PARSE_PARAMS } from '#src/common/config.js';
+import { parseRuleConfig } from '#src/common/config.js';
 import { findNameAttributeArg, listAttributes } from '#src/common/prisma.js';
 import type { ModelRuleDefinition } from '#src/common/rule.js';
 import { toSnakeCase } from '#src/common/snake-case.js';
@@ -69,7 +69,7 @@ const Config = z
 export default {
   ruleName: RULE_NAME,
   create: (config, context) => {
-    const parsedConfig = Config.parse(config, RULE_CONFIG_PARSE_PARAMS);
+    const parsedConfig = parseRuleConfig(RULE_NAME, Config, config);
     const compoundWords = parsedConfig?.compoundWords ?? [];
     const trimPrefix = parsedConfig?.trimPrefix ?? '';
     return {

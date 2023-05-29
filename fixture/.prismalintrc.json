@@ -6,7 +6,7 @@
       "error",
       {
         "compoundWords": ["GraphQL"],
-        "trimPrefix": "Db"
+        "trimPrefixed": "Db"
       }
     ],
     "model-name-prefix": ["error", { "prefix": "Db" }],
