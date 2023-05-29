@@ -15,10 +15,6 @@ import ruleRegistry from '#src/rule-registry.js';
 program
   .description('A linter for Prisma schema files.')
   .option(
-    '-c, --check',
-    'Exit with a non-zero exit code if any violations are found.',
-  )
-  .option(
     '-e, --explicit-config <path>',
     'An explicit path to a config file. ' +
       'If omitted, cosmiconfig is used to search for a config file.',
