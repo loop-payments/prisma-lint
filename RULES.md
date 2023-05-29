@@ -28,6 +28,7 @@ z
   .object({
     compoundWords: z.array(z.string()).optional(),
   })
+  .strict()
   .optional();
 ```
 
@@ -40,7 +41,6 @@ z
 model UserRole {
   userId String @map(name: "user_id")
 }
-// good
 model UserRole {
   // No mapping needed.
   id String
@@ -49,7 +49,6 @@ model UserRole {
 model UserRole {
   userId String
 }
-// bad
 model UserRole {
   userId String @map(name: "user_i_d")
 }
@@ -86,9 +85,11 @@ number of fields can appear in the model at that point.
 ### Configuration
 
 ```ts
-z.object({
-  order: z.array(z.string()),
-});
+z
+  .object({
+    order: z.array(z.string()),
+  })
+  .strict();
 ```
 
 ### Examples
@@ -144,9 +145,11 @@ Forbids fields with certain names.
 ### Configuration
 
 ```ts
-z.object({
-  forbid: z.array(z.union([z.string(), z.instanceof(RegExp)])),
-});
+z
+  .object({
+    forbid: z.array(z.union([z.string(), z.instanceof(RegExp)])),
+  })
+  .strict();
 ```
 
 ### Examples
@@ -189,9 +192,11 @@ Checks that each model name matches the plural or singlar enforced style.
 ### Configuration
 
 ```ts
-z.object({
-  style: z.enum(['singular', 'plural']),
-});
+z
+  .object({
+    style: z.enum(['singular', 'plural']),
+  })
+  .strict();
 ```
 
 ### Examples
@@ -235,6 +240,7 @@ z
     compoundWords: z.array(z.string()).optional(),
     trimPrefix: z.string().optional(),
   })
+  .strict()
   .optional();
 ```
 
@@ -252,7 +258,6 @@ model UserRole {
 model UserRole {
   id String @id
 }
-// bad
 model UserRole {
   id String @id
   @@map(name: "user_roles")
@@ -303,9 +308,11 @@ structure.
 ### Configuration
 
 ```ts
-z.object({
-  prefix: z.string(),
-});
+z
+  .object({
+    prefix: z.string(),
+  })
+  .strict();
 ```
 
 ### Examples
@@ -340,12 +347,14 @@ can be provided to ignore multiple fields.
 ### Configuration
 
 ```ts
-z.object({
-  forAllRelations: z.boolean().optional(),
-  forNames: z
-    .union([z.string(), z.array(z.union([z.string(), z.instanceof(RegExp)]))])
-    .optional(),
-});
+z
+  .object({
+    forAllRelations: z.boolean().optional(),
+    forNames: z
+      .union([z.string(), z.array(z.union([z.string(), z.instanceof(RegExp)]))])
+      .optional(),
+  })
+  .strict();
 ```
 
 ### Examples
@@ -400,7 +409,7 @@ type Bar {
   foo Foo @relation(fields: [fooId], references: [id])
   @@index([fooId])
 }
-// bar
+// bad
 type Bar {
   fooId String
   foo Foo @relation(fields: [fooId], references: [id])
@@ -415,14 +424,16 @@ Checks that certain fields have a specific type.
 ### Configuration
 
 ```ts
-z.object({
-  require: z.array(
-    z.object({
-      ifName: z.union([z.string(), z.instanceof(RegExp)]),
-      type: z.string(),
-    }),
-  ),
-});
+z
+  .object({
+    require: z.array(
+      z.object({
+        ifName: z.union([z.string(), z.instanceof(RegExp)]),
+        type: z.string(),
+      }),
+    ),
+  })
+  .strict();
 ```
 
 ### Examples
@@ -472,17 +483,19 @@ can be provided to ignore multiple require fields.
 ### Configuration
 
 ```ts
-z.object({
-  require: z.array(
-    z.union([
-      z.string(),
-      z.object({
-        name: z.string(),
-        ifSibling: z.union([z.string(), z.instanceof(RegExp)]),
-      }),
-    ]),
-  ),
-});
+z
+  .object({
+    require: z.array(
+      z.union([
+        z.string(),
+        z.object({
+          name: z.string(),
+          ifSibling: z.union([z.string(), z.instanceof(RegExp)]),
+        }),
+      ]),
+    ),
+  })
+  .strict();
 ```
 
 ### Examples

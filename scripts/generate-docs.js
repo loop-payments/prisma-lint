@@ -64,7 +64,7 @@ function listExamples(exampleLines) {
   return examples;
 }
 
-function extractRulesFromTSFile(filePath) {
+function extractRulesFromSourceCode(filePath) {
   const fileContent = fs.readFileSync(filePath, 'utf-8');
   const ruleNameMatch = fileContent.match(/const RULE_NAME = '(.*)';/);
   const descriptionMatch = fileContent.match(/\/\*\*\n([\s\S]*?)\n\s*\*\//);
@@ -134,7 +134,7 @@ function extractAndBuildRulesMarkdown() {
     .sort()
     .map((file) => {
       try {
-        return extractRulesFromTSFile(file);
+        return extractRulesFromSourceCode(file);
       } catch (e) {
         // eslint-disable-next-line no-console
         console.error(`Error while processing rule file ${file}`);
