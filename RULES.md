@@ -41,14 +41,17 @@ z
 model UserRole {
   userId String @map(name: "user_id")
 }
+
 model UserRole {
   // No mapping needed.
   id String
 }
+
 // bad
 model UserRole {
   userId String
 }
+
 model UserRole {
   userId String @map(name: "user_i_d")
 }
@@ -61,6 +64,7 @@ model UserRole {
 model PersistedQuery {
   graphQLId String @map(name: "graphql_id")
 }
+
 // bad
 model PersistedQuery {
   graphQLId String @map(name: "graph_q_l_id")
@@ -103,12 +107,14 @@ model User {
   id String @id
   email String
 }
+
 model User {
   tenantId String
   id String @id
   createdAt DateTime
   email String
 }
+
 // bad
 model Users {
   id String @id
@@ -128,6 +134,7 @@ model User {
   createdAt DateTime
   updatedAt DateTime
 }
+
 // good
 model User {
   tenantId String
@@ -161,6 +168,7 @@ z
 type Product {
   uuid String
 }
+
 // bad
 type Product {
   id String
@@ -175,6 +183,7 @@ type Product {
   id String
   priceAmountD6 Int
 }
+
 // bad
 type Product {
   id Int
@@ -208,6 +217,7 @@ z
 model User {
   id String @id
 }
+
 // bad
 model Users {
   id String @id
@@ -221,6 +231,7 @@ model Users {
 model Users {
   id String @id
 }
+
 // bad
 model User {
   id String @id
@@ -254,10 +265,12 @@ model UserRole {
   id String @id
   @@map(name: "user_role")
 }
+
 // bad
 model UserRole {
   id String @id
 }
+
 model UserRole {
   id String @id
   @@map(name: "user_roles")
@@ -272,6 +285,7 @@ model DbUserRole {
   id String @id
   @@map(name: "user_role")
 }
+
 // bad
 model DbUserRole {
   id String @id
@@ -287,6 +301,7 @@ model GraphQLPersistedQuery {
   id String @id
   @@map(name: "graphql_persisted_query")
 }
+
 // bad
 model GraphQLPersistedQuery {
   id String @id
@@ -324,6 +339,7 @@ z
 model DbUser {
   id String @id
 }
+
 // bad
 model Users {
   id String @id
@@ -363,23 +379,27 @@ z
 
 ```prisma
 // good
-type User {
+model User {
   createdAt DateTime @unique
 }
-type User {
+
+model User {
   createdAt DateTime
   @@index([createdAt])
 }
-type User {
+
+model User {
   createdAt DateTime
   id String
   @@index([createdAt, id])
 }
+
 // bad
-type User {
+model User {
   createdAt string
 }
-type User {
+
+model User {
   createdAt DateTime
   id String
   @@index([id, createdAt])
@@ -390,12 +410,13 @@ type User {
 
 ```prisma
 // good
-type User {
+model User {
   tenantId String
   @@index([tenantId])
 }
+
 // bad
-type User {
+model User {
   tenantId String
 }
 ```
@@ -409,6 +430,7 @@ type Bar {
   foo Foo @relation(fields: [fooId], references: [id])
   @@index([fooId])
 }
+
 // bad
 type Bar {
   fooId String
@@ -442,11 +464,12 @@ z
 
 ```prisma
 // good
-type User {
+model User {
   id String
 }
+
 // bad
-type User {
+model User {
   id Int
 }
 ```
@@ -455,12 +478,13 @@ type User {
 
 ```prisma
 // good
-type User {
+model User {
   createdAt DateTime
   updatedAt DateTime
 }
+
 // bad
-type User {
+model User {
   createdAt string
   updatedAt string
 }
@@ -507,6 +531,7 @@ z
 model User {
   id Int @id
 }
+
 // bad
 model User {
   name string
@@ -521,6 +546,7 @@ model Product {
   currencyCode string
   priceAmountD6 Int
 }
+
 // bad
 model Product {
   priceAmountD6 Int

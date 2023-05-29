@@ -44,8 +44,8 @@ function listExamples(exampleLines) {
     } else {
       // Remove the first 2 spaces.
       if (line.trim() === '') {
-        continue;
         currentExampleCode += '\n';
+        continue;
       }
       if (!line.startsWith('  ')) {
         throw new Error(
