@@ -4,10 +4,10 @@ import { RULE_CONFIG_PARSE_PARAMS } from '#src/common/config.js';
 import { toRegExp } from '#src/common/regex.js';
 import type { FieldRuleDefinition } from '#src/common/rule.js';
 
-const RULE_NAME = 'required-field-type';
+const RULE_NAME = 'require-field-type';
 
 const Config = z.object({
-  required: z.array(
+  require: z.array(
     z.object({
       ifName: z.union([z.string(), z.instanceof(RegExp)]),
       type: z.string(),
@@ -18,7 +18,7 @@ const Config = z.object({
 /**
  * Checks that certain fields have a specific type.
  *
- * @example { required: [{ ifName: "id", type: "String" }] }
+ * @example { require: [{ ifName: "id", type: "String" }] }
  *   // good
  *   type User {
  *     id String
@@ -29,7 +29,7 @@ const Config = z.object({
  *     id Int
  *   }
  *
- * @example { required: [{ ifName: "/At$/", type: "DateTime" }] }
+ * @example { require: [{ ifName: "/At$/", type: "DateTime" }] }
  *   // good
  *   type User {
  *     createdAt DateTime
@@ -46,13 +46,13 @@ export default {
   ruleName: RULE_NAME,
   create: (config, context) => {
     const parsedConfig = Config.parse(config, RULE_CONFIG_PARSE_PARAMS);
-    const requiredWithRegExp = parsedConfig.required.map((r) => ({
+    const requireWithRegExp = parsedConfig.require.map((r) => ({
       ...r,
       ifNameRegExp: toRegExp(r.ifName),
     })) as { ifName: string; type: string; ifNameRegExp: RegExp }[];
     return {
       Field: (model, field) => {
-        const matches = requiredWithRegExp.filter((r) =>
+        const matches = requireWithRegExp.filter((r) =>
           r.ifNameRegExp.test(field.name),
         );
         if (matches.length === 0) {
@@ -61,7 +61,7 @@ export default {
         const areMatchesConflicting =
           new Set(matches.map((m) => m.type)).size > 1;
         if (areMatchesConflicting) {
-          const message = `Field has conflicting type required: ${JSON.stringify(
+          const message = `Field has conflicting type require: ${JSON.stringify(
             matches.map(({ ifName, type }) => ({
               ifName,
               type,

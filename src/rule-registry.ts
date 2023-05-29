@@ -5,9 +5,9 @@ import forbiddenField from '#src/rules/forbidden-field.js';
 import modelNameGrammaticalNumber from '#src/rules/model-name-grammatical-number.js';
 import modelNameMappingSnakeCase from '#src/rules/model-name-mapping-snake-case.js';
 import modelNamePrefix from '#src/rules/model-name-prefix.js';
-import requiredFieldIndex from '#src/rules/required-field-index.js';
-import requiredFieldType from '#src/rules/required-field-type.js';
-import requiredField from '#src/rules/required-field.js';
+import requireFieldIndex from '#src/rules/require-field-index.js';
+import requireFieldType from '#src/rules/require-field-type.js';
+import requireField from '#src/rules/require-field.js';
 
 export default Object.fromEntries(
   [
@@ -17,9 +17,9 @@ export default Object.fromEntries(
     modelNameGrammaticalNumber,
     modelNameMappingSnakeCase,
     modelNamePrefix,
-    requiredField,
-    requiredFieldIndex,
-    requiredFieldType,
+    requireField,
+    requireFieldIndex,
+    requireFieldType,
   ].map((rule) => {
     return [rule.ruleName, rule];
   }),

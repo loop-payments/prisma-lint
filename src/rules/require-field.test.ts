@@ -1,31 +1,31 @@
 import type { RuleConfig } from '#src/common/config.js';
 import { lintSchemaSource } from '#src/lint.js';
-import requiredField from '#src/rules/required-field.js';
+import requireField from '#src/rules/require-field.js';
 
-describe('required-field', () => {
+describe('require-field', () => {
   const getRunner = (config: RuleConfig) => async (schemaSource: string) =>
     await lintSchemaSource({
       fileName: 'fake.ts',
       schemaSource,
       config: {
         rules: {
-          'required-field': ['error', config],
+          'require-field': ['error', config],
         },
       },
       ruleRegistry: {
-        'required-field': requiredField,
+        'require-field': requireField,
       },
     });
 
   describe('ignore comments', () => {
     const run = getRunner({
-      required: ['tenantId', 'createdAt', 'revisionCreatedAt'],
+      require: ['tenantId', 'createdAt', 'revisionCreatedAt'],
     });
 
     it('respects rule-specific ignore comments', async () => {
       const violations = await run(`
         model Products {
-          /// prisma-lint-ignore-model required-field
+          /// prisma-lint-ignore-model require-field
           id String @id
         }
         `);
@@ -35,7 +35,7 @@ describe('required-field', () => {
     it('respects field-specific ignore comments with comma', async () => {
       const violations = await run(`
         model Products {
-          /// prisma-lint-ignore-model required-field tenantId,createdAt
+          /// prisma-lint-ignore-model require-field tenantId,createdAt
           id String @id
         }
         `);
@@ -57,7 +57,7 @@ describe('required-field', () => {
   });
 
   describe('simple field name', () => {
-    const run = getRunner({ required: ['tenantId'] });
+    const run = getRunner({ require: ['tenantId'] });
 
     describe('with field', () => {
       it('returns no violations', async () => {
@@ -85,7 +85,7 @@ describe('required-field', () => {
 
   describe('conditional ifSibling regex string', () => {
     const run = getRunner({
-      required: [
+      require: [
         {
           ifSibling: '/amountD\\d$/',
           name: 'currencyCode',
@@ -134,7 +134,7 @@ describe('required-field', () => {
 
   describe('conditional ifSibling regex', () => {
     const run = getRunner({
-      required: [
+      require: [
         {
           ifSibling: /amountD\d$/,
           name: 'currencyCode',
@@ -183,7 +183,7 @@ describe('required-field', () => {
 
   describe('conditional ifSibling string', () => {
     const run = getRunner({
-      required: [
+      require: [
         {
           ifSibling: 'amountD6',
           name: 'currencyCode',

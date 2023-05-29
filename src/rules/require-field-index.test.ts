@@ -1,19 +1,19 @@
 import type { RuleConfig } from '#src/common/config.js';
 import { lintSchemaSource } from '#src/lint.js';
-import requiredFieldType from '#src/rules/required-field-index.js';
+import requireFieldType from '#src/rules/require-field-index.js';
 
-describe('required-field-index', () => {
+describe('require-field-index', () => {
   const getRunner = (config: RuleConfig) => async (schemaSource: string) =>
     await lintSchemaSource({
       fileName: 'fake.ts',
       schemaSource,
       config: {
         rules: {
-          'required-field-index': ['error', config],
+          'require-field-index': ['error', config],
         },
       },
       ruleRegistry: {
-        'required-field-index': requiredFieldType,
+        'require-field-index': requireFieldType,
       },
     });
 
@@ -25,7 +25,7 @@ describe('required-field-index', () => {
     it('respects rule-specific ignore comments', async () => {
       const violations = await run(`
         model Products {
-          /// prisma-lint-ignore-model required-field-index
+          /// prisma-lint-ignore-model require-field-index
           tenantQid String
         }
         `);
@@ -35,7 +35,7 @@ describe('required-field-index', () => {
     it('respects field-specific ignore comments with comma', async () => {
       const violations = await run(`
         model Products {
-          /// prisma-lint-ignore-model required-field-index tenantQid,createdAt
+          /// prisma-lint-ignore-model require-field-index tenantQid,createdAt
           tenantQid String
           createdAt DateTime
           qid String

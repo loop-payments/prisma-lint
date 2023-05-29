@@ -6,10 +6,10 @@ import { listFields } from '#src/common/prisma.js';
 import { isRegexOrRegexStr } from '#src/common/regex.js';
 import type { ModelRuleDefinition } from '#src/common/rule.js';
 
-const RULE_NAME = 'required-field';
+const RULE_NAME = 'require-field';
 
 const Config = z.object({
-  required: z.array(
+  require: z.array(
     z.union([
       z.string(),
       z.object({
@@ -26,13 +26,13 @@ const Config = z.object({
  * This rules supports selective ignoring via the `prisma-lint-ignore-model`
  * comment, like so:
  *
- *     /// prisma-lint-ignore-model required-field tenantId
+ *     /// prisma-lint-ignore-model require-field tenantId
  *
  * That will ignore only `tenantId` field violations for the model. Other
- * required fields will still be enforced. A comma-separated list of fields
- * can be provided to ignore multiple required fields.
+ * require fields will still be enforced. A comma-separated list of fields
+ * can be provided to ignore multiple require fields.
  *
- * @example { required: ["id"] }
+ * @example { require: ["id"] }
  *   // good
  *   model User {
  *     id Int @id
@@ -44,7 +44,7 @@ const Config = z.object({
  *   }
  *
  *
- * @example { required: [{ name: "currencyCode", ifSibling: "/mountD6$/" }] }
+ * @example { require: [{ name: "currencyCode", ifSibling: "/mountD6$/" }] }
  *   // good
  *   model Product {
  *     currencyCode string
@@ -62,11 +62,11 @@ export default {
   ruleName: RULE_NAME,
   create: (config, context) => {
     const parsedConfig = Config.parse(config, RULE_CONFIG_PARSE_PARAMS);
-    const { required } = parsedConfig;
-    const requiredNames = required.filter(
+    const { require } = parsedConfig;
+    const requireNames = require.filter(
       (f) => typeof f === 'string',
     ) as string[];
-    const conditions = required.filter((f) => typeof f === 'object') as {
+    const conditions = require.filter((f) => typeof f === 'object') as {
       name: string;
       ifSibling: string | RegExp;
     }[];
@@ -93,12 +93,12 @@ export default {
 
         const missingFields = [];
 
-        for (const requiredName of requiredNames) {
-          if (ignoreNameSet.has(requiredName)) {
+        for (const requireName of requireNames) {
+          if (ignoreNameSet.has(requireName)) {
             continue;
           }
-          if (!fieldNameSet.has(requiredName)) {
-            missingFields.push(requiredName);
+          if (!fieldNameSet.has(requireName)) {
+            missingFields.push(requireName);
           }
         }
 
@@ -128,7 +128,7 @@ export default {
 
         if (missingFields.length > 0) {
           context.report({
-            message: `Missing required fields: ${missingFields
+            message: `Missing require fields: ${missingFields
               .map((f) => `"${f}"`)
               .join(', ')}.`,
             model,

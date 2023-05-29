@@ -10,17 +10,17 @@
       }
     ],
     "model-name-prefix": ["error", { "prefix": "Db" }],
-    "required-field-index": [
+    "require-field-index": [
       "error",
       {
         "forAllRelations": true,
         "forNames": ["tenantQid", "qid", "id", "/^.*Id$/"]
       }
     ],
-    "required-field-type": [
+    "require-field-type": [
       "error",
       {
-        "required": [
+        "require": [
           {
             "type": "DateTime",
             "ifName": "/At$/"
@@ -28,10 +28,10 @@
         ]
       }
     ],
-    "required-field": [
+    "require-field": [
       "error",
       {
-        "required": [
+        "require": [
           "id",
           "createdAt",
           {

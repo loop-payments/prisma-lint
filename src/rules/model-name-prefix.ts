@@ -10,7 +10,7 @@ const Config = z.object({
 });
 
 /**
- * Check that model names include a required prefix.
+ * Check that model names include a require prefix.
  *
  * This is useful for avoiding name collisions with
  * application-level types in cases where a single

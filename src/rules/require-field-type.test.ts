@@ -1,25 +1,25 @@
 import type { RuleConfig } from '#src/common/config.js';
 import { lintSchemaSource } from '#src/lint.js';
-import requiredFieldType from '#src/rules/required-field-type.js';
+import requireFieldType from '#src/rules/require-field-type.js';
 
-describe('required-field-type', () => {
+describe('require-field-type', () => {
   const getRunner = (config: RuleConfig) => async (schemaSource: string) =>
     await lintSchemaSource({
       fileName: 'fake.ts',
       schemaSource,
       config: {
         rules: {
-          'required-field-type': ['error', config],
+          'require-field-type': ['error', config],
         },
       },
       ruleRegistry: {
-        'required-field-type': requiredFieldType,
+        'require-field-type': requireFieldType,
       },
     });
 
   describe('string literal field name', () => {
     const run = getRunner({
-      required: [{ ifName: 'id', type: 'String' }],
+      require: [{ ifName: 'id', type: 'String' }],
     });
 
     describe('correct type', () => {
@@ -47,7 +47,7 @@ describe('required-field-type', () => {
 
   describe('regex field name', () => {
     const run = getRunner({
-      required: [{ ifName: /At$/, type: 'DateTime' }],
+      require: [{ ifName: /At$/, type: 'DateTime' }],
     });
 
     describe('correct type', () => {
@@ -75,7 +75,7 @@ describe('required-field-type', () => {
 
   describe('regex string field name', () => {
     const run = getRunner({
-      required: [{ ifName: '/At$/', type: 'DateTime' }],
+      require: [{ ifName: '/At$/', type: 'DateTime' }],
     });
 
     describe('correct type', () => {

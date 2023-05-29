@@ -19,7 +19,7 @@ import {
 import { toRegExp } from '#src/common/regex.js';
 import type { FieldRuleDefinition } from '#src/common/rule.js';
 
-const RULE_NAME = 'required-field-index';
+const RULE_NAME = 'require-field-index';
 
 const Config = z.object({
   forAllRelations: z.boolean().optional(),
@@ -34,10 +34,10 @@ const Config = z.object({
  * This rules supports selective ignoring via the `prisma-lint-ignore-model`
  * comment, like so:
  *
- *     /// prisma-lint-ignore-model required-field-index tenantId
+ *     /// prisma-lint-ignore-model require-field-index tenantId
  *
  * That will ignore only `tenantId` violations for the model. Other
- * required indices will still be enforced. A comma-separated list of fields
+ * require indices will still be enforced. A comma-separated list of fields
  * can be provided to ignore multiple fields.
  *
  * @example { forNames: ["createdAt"] }

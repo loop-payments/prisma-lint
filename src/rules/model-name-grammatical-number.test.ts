@@ -52,7 +52,7 @@ describe('model-name-grammatical-number', () => {
             "expected": "object",
             "received": "undefined",
             "path": [],
-            "message": "A rule configuration is required"
+            "message": "A rule configuration is require"
           }
         ]"
       `);

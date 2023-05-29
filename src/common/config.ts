@@ -29,7 +29,7 @@ export function getRuleConfig(value: RuleConfigValue) {
 
 const errorMap: z.ZodErrorMap = (issue) => {
   if (issue.code === z.ZodIssueCode.invalid_type && issue.path.length === 0) {
-    return { message: 'A rule configuration is required' };
+    return { message: 'A rule configuration is require' };
   }
   return { message: 'Invalid rule configuration' };
 };
