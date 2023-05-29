@@ -41,7 +41,7 @@ const Config = z
  *   }
  *
  *   // bad
- *   model Users {
+ *   model User {
  *     id String @id
  *     email String
  *     tenantId String
@@ -57,12 +57,18 @@ const Config = z
  *     updatedAt DateTime
  *   }
  *
- *   // good
  *   model User {
  *     tenantId String
  *     id String
  *     email String
  *     createdAt DateTime
+ *   }
+ *
+ *   // bad
+ *   model User {
+ *     id String @id
+ *     createdAt DateTime
+ *     email String
  *   }
  *
  */
