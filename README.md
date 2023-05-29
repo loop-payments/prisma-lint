@@ -22,7 +22,7 @@ The arguments can be globs, directories, or file paths. The default path is `pri
 
 ## Configuration
 
-Configuration files are loaded with [comsiconfig](https://github.com/cosmiconfig/cosmiconfig).
+Configuration files are loaded with [cosmiconfig](https://github.com/cosmiconfig/cosmiconfig).
 Here's an example `.prismalintrc.json`:
 
 ```json
