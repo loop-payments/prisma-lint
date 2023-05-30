@@ -37,7 +37,7 @@ if (newVersion === currentVersion) {
 
   // Create a new section in CHANGELOG.md for the new version
   const changelogDate = new Date().toISOString().split('T')[0];
-  const changelogContent = `## ${newVersion} (${changelogDate})\n\n`;
+  const changelogHeader = `## ${newVersion} (${changelogDate})\n`;
 
   // Read the current content of CHANGELOG.md
   const changelogPath = 'CHANGELOG.md';
@@ -51,8 +51,8 @@ if (newVersion === currentVersion) {
   } else {
     // Insert the new section after the first 'Unreleased' section
     changelog = changelog.replace(
-      /^## Unreleased([\s\S]*)/,
-      `## Unreleased$1${changelogContent}`,
+      /^## Unreleased\s$/m,
+      `## Unreleased\n\n${changelogHeader}`,
     );
     fs.writeFileSync(changelogPath, changelog);
   }
