@@ -23,23 +23,21 @@ jobs:
           git checkout HEAD~1 -- package.json
           prev="$(jq -r '.version' package.json)"
           if [[ "$curr" != "$prev" ]]; then
-            echo "version-changed=true" >> $GITHUB_OUTPUT
-          else
-            echo "version-changed=false" >> $GITHUB_OUTPUT
+            echo "new-version=$curr" >> $GITHUB_OUTPUT
           fi
 
       - name: Set up Node.js
-        if: steps.version-check.outputs.version-changed
+        if: steps.version-check.outputs.new-version
         uses: actions/setup-node@v2
         with:
           node-version: 18
 
       - name: Install dependencies
-        if: steps.version-check.outputs.version-changed
+        if: steps.version-check.outputs.new-version
         run: yarn install
 
       - name: Release
-        if: steps.version-check.outputs.version-changed
+        if: steps.version-check.outputs.new-version
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -47,13 +45,13 @@ jobs:
           yarn publish
 
       - name: Create GitHub release
-        if: steps.version-check.outputs.version-changed
+        if: steps.version-check.outputs.new-version
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: v${{ steps.version-check.outputs.version-changed }}
-          release_name: Release ${{ steps.version-check.outputs.version-changed }}
+          tag_name: v${{ steps.version-check.outputs.new-version }}
+          release_name: Release ${{ steps.version-check.outputs.new-version }}
           body: |
             $(git log --format=%B -n 1 ${{ github.sha }})
           draft: false
