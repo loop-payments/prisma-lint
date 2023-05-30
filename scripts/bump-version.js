@@ -4,10 +4,13 @@ import { execSync } from 'child_process';
 // Check if the new version is provided as a command-line argument
 const newVersion = process.argv[2];
 if (!newVersion) {
-  console.error(
-    'Error: Please provide the new version as a command-line argument.',
-  );
-  process.exit(1);
+  // Read the current version from package.json
+  const packageJson = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+  const currentVersion = packageJson.version;
+
+  // Increment the patch version
+  const [major, minor, patch] = currentVersion.split('.');
+  newVersion = `${major}.${minor}.${parseInt(patch) + 1}`;
 }
 
 // Read the current version from package.json
