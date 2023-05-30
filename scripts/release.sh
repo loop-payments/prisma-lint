@@ -37,8 +37,10 @@ else
   if grep -q "## $new_version" CHANGELOG.md; then
     echo "Skipping updating CHANGELOG.md. Section for version $new_version already exists."
   else
-    # Insert the new section after the 'Unreleased' section
-    awk -v changelog_content="$changelog_content" '/## Unreleased/ { print changelog_content $0; next } 1' CHANGELOG.md > temp.md && mv temp.md CHANGELOG.md
+    # Insert the new section before the first 'Unreleased' section
+    sed -i '' "/## Unreleased/i \\
+\\
+$changelog_content" CHANGELOG.md
   fi
 
   # Perform the changes only if it's not a dry run
