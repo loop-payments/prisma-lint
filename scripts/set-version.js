@@ -43,4 +43,7 @@ if (newVersion === currentVersion) {
     );
     fs.writeFileSync(changelogPath, changelog);
   }
+
+  execSync('git add package.json CHANGELOG.md');
+  execSync(`git commit -m "Bump version to ${newVersion}"`);
 }
