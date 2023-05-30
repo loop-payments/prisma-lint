@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.0.12 (2023-05-30)
+
 - Fix behavior when no CLI arg is provided.
 
 ## 0.0.11 (2023-05-30)
