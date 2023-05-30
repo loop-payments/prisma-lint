@@ -18,7 +18,7 @@ A linter for Prisma schema files.
 > yarn prisma-lint path/to/schema.prisma
 ```
 
-The arguments can be globs, directories, or file paths. The default path is `prisma/schema.prisma`.
+The arguments can be globs, directories, or file paths. The default path is `prisma/schema.prisma`. Run `yarn prisma-lint --help` for all options.
 
 ## Configuration
 
