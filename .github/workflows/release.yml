@@ -54,7 +54,7 @@ jobs:
         id: release-notes
         run: |
           EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
-          echo "name<<$EOF" >> "$GITHUB_OUTPUT"
+          echo "notes<<$EOF" >> "$GITHUB_OUTPUT"
           node ./scripts/generate-release-notes.js ${{ steps.version-check.outputs.new-version }} >> "$GITHUB_OUTPUT"
           echo "$EOF" >> "$GITHUB_OUTPUT"
 
