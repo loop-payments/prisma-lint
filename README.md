@@ -13,7 +13,7 @@ A linter for Prisma schema files.
 ## Usage
 
 ```sh
-> npm prisma-lint path/to/schema.prisma
+> npx prisma-lint path/to/schema.prisma
 # or
 > yarn prisma-lint path/to/schema.prisma
 ```
