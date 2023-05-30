@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.0.11 (2023-05-30)
+
 - Add support for terminal colors and `--no-color` CLI option.
 
 ## 0.0.10 (2023-05-30)
