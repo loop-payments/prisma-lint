@@ -23,9 +23,9 @@ jobs:
           git checkout HEAD~1 -- package.json
           prev="$(jq -r '.version' package.json)"
           if [[ "$curr" != "$prev" ]]; then
-            echo "version-changed=true" >> $GITHUB_OUTPUT 
+            echo "version-changed=true" >> $GITHUB_OUTPUT
           else
-            echo "version-changed=false" >> $GITHUB_OUTPUT 
+            echo "version-changed=false" >> $GITHUB_OUTPUT
           fi
 
       - name: Set up Node.js
