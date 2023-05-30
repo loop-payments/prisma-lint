@@ -49,6 +49,13 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npm publish
 
+      - name: Generate release notes
+        if: steps.version-check.outputs.new-version
+        id: release-notes
+        run: |
+          notes=$(node ./scripts/generate-release-notes.js ${{ steps.version-check.outputs.new-version }})
+          echo "notes=$notes" >> $GITHUB_OUTPUT
+
       - name: Create GitHub release
         if: steps.version-check.outputs.new-version
         uses: actions/create-release@v1
@@ -56,8 +63,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: v${{ steps.version-check.outputs.new-version }}
-          release_name: Release ${{ steps.version-check.outputs.new-version }}
-          body: |
-            $(git log --format=%B -n 1 ${{ github.sha }})
+          release_name: prisma-lint v${{ steps.version-check.outputs.new-version }}
+          body: ${{ steps.release-notes.outputs.notes }}
           draft: false
           prerelease: false
