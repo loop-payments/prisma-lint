@@ -22,10 +22,10 @@ jobs:
           curr="$(jq -r '.version' package.json)"
           git checkout HEAD~1 -- package.json
           prev="$(jq -r '.version' package.json)"
-          if [[ "$curr" == "$prev" ]]; then
-            echo version-changed=1
+          if [[ "$curr" != "$prev" ]]; then
+            echo "version-changed=true" >> $GITHUB_OUTPUT
           else
-            echo version-changed=0
+            echo "version-changed=false" >> $GITHUB_OUTPUT
           fi
 
       - name: Set up Node.js
