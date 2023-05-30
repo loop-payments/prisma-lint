@@ -1,6 +1,6 @@
 {
   "name": "prisma-lint",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "A linter for Prisma schema files.",
   "license": "MIT",
   "author": "engineering@loop.com",
