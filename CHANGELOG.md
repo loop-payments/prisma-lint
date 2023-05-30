@@ -4,8 +4,6 @@
 
 ## 0.0.14 (2023-05-30)
 
-## 0.0.13 (2023-05-30)
-
 - Add comment to README about rules being disabled by default.
 - Improve error output for invalid and missing configuration files.
 
