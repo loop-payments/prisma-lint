@@ -25,6 +25,7 @@ jobs:
           if [[ "$curr" != "$prev" ]]; then
             echo "new-version=$curr" >> $GITHUB_OUTPUT
           fi
+          git checkout HEAD -- package.json
 
       - name: Set up Node.js
         if: steps.version-check.outputs.new-version
