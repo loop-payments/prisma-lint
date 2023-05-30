@@ -18,12 +18,17 @@ A linter for Prisma schema files.
 > yarn prisma-lint path/to/schema.prisma
 ```
 
-The arguments can be globs, directories, or file paths. The default path is `prisma/schema.prisma`. Run `yarn prisma-lint --help` for all options.
+The arguments can be globs, directories, or file paths. The default path is `prisma/schema.prisma`.
+
+Run `yarn prisma-lint --help` for all options.
+
+## Rules
+
+The file [RULES.md](./RULES.md) contains documentation for each rule. All rules are disabled by default. Create a configuration file to enable the rules you'd like to enforce.
 
 ## Configuration
 
-Configuration files are loaded with [cosmiconfig](https://github.com/cosmiconfig/cosmiconfig).
-Here's an example `.prismalintrc.json`:
+The configuration file format is loosely based on [eslint's conventions](https://github.com/eslint/eslint#configuration). Here's an example `.prismalintrc.json`:
 
 ```json
 {
@@ -51,9 +56,7 @@ Here's an example `.prismalintrc.json`:
 }
 ```
 
-### Rules
-
-See [RULES.md](./RULES.md) for a full list of supported rules. By default, no rules are enabled.
+See [Loop's configuration](./example/loop/.prismalintrc.json) for a more thorough example. Configuration files are loaded with [cosmiconfig](https://github.com/cosmiconfig/cosmiconfig).
 
 ## Ignore comments
 

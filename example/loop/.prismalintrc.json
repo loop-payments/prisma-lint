@@ -1,0 +1,66 @@
+{
+  "rules": {
+    "field-name-mapping-snake-case": [
+      "error",
+      {
+        "compoundWords": ["S3", "D6"]
+      }
+    ],
+    "field-order": [
+      "error",
+      {
+        "order": ["tenantQid", "..."]
+      }
+    ],
+    "forbid-field": [
+      "error",
+      {
+        "forbid": ["/^(?!.*[aA]mountD6$).*D6$/"]
+      }
+    ],
+    "model-name-grammatical-number": [
+      "error",
+      {
+        "style": "singular"
+      }
+    ],
+    "model-name-mapping-snake-case": [
+      "error",
+      {
+        "compoundWords": ["S3", "GraphQL"],
+        "trimPrefix": "Db"
+      }
+    ],
+    "model-name-prefix": ["error", { "prefix": "Db" }],
+    "require-field-index": [
+      "error",
+      {
+        "forAllRelations": true,
+        "forNames": ["tenantQid"]
+      }
+    ],
+    "require-field-type": [
+      "error",
+      {
+        "require": [
+          {
+            "type": "BigInt",
+            "ifName": "/[Aa]mountD6$/"
+          }
+        ]
+      }
+    ],
+    "require-field": [
+      "error",
+      {
+        "require": [
+          "tenantQid",
+          {
+            "name": "currencyCode",
+            "ifSibling": "/[Aa]mountD6$/"
+          }
+        ]
+      }
+    ]
+  }
+}
