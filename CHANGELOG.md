@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Add comment to README about rules being disabled by default.
+- Improve error output for invalid and missing configuration files.
+
 ## 0.0.12 (2023-05-30)
 
 - Fix behavior when no CLI arg is provided.

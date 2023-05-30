@@ -53,7 +53,7 @@ Here's an example `.prismalintrc.json`:
 
 ### Rules
 
-See [RULES.md](./RULES.md) for a full list of supported rules.
+See [RULES.md](./RULES.md) for a full list of supported rules. By default, no rules are enabled.
 
 ## Ignore comments
 
