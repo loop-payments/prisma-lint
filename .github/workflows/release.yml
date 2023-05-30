@@ -12,10 +12,21 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
 
-      - name: Check if version changed
+      - name: Check versions
         id: version-check
-        run: echo ::set-output name=version-changed::$(git diff --name-only HEAD~1..HEAD | grep 'package.json')
+        run: |
+          git checkout HEAD -- package.json
+          curr="$(jq -r '.version' package.json)"
+          git checkout HEAD~1 -- package.json
+          prev="$(jq -r '.version' package.json)"
+          if [[ $curr != $prev ]]; then
+            echo "version-changed=true"
+          else
+            echo "version-changed=false"
+          fi
 
       - name: Set up Node.js
         if: steps.version-check.outputs.version-changed
