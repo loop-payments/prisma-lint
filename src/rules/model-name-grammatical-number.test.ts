@@ -7,14 +7,12 @@ describe('model-name-grammatical-number', () => {
     await testLintPrismaSource({
       fileName: 'fake.ts',
       sourceCode,
-      config: {
+      rootConfig: {
         rules: {
           'model-name-grammatical-number': ['error', config],
         },
       },
-      ruleRegistry: {
-        'model-name-grammatical-number': modelNameGrammaticalNumber,
-      },
+      ruleDefinitions: [modelNameGrammaticalNumber],
     });
 
   describe('ignore comments', () => {

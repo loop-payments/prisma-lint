@@ -7,14 +7,12 @@ describe('require-field', () => {
     await testLintPrismaSource({
       fileName: 'fake.ts',
       sourceCode,
-      config: {
+      rootConfig: {
         rules: {
           'require-field': ['error', config],
         },
       },
-      ruleRegistry: {
-        'require-field': requireField,
-      },
+      ruleDefinitions: [requireField],
     });
 
   describe('ignore comments', () => {

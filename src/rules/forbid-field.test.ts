@@ -7,14 +7,12 @@ describe('forbid-field', () => {
     await testLintPrismaSource({
       fileName: 'fake.ts',
       sourceCode,
-      config: {
+      rootConfig: {
         rules: {
           'forbid-field': ['error', config],
         },
       },
-      ruleRegistry: {
-        'forbid-field': forbidField,
-      },
+      ruleDefinitions: [forbidField],
     });
 
   describe('forbidding id field with string', () => {

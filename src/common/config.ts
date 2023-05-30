@@ -1,66 +1,27 @@
-import type { RuleRegistry } from '#src/common/rule.js';
+export type RootConfig = {
+  rules: Record<RuleName, RuleConfigValue>;
+};
 
-export type RuleName = string;
-export type RuleConfig = Record<string, unknown>;
-export type RuleConfigLevel = 'error' | 'off';
-export type RuleConfigValue =
+type RuleName = string;
+
+type RuleConfigValue =
   | RuleConfigLevel
   | [RuleConfigLevel]
   | [RuleConfigLevel, RuleConfig | undefined];
 
-export type PrismaLintConfig = {
-  rules: Record<RuleName, RuleConfigValue>;
-  plugins?: string[];
-};
+type RuleConfigLevel = 'error' | 'off';
+export type RuleConfig = Record<string, unknown>;
 
-export function getRuleLevel(value: RuleConfigValue) {
+export function getRuleLevel(value: RuleConfigValue): RuleConfigLevel {
   if (Array.isArray(value)) {
     return value[0];
   }
   return value;
 }
 
-export function getRuleConfig(value: RuleConfigValue) {
+export function getRuleConfig(value: RuleConfigValue): RuleConfig {
   if (Array.isArray(value)) {
     return value[1] ?? {};
   }
   return {};
 }
-
-export type RuleConfigList = [RuleName, RuleConfig][];
-
-export const parseRuleConfigList = (
-  ruleRegistry: RuleRegistry,
-  config: PrismaLintConfig,
-): { ruleConfigList: RuleConfigList; parseIssues: string[] } => {
-  const ruleConfigList: [RuleName, RuleConfig][] = [];
-  const parseIssues: string[] = [];
-  const rawRuleValues = config.rules;
-  const sortedRuleNames = Object.keys(rawRuleValues).sort();
-  for (const ruleName of sortedRuleNames) {
-    const ruleDefinition = ruleRegistry[ruleName];
-    if (ruleDefinition == null) {
-      parseIssues.push(`Unable to find rule for ${ruleName}`);
-    }
-    const rawRuleValue = rawRuleValues[ruleName];
-    if (getRuleLevel(rawRuleValue) === 'off') {
-      continue;
-    }
-    const rawRuleConfig = getRuleConfig(rawRuleValue);
-    const parsed = ruleDefinition.configSchema.safeParse(rawRuleConfig);
-    if (parsed.success) {
-      ruleConfigList.push([ruleName, parsed.data]);
-    } else {
-      const issues = parsed.error.issues.map((issue) => issue.message);
-      if (issues.length > 1 && issues[0] === 'Required') {
-        issues.shift();
-      }
-      const parseIssue = [
-        `Failed to parse config for rule '${ruleName}':`,
-        `  ${issues.join(',')}`,
-      ].join('\n');
-      parseIssues.push(parseIssue);
-    }
-  }
-  return { ruleConfigList, parseIssues };
-};
