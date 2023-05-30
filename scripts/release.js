@@ -49,13 +49,10 @@ if (newVersion === currentVersion) {
       `Skipping updating ${changelogPath}. Section for version ${newVersion} already exists.`,
     );
   } else {
-    console.log(
-      `Updating ${changelogPath} with a new section for ${newVersion}.`,
-    );
-    // Insert the new section before the first 'Unreleased' section
+    // Insert the new section after the first 'Unreleased' section
     changelog = changelog.replace(
-      /^## Unreleased/,
-      `${changelogContent}\n\n## Unreleased`,
+      /^## Unreleased([\s\S]*)/,
+      `## Unreleased$1${changelogContent}`,
     );
     fs.writeFileSync(changelogPath, changelog);
   }
