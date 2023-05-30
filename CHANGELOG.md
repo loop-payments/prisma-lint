@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Add Loop example configuration.
 - Add comment to README about rules being disabled by default.
 - Improve error output for invalid and missing configuration files.
 
