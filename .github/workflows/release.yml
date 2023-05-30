@@ -1,0 +1,49 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Check if version changed
+        id: version-check
+        run: echo ::set-output name=version-changed::$(git diff --name-only HEAD~1..HEAD | grep 'package.json')
+
+      - name: Set up Node.js
+        if: steps.version-check.outputs.version-changed
+        uses: actions/setup-node@v2
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        if: steps.version-check.outputs.version-changed
+        run: yarn install
+
+      - name: Release
+        if: steps.version-check.outputs.version-changed
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          yarn publish
+
+      - name: Create GitHub release
+        if: steps.version-check.outputs.version-changed
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ steps.version-check.outputs.version-changed }}
+          release_name: Release ${{ steps.version-check.outputs.version-changed }}
+          body: |
+            $(git log --format=%B -n 1 ${{ github.sha }})
+          draft: false
+          prerelease: false
