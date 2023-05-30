@@ -7,14 +7,12 @@ describe('model-name-prefix', () => {
     await testLintPrismaSource({
       fileName: 'fake.ts',
       sourceCode,
-      config: {
+      rootConfig: {
         rules: {
           'model-name-prefix': ['error', config],
         },
       },
-      ruleRegistry: {
-        'model-name-prefix': modelNamePrefix,
-      },
+      ruleDefinitions: [modelNamePrefix],
     });
 
   describe('ignore comments', () => {

@@ -7,14 +7,12 @@ describe('field-order', () => {
     await testLintPrismaSource({
       fileName: 'fake.ts',
       sourceCode,
-      config: {
+      rootConfig: {
         rules: {
           'field-order': ['error', config],
         },
       },
-      ruleRegistry: {
-        'field-order': fieldOrder,
-      },
+      ruleDefinitions: [fieldOrder],
     });
 
   describe('expecting tenant qid first', () => {
