@@ -20,7 +20,7 @@
   "scripts": {
     "build": "tsc",
     "docs": "node ./scripts/generate-docs.js",
-    "set-version": "node ./scripts/set-version.js",
+    "bump-version": "node ./scripts/bump-version.js",
     "setup:precommit-hooks": "husky install",
     "style:eslint": "eslint src --fix --max-warnings=0 --cache",
     "style:eslint:check": "eslint src --max-warnings=0 --cache",
