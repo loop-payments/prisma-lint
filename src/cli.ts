@@ -99,7 +99,6 @@ const run = async () => {
   }
 
   const fileNames = resolvePrismaFiles(args);
-  console.log({ fileNames });
   const fileViolationList = await lintPrismaFiles({
     rules,
     fileNames,
