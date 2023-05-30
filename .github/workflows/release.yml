@@ -50,6 +50,7 @@ jobs:
         run: npm publish
 
       - name: Generate release notes
+        if: steps.version-check.outputs.new-version
         id: release-notes
         run: |
           notes=$(node ./scripts/generate-release-notes.js ${{ steps.version-check.outputs.new-version }})
