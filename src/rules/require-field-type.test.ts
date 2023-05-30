@@ -7,14 +7,12 @@ describe('require-field-type', () => {
     await testLintPrismaSource({
       fileName: 'fake.ts',
       sourceCode,
-      config: {
+      rootConfig: {
         rules: {
           'require-field-type': ['error', config],
         },
       },
-      ruleRegistry: {
-        'require-field-type': requireFieldType,
-      },
+      ruleDefinitions: [requireFieldType],
     });
 
   describe('string literal field name', () => {

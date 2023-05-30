@@ -1,20 +1,18 @@
 import type { RuleConfig } from '#src/common/config.js';
 import { testLintPrismaSource } from '#src/common/test.js';
-import requireFieldType from '#src/rules/require-field-index.js';
+import requireFieldIndex from '#src/rules/require-field-index.js';
 
 describe('require-field-index', () => {
   const getRunner = (config: RuleConfig) => async (sourceCode: string) =>
     await testLintPrismaSource({
       fileName: 'fake.ts',
       sourceCode,
-      config: {
+      rootConfig: {
         rules: {
           'require-field-index': ['error', config],
         },
       },
-      ruleRegistry: {
-        'require-field-index': requireFieldType,
-      },
+      ruleDefinitions: [requireFieldIndex],
     });
 
   describe('ignore comments', () => {

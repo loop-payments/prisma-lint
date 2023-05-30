@@ -1,7 +1,11 @@
 {
   "name": "prisma-lint",
-  "version": "0.0.3",
+  "version": "0.0.10",
   "description": "A linter for Prisma schema files.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/loop-payments/prisma-lint.git"
+  },
   "license": "MIT",
   "author": "engineering@loop.com",
   "type": "module",
@@ -16,6 +20,7 @@
   "scripts": {
     "build": "tsc",
     "docs": "node ./scripts/generate-docs.js",
+    "set-version": "node ./scripts/set-version.js",
     "setup:precommit-hooks": "husky install",
     "style:eslint": "eslint src --fix --max-warnings=0 --cache",
     "style:eslint:check": "eslint src --max-warnings=0 --cache",
