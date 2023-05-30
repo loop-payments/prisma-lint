@@ -3,13 +3,13 @@
 import fs from 'fs';
 import path from 'path';
 
+import chalk from 'chalk';
 import { program } from 'commander';
 import { cosmiconfig } from 'cosmiconfig';
 import { glob } from 'glob';
 
 import { parseRules } from '#src/common/parse-rules.js';
 import { renderViolations } from '#src/common/render.js';
-import type { Violation } from '#src/common/violation.js';
 import { lintPrismaFiles } from '#src/lint-prisma-files.js';
 import ruleDefinitions from '#src/rule-definitions.js';
 
@@ -19,10 +19,12 @@ program
   .name('prisma-lint')
   .description('A linter for Prisma schema files.')
   .option(
-    '-e, --explicit-config <path>',
-    'An explicit path to a config file. ' +
+    '-c, --config <path>',
+    'An path to a config file. ' +
       'If omitted, cosmiconfig is used to search for a config file.',
   )
+  .option('--no-color', 'Disable color output.')
+  .option('--quiet', 'Suppress all output except for errors.')
   .argument(
     '[paths...]',
     'One or more schema files, directories, or globs to lint.',
@@ -36,20 +38,20 @@ const explorer = cosmiconfig('prismalint');
 const options = program.opts();
 const { args } = program;
 
-const getRootConfig = async () => {
-  if (options.explicitConfig != null) {
-    const result = await explorer.load(options.explicitConfig);
+const getRootConfigResult = async () => {
+  if (options.config != null) {
+    const result = await explorer.load(options.config);
     if (result == null) {
       throw new Error('Configuration file for prisma-lint not found');
     }
-    return result.config;
+    return result;
   }
 
   const result = await explorer.search();
   if (result == null) {
     throw new Error('Configuration file for prisma-lint not found');
   }
-  return result.config;
+  return result;
 };
 
 const resolvePrismaFiles = (args: string[]) => {
@@ -79,24 +81,19 @@ const resolvePrismaFiles = (args: string[]) => {
   return resolvedFiles;
 };
 
-const printFileViolations = (fileName: string, violations: Violation[]) => {
-  /* eslint-disable no-console */
-  console.log(fileName);
-  const lines = renderViolations(violations);
-  for (const line of lines) {
-    console.log(line);
-  }
-  console.log('');
-  /* eslint-enable no-console */
-};
+/* eslint-disable no-console */
 
 const run = async () => {
-  const rootConfig = await getRootConfig();
-  const { rules, parseIssues } = parseRules(ruleDefinitions, rootConfig);
+  if (!options.color) {
+    chalk.level = 0;
+  }
+  const { quiet } = options;
+  const rootConfig = await getRootConfigResult();
+  const { rules, parseIssues } = parseRules(ruleDefinitions, rootConfig.config);
   if (parseIssues.length > 0) {
+    console.error(`${rootConfig.filepath} ${chalk.red('✖')}`);
     for (const parseIssue of parseIssues) {
-      // eslint-disable-next-line no-console
-      console.error(parseIssue);
+      console.error(`  ${parseIssue.replaceAll('\n', '\n  ')}`);
     }
     process.exit(1);
   }
@@ -107,10 +104,22 @@ const run = async () => {
     fileNames,
   });
   let hasViolations = false;
+  const cwd = process.cwd();
   fileViolationList.forEach(({ fileName, violations }) => {
+    const truncatedFileName = fileName.includes(cwd)
+      ? path.relative(process.cwd(), fileName)
+      : fileName;
     if (violations.length > 0) {
       hasViolations = true;
-      printFileViolations(fileName, violations);
+      console.error(`${truncatedFileName} ${chalk.red('✖')}`);
+      const lines = renderViolations(violations);
+      for (const line of lines) {
+        console.error(line);
+      }
+    } else {
+      if (!quiet) {
+        console.log(`${truncatedFileName} ${chalk.green('✔')}`);
+      }
     }
   });
   if (hasViolations) {
@@ -119,7 +128,7 @@ const run = async () => {
 };
 
 run().catch((err) => {
-  // eslint-disable-next-line no-console
   console.error(err);
-  process.exit(1);
+  // Something's wrong with prisma-lint.
+  process.exit(2);
 });
