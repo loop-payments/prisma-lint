@@ -55,7 +55,7 @@ const getRootConfigResult = async () => {
 };
 
 const resolvePrismaFiles = (args: string[]) => {
-  if (args == null) {
+  if (args.length == 0) {
     return [DEFAULT_PRISMA_FILE_PATH];
   }
 
