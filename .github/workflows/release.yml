@@ -1,0 +1,69 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+
+      - name: Check versions
+        id: version-check
+        run: |
+          git checkout HEAD -- package.json
+          curr="$(jq -r '.version' package.json)"
+          git checkout HEAD~1 -- package.json
+          prev="$(jq -r '.version' package.json)"
+          if [[ "$curr" != "$prev" ]]; then
+            echo "new-version=$curr" >> $GITHUB_OUTPUT
+          fi
+          git checkout HEAD -- package.json
+
+      - name: Set up Node.js
+        if: steps.version-check.outputs.new-version
+        uses: actions/setup-node@v2
+        with:
+          node-version: 18
+          cache: 'yarn'
+
+      - name: Install dependencies
+        if: steps.version-check.outputs.new-version
+        run: yarn install
+
+      - name: Build
+        if: steps.version-check.outputs.new-version
+        run: yarn build
+
+      - name: Publish to NPM
+        if: steps.version-check.outputs.new-version
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish
+
+      - name: Generate release notes
+        if: steps.version-check.outputs.new-version
+        id: release-notes
+        run: |
+          notes=$(node ./scripts/generate-release-notes.js ${{ steps.version-check.outputs.new-version }})
+          echo "notes=$notes" >> $GITHUB_OUTPUT
+
+      - name: Create GitHub release
+        if: steps.version-check.outputs.new-version
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ steps.version-check.outputs.new-version }}
+          release_name: prisma-lint v${{ steps.version-check.outputs.new-version }}
+          body: ${{ steps.release-notes.outputs.notes }}
+          draft: false
+          prerelease: false
