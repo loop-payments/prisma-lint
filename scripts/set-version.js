@@ -16,9 +16,7 @@ const currentVersion = packageJson.version;
 
 // Check if the new version is the same as the current version
 if (newVersion === currentVersion) {
-  console.log(
-    'The new version is the same as the current version. Skipping the release process.',
-  );
+  console.log('The new version is the same as the current version.');
 } else {
   // Update package.json with the new version
   packageJson.version = newVersion;
