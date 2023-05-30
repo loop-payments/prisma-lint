@@ -23,7 +23,7 @@ jobs:
           git checkout HEAD~1 -- package.json
           prev="$(jq -r '.version' package.json)"
           if [[ "$curr" != "$prev" ]]; then
-            echo "new-version=$curr" >> $GITHUB_OUTPUT
+            echo "new-version=$curr" >> "$GITHUB_OUTPUT"
           fi
           git checkout HEAD -- package.json
 
@@ -53,8 +53,10 @@ jobs:
         if: steps.version-check.outputs.new-version
         id: release-notes
         run: |
-          notes=$(node ./scripts/generate-release-notes.js ${{ steps.version-check.outputs.new-version }})
-          echo "notes=$notes" >> $GITHUB_OUTPUT
+          EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
+          echo "notes<<$EOF" >> "$GITHUB_OUTPUT"
+          node ./scripts/generate-release-notes.js ${{ steps.version-check.outputs.new-version }} >> "$GITHUB_OUTPUT"
+          echo "$EOF" >> "$GITHUB_OUTPUT"
 
       - name: Create GitHub release
         if: steps.version-check.outputs.new-version
