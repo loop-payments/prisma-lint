@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-## 0.0.14 (2023-05-30)
+## 0.0.15 (2023-05-30)
 
 - Add Loop example configuration.
 - Add comment to README about rules being disabled by default.
