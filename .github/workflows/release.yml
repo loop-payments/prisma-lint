@@ -57,7 +57,6 @@ jobs:
         with:
           tag_name: v${{ steps.version-check.outputs.new-version }}
           release_name: Release ${{ steps.version-check.outputs.new-version }}
-          body: |
-            $(git log --format=%B -n 1 ${{ github.sha }})
+          body: github.sha
           draft: false
           prerelease: false
