@@ -2,7 +2,7 @@ import fs from 'fs';
 import { execSync } from 'child_process';
 
 // Check if the new version is provided as a command-line argument
-const newVersion = process.argv[2];
+let newVersion = process.argv[2];
 if (!newVersion) {
   // Read the current version from package.json
   const packageJson = JSON.parse(fs.readFileSync('package.json', 'utf8'));
