@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.0.10 (2023-05-30)
+
+- Support automatic releases on version changes.
+
 ## 0.0.4 (2023-05-30)
 
 - Add CHANGELOG.
