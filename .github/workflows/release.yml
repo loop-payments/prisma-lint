@@ -1,0 +1,47 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check if version changed
+        id: version-check
+        run: echo ::set-output name=version-changed::$(git diff --name-only HEAD~1..HEAD | grep 'package.json')
+
+      - name: Release
+        if: steps.version-check.outputs.version-changed
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          npm publish
+
+      - name: Create GitHub release
+        if: steps.version-check.outputs.version-changed
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ steps.version-check.outputs.version-changed }}
+          release_name: Release ${{ steps.version-check.outputs.version-changed }}
+          body: |
+            $(git log --format=%B -n 1 ${{ github.sha }})
+          draft: false
+          prerelease: false
