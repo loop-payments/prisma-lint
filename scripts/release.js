@@ -59,6 +59,14 @@ if (newVersion === currentVersion) {
 
   // Perform the changes only if it's not a dry run
   if (!dryRun) {
+    try {
+      // Check if the current branch has an upstream branch set
+      execSync('git rev-parse --abbrev-ref --symbolic-full-name @{u}');
+    } catch {
+      // Set the upstream branch
+      execSync(`git push --set-upstream origin ${currentBranch()}`);
+    }
+
     // Commit and push the changes to Git
     execSync('git add package.json CHANGELOG.md');
     execSync(`git commit -m "Bump version to ${newVersion}"`);
