@@ -38,7 +38,7 @@ else
     echo "Skipping updating CHANGELOG.md. Section for version $new_version already exists."
   else
     # Insert the new section after the 'Unreleased' section
-    sed -i "s/## Unreleased/$changelog_content## Unreleased/" CHANGELOG.md
+    awk -v changelog_content="$changelog_content" '/## Unreleased/ { print changelog_content $0; next } 1' CHANGELOG.md > temp.md && mv temp.md CHANGELOG.md
   fi
 
   # Perform the changes only if it's not a dry run
