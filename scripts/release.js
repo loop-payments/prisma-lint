@@ -5,7 +5,8 @@ import { execSync } from 'child_process';
 const dryRun = process.argv.includes('--dry-run');
 
 // Check if the new version is provided as a command-line argument
-const newVersion = process.argv[2];
+const newVersionIndex = process.argv.indexOf('--dry-run') === -1 ? 2 : 3;
+const newVersion = process.argv[newVersionIndex];
 if (!newVersion) {
   console.error(
     'Error: Please provide the new version as a command-line argument.',
@@ -21,7 +22,7 @@ const currentVersion = packageJson.version;
 if (newVersion === currentVersion) {
   if (dryRun) {
     console.error(
-      'Running in dry run mode. The new version is the same as the current version. Exiting.',
+      'Unexpected! Running in dry run mode. The new version is the same as the current version.',
     );
     process.exit(1);
   } else {
@@ -50,7 +51,7 @@ if (newVersion === currentVersion) {
   } else {
     // Insert the new section before the first 'Unreleased' section
     changelog = changelog.replace(
-      '## Unreleased',
+      /^## Unreleased/,
       `${changelogContent}\n\n## Unreleased`,
     );
     fs.writeFileSync(changelogPath, changelog);
