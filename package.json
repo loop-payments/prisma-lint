@@ -16,6 +16,7 @@
   "scripts": {
     "build": "tsc",
     "docs": "node ./scripts/generate-docs.js",
+    "publish": "yarn build && npm publish",
     "set-version": "node ./scripts/set-version.js",
     "setup:precommit-hooks": "husky install",
     "style:eslint": "eslint src --fix --max-warnings=0 --cache",
