@@ -2,6 +2,10 @@
   "name": "prisma-lint",
   "version": "0.0.10",
   "description": "A linter for Prisma schema files.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/loop-payments/prisma-lint.git"
+  },
   "license": "MIT",
   "author": "engineering@loop.com",
   "type": "module",
