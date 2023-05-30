@@ -4,6 +4,7 @@
 
 ## 0.0.14 (2023-05-30)
 
+- Add Loop example configuration.
 - Add comment to README about rules being disabled by default.
 - Improve error output for invalid and missing configuration files.
 
