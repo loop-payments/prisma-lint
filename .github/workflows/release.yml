@@ -22,7 +22,7 @@ jobs:
           curr="$(jq -r '.version' package.json)"
           git checkout HEAD~1 -- package.json
           prev="$(jq -r '.version' package.json)"
-          if [[ "$curr" != "$prev" ]]; then
+          if [[ "$curr" == "$prev" ]]; then
             echo version-changed=1
           else
             echo version-changed=0
