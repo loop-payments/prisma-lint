@@ -42,14 +42,14 @@ const getRootConfigResult = async () => {
   if (options.config != null) {
     const result = await explorer.load(options.config);
     if (result == null) {
-      throw new Error('Configuration file for prisma-lint not found');
+      return;
     }
     return result;
   }
 
   const result = await explorer.search();
   if (result == null) {
-    throw new Error('Configuration file for prisma-lint not found');
+    return;
   }
   return result;
 };
@@ -81,6 +81,13 @@ const resolvePrismaFiles = (args: string[]) => {
   return resolvedFiles;
 };
 
+function getTruncatedFileName(fileName: string) {
+  const cwd = process.cwd();
+  return fileName.includes(cwd)
+    ? path.relative(process.cwd(), fileName)
+    : fileName;
+}
+
 /* eslint-disable no-console */
 
 const run = async () => {
@@ -89,9 +96,16 @@ const run = async () => {
   }
   const { quiet } = options;
   const rootConfig = await getRootConfigResult();
+  if (rootConfig == null) {
+    console.error(
+      `Unable to find configuration file for prisma-lint ${chalk.red('✖')}`,
+    );
+    process.exit(1);
+  }
   const { rules, parseIssues } = parseRules(ruleDefinitions, rootConfig.config);
   if (parseIssues.length > 0) {
-    console.error(`${rootConfig.filepath} ${chalk.red('✖')}`);
+    const truncatedFileName = getTruncatedFileName(rootConfig.filepath);
+    console.error(`${truncatedFileName} ${chalk.red('✖')}`);
     for (const parseIssue of parseIssues) {
       console.error(`  ${parseIssue.replaceAll('\n', '\n  ')}`);
     }
@@ -104,11 +118,8 @@ const run = async () => {
     fileNames,
   });
   let hasViolations = false;
-  const cwd = process.cwd();
   fileViolationList.forEach(({ fileName, violations }) => {
-    const truncatedFileName = fileName.includes(cwd)
-      ? path.relative(process.cwd(), fileName)
-      : fileName;
+    const truncatedFileName = getTruncatedFileName(fileName);
     if (violations.length > 0) {
       hasViolations = true;
       console.error(`${truncatedFileName} ${chalk.red('✖')}`);
