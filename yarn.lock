@@ -852,11 +852,11 @@ __metadata:
   linkType: hard
 
 "@mrleebo/prisma-ast@npm:^0.5.1":
-  version: 0.5.1
-  resolution: "@mrleebo/prisma-ast@npm:0.5.1"
+  version: 0.5.2
+  resolution: "@mrleebo/prisma-ast@npm:0.5.2"
   dependencies:
     chevrotain: ^10.4.2
-  checksum: 9faf8b50c7a9b1513470141f62f51049b861cdecdbe98d19fb8c23ed4457dcb496c38561afec14a7278c1f1fc09a725ed2b3e3261cf74873beaf71acf7c83324
+  checksum: ebb04e827b1622df2a58288c285bef99d3245321ff7886494a6d80c187b401b2c172b8a7186fabf5ca405d0727b7f1f5210687df974f491f10a466adf0869065
   languageName: node
   linkType: hard
 
