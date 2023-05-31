@@ -41,14 +41,14 @@ const Config = z
  *
  *   // bad
  *   model User {
- *     name string
+ *     name String
  *   }
  *
  *
  * @example { require: [{ name: "currencyCode", ifSibling: "/mountD6$/" }] }
  *   // good
  *   model Product {
- *     currencyCode string
+ *     currencyCode String
  *     priceAmountD6 Int
  *   }
  *

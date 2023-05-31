@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Minor tweaks to rules documentation.
+
 ## 0.0.15 (2023-05-30)
 
 - Add Loop example configuration.

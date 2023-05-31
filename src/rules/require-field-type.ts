@@ -39,8 +39,8 @@ const Config = z
  *
  *   // bad
  *   model User {
- *     createdAt string
- *     updatedAt string
+ *     createdAt String
+ *     updatedAt String
  *   }
  */
 export default {
