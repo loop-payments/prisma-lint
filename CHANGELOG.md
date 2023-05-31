@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.0.16 (2023-05-31)
+
 - Minor tweaks to rules documentation.
 
 ## 0.0.15 (2023-05-30)
