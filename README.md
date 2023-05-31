@@ -51,6 +51,13 @@ The configuration file format is loosely based on [eslint's conventions](https:/
       {
         "prefix": "Db"
       }
+    ],
+    "require-field-index": [
+      "error",
+      {
+        "forAllRelations": true,
+        "forNames": ["tenantId"]
+      }
     ]
   }
 }
