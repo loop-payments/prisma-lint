@@ -33,6 +33,18 @@ The configuration file format is loosely based on [eslint's conventions](https:/
 ```json
 {
   "rules": {
+    "field-name-mapping-snake-case": [
+      "error",
+      {
+        "compoundWords": ["S3"]
+      }
+    ],
+    "field-order": [
+      "error",
+      {
+        "order": ["tenantId", "..."]
+      }
+    ],
     "model-name-grammatical-number": [
       "error",
       {
@@ -42,14 +54,14 @@ The configuration file format is loosely based on [eslint's conventions](https:/
     "model-name-mapping-snake-case": [
       "error",
       {
-        "compoundWords": ["GraphQL"],
-        "trimPrefix": "Db"
+        "compoundWords": ["GraphQL"]
       }
     ],
-    "model-name-prefix": [
+    "require-field-index": [
       "error",
       {
-        "prefix": "Db"
+        "forAllRelations": true,
+        "forNames": ["tenantId"]
       }
     ]
   }
