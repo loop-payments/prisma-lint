@@ -14,15 +14,17 @@ const Config = z
 /**
  * Checks that fields within a model are in the correct order.
  *
- * Fields in the `order` that are not present in the model are ignored.
- * To require fields, use the `require-field` rule.
+ * Fields in the `order` list that are not present in the model are ignored.
+ * (To require fields, use the `require-field` rule.)
  *
  * The first field in the `order` is interpreted to be required as
  * the first field in the model. The last field in the `order` is
  * interpreted to be required as the last field in the model.
  *
  * The special field name `...` can be used to indicate that any
- * number of fields can appear in the model at that point.
+ * number of fields can appear in the model at that point. This can
+ * be used at the end of the `order` list to indicate that remaining
+ * fields can appear in any order at the end of the model.
  *
  * @example { order: ['tenantId', 'id', createdAt', 'updatedAt', '...'] }
  *   // good
