@@ -1,6 +1,7 @@
 import pluralize from 'pluralize';
 import { z } from 'zod';
 
+import { getRuleIgnoreParams } from '#src/common/ignore.js';
 import { toRegExp } from '#src/common/regex.js';
 import type { FieldRuleDefinition } from '#src/common/rule.js';
 
@@ -51,6 +52,12 @@ export default {
     }));
     return {
       Field: (model, field) => {
+        const ruleIgnoreParams = getRuleIgnoreParams(model, RULE_NAME);
+        const ignoreNameSet = new Set(ruleIgnoreParams);
+        if (ignoreNameSet.has(field.name)) {
+          return;
+        }
+
         const matches = forbidWithRegExp.filter((r) =>
           r.nameRegExp.test(field.name),
         );

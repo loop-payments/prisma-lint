@@ -15,6 +15,24 @@ describe('forbid-field', () => {
       ruleDefinitions: [forbidField],
     });
 
+  describe('forbidding with parameterized comment', () => {
+    const run = getRunner({
+      forbid: ['id'],
+    });
+
+    describe('with parameterized comment', () => {
+      it('returns no violations', async () => {
+        const violations = await run(`
+      model User {
+        /// prisma-lint-ignore-model forbid-field id
+        id String
+      }
+    `);
+        expect(violations.length).toEqual(0);
+      });
+    });
+  });
+
   describe('forbidding id field with string', () => {
     const run = getRunner({
       forbid: ['id'],
