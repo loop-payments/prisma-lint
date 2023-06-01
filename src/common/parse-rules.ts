@@ -12,6 +12,9 @@ export const parseRules = (
   const rules: Rule[] = [];
   const parseIssues: string[] = [];
   const rawRuleValues = rootConfig.rules;
+  if (rawRuleValues == null) {
+    return { rules, parseIssues: ['Expected "rules" key in config.'] };
+  }
   const ruleDefinitionMap = new Map(
     ruleDefinitions.map((d) => [d.ruleName, d]),
   );

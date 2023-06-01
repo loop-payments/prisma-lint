@@ -1,0 +1,3 @@
+{
+  "model-name-prefix": ["error", { "prefix": "Db" }]
+}
