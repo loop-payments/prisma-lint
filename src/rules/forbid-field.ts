@@ -54,10 +54,13 @@ export default {
       Field: (model, field) => {
         const ruleIgnoreParams = getRuleIgnoreParams(model, RULE_NAME);
         const ignoreNameSet = new Set(ruleIgnoreParams);
+        if (ignoreNameSet.has(field.name)) {
+          return;
+        }
 
-        const matches = forbidWithRegExp
-          .filter((r) => r.nameRegExp.test(field.name))
-          .filter((r) => !ignoreNameSet.has(r.name));
+        const matches = forbidWithRegExp.filter((r) =>
+          r.nameRegExp.test(field.name),
+        );
         if (matches.length === 0) {
           return;
         }
