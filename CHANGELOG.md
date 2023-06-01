@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.0.17 (2023-06-01)
+
 - Show clearer error if "rules" is missing from config.
 - Allow ignore parameters for the `forbid-field` rule.
 
