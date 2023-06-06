@@ -21,7 +21,7 @@ program
   .option(
     '-c, --config <path>',
     'A path to a config file. ' +
-    'If omitted, cosmiconfig is used to search for a config file.',
+      'If omitted, cosmiconfig is used to search for a config file.',
   )
   .option('--no-color', 'Disable color output.')
   .option('--quiet', 'Suppress all output except for errors.')
