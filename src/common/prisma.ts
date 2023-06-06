@@ -46,11 +46,13 @@ export function listAttributes(node: Model): ModelAttribute[] {
 type NameAttribute = AttributeArgument & {
   value: { key: 'name'; value: string };
 };
-export function findNameAttributeArg(
-  args: AttributeArgument[],
-): NameAttribute | undefined {
+export function getMappedName(args: AttributeArgument[]): string | undefined {
+  const firstArg = args[0];
+  if (typeof firstArg.value === 'string') {
+    return firstArg.value.replace(/"/g, '');
+  }
   const filtered = args.filter((a) => {
-    if (typeof a.value !== 'object') {
+    if (typeof a !== 'object' || typeof a.value !== 'object') {
       return false;
     }
     if (!a.value.hasOwnProperty('key')) {
@@ -73,7 +75,7 @@ export function findNameAttributeArg(
       `Unexpected multiple name attributes! ${JSON.stringify(filtered)}`,
     );
   }
-  return filtered[0];
+  return filtered[0].value.value.replace(/"/g, '');
 }
 
 export function isValue(value: Value | KeyValue): value is Value {

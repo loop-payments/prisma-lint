@@ -2,10 +2,7 @@ import type { Attribute, Field } from '@mrleebo/prisma-ast';
 
 import { z } from 'zod';
 
-import {
-  PRISMA_SCALAR_TYPES,
-  findNameAttributeArg,
-} from '#src/common/prisma.js';
+import { PRISMA_SCALAR_TYPES, getMappedName } from '#src/common/prisma.js';
 import type { FieldRuleDefinition } from '#src/common/rule.js';
 import { toSnakeCase } from '#src/common/snake-case.js';
 
@@ -76,13 +73,12 @@ export default {
           report('Field name must be mapped to snake case.');
           return;
         }
-        const nameAttribute = findNameAttributeArg(mapAttribute.args);
-        if (!nameAttribute) {
+        const mappedName = getMappedName(mapAttribute.args);
+        if (!mappedName) {
           report('Field name must be mapped to snake case.');
           return;
         }
         const fieldName = field.name;
-        const mappedName = nameAttribute.value.value.replaceAll('"', '');
         const expectedSnakeCase = toSnakeCase(fieldName, {
           compoundWords,
         });
