@@ -21,7 +21,7 @@ program
   .option(
     '-c, --config <path>',
     'A path to a config file. ' +
-      'If omitted, cosmiconfig is used to search for a config file.',
+    'If omitted, cosmiconfig is used to search for a config file.',
   )
   .option('--no-color', 'Disable color output.')
   .option('--quiet', 'Suppress all output except for errors.')
@@ -98,7 +98,7 @@ const run = async () => {
   const rootConfig = await getRootConfigResult();
   if (rootConfig == null) {
     console.error(
-      `Unable to find configuration file for prisma-lint ${chalk.red('✖')}`,
+      `Unable to find configuration file for prisma-lint. Please create a ".prismalintrc.json" file.`,
     );
     process.exit(1);
   }
