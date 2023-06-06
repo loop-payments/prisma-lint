@@ -29,6 +29,17 @@ describe('field-name-mapping-snake-case', () => {
       });
     });
 
+    describe('valid with mapping with no key', () => {
+      it('returns no violations', async () => {
+        const violations = await run(`
+      model User {
+        graphQLId String @map("graphql_id")
+      }
+    `);
+        expect(violations.length).toEqual(0);
+      });
+    });
+
     describe('valid without mapping', () => {
       it('returns no violations', async () => {
         const violations = await run(`
