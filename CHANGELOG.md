@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add support for `@map` and `@@map` without keys. (#59)
+
 ## 0.0.17 (2023-06-01)
 
 - Show clearer error if "rules" is missing from config.
