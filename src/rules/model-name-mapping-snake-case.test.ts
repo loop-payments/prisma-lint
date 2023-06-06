@@ -18,12 +18,24 @@ describe('model-name-mapping-snake-case', () => {
   describe('without config', () => {
     const run = getRunner();
 
-    describe('valid', () => {
+    describe('valid with key', () => {
       it('returns no violations', async () => {
         const violations = await run(`
       model UserRole {
         id String @id
         @@map(name: "user_role")
+      }
+    `);
+        expect(violations.length).toEqual(0);
+      });
+    });
+
+    describe('valid with no key', () => {
+      it('returns no violations', async () => {
+        const violations = await run(`
+      model UserRole {
+        id String @id
+        @@map("user_role")
       }
     `);
         expect(violations.length).toEqual(0);

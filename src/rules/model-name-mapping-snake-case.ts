@@ -2,7 +2,7 @@ import type { ModelAttribute } from '@mrleebo/prisma-ast';
 
 import { z } from 'zod';
 
-import { findNameAttributeArg, listAttributes } from '#src/common/prisma.js';
+import { getMappedName, listAttributes } from '#src/common/prisma.js';
 import type { ModelRuleDefinition } from '#src/common/rule.js';
 import { toSnakeCase } from '#src/common/snake-case.js';
 
@@ -82,8 +82,8 @@ export default {
           });
           return;
         }
-        const nameAttribute = findNameAttributeArg(mapAttribute.args);
-        if (!nameAttribute) {
+        const mappedName = getMappedName(mapAttribute.args);
+        if (!mappedName) {
           context.report({
             model,
             message: 'Model name must be mapped to snake case.',
@@ -91,7 +91,6 @@ export default {
           return;
         }
         const nodeName = model.name;
-        const mappedName = nameAttribute.value.value.replaceAll('"', '');
         const expectedSnakeCase = toSnakeCase(nodeName, {
           compoundWords,
           trimPrefix,
