@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.0.18 (2023-06-06)
+
 - [#59](https://github.com/loop-payments/prisma-lint/issues/59) Add support for `@map` and `@@map` without keys.
 - [#56](https://github.com/loop-payments/prisma-lint/issues/56) Clearer error message when configuration not found.
 
