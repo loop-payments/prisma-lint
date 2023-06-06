@@ -98,7 +98,7 @@ const run = async () => {
   const rootConfig = await getRootConfigResult();
   if (rootConfig == null) {
     console.error(
-      `Unable to find configuration file for prisma-lint. Please create a ".prismalintrc.json" file.`,
+      'Unable to find configuration file for prisma-lint. Please create a ".prismalintrc.json" file.',
     );
     process.exit(1);
   }
