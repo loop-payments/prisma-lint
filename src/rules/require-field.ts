@@ -24,7 +24,7 @@ const Config = z
 /**
  * Checks that a model has certain fields.
  *
- * This rules supports selective ignoring via the `prisma-lint-ignore-model`
+ * This rule supports selective ignoring via the `prisma-lint-ignore-model`
  * comment, like so:
  *
  *     /// prisma-lint-ignore-model require-field tenantId

@@ -32,7 +32,7 @@ const Config = z
 /**
  * Checks that certain fields have indices.
  *
- * This rules supports selective ignoring via the `prisma-lint-ignore-model`
+ * This rule supports selective ignoring via the `prisma-lint-ignore-model`
  * comment, like so:
  *
  *     /// prisma-lint-ignore-model require-field-index tenantId
