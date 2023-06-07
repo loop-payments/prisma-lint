@@ -73,6 +73,18 @@ describe('require-field-index', () => {
       expect(violations.length).toEqual(0);
     });
 
+    it('returns no violations for indexed relation fields with key', async () => {
+      const violations = await run(`
+        model Foo {
+          qid String @id
+          barRef String
+          bar Bar @relation(fields: [barRef], references: [ref])
+          @@index(fields: [barRef])
+        }
+      `);
+      expect(violations.length).toEqual(0);
+    });
+
     it('returns violations for non-indexed relation fields', async () => {
       const violations = await run(`
         model Foo {
@@ -184,6 +196,18 @@ describe('require-field-index', () => {
       model User {
         tenantQid String
         @@index(tenantQid)
+      }
+    `);
+        expect(violations.length).toEqual(0);
+      });
+    });
+
+    describe('with @@index with key', () => {
+      it('returns no violations', async () => {
+        const violations = await run(`
+      model User {
+        tenantQid String
+        @@index(fields: [tenantQid])
       }
     `);
         expect(violations.length).toEqual(0);
