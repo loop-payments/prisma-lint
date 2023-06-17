@@ -1,4 +1,4 @@
-import type { ModelAttribute } from '@mrleebo/prisma-ast';
+import type { BlockAttribute } from '@mrleebo/prisma-ast';
 
 import { z } from 'zod';
 
@@ -107,8 +107,8 @@ export default {
 } satisfies ModelRuleDefinition<z.infer<typeof Config>>;
 
 function findMapAttribute(
-  attributes: ModelAttribute[],
-): ModelAttribute | undefined {
+  attributes: BlockAttribute[],
+): BlockAttribute | undefined {
   const filtered = attributes.filter((a) => a.name === 'map');
   if (filtered.length === 0) {
     return;
