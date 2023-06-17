@@ -1,10 +1,10 @@
 import { Enum } from '@kejistan/enum';
 import type {
   AttributeArgument,
+  BlockAttribute,
   Field,
   KeyValue,
   Model,
-  ModelAttribute,
   Schema,
   Value,
 } from '@mrleebo/prisma-ast';
@@ -36,10 +36,10 @@ export function listModelBlocks(schema: Schema) {
   return schema.list.filter((block): block is Model => block.type === 'model');
 }
 
-export function listAttributes(node: Model): ModelAttribute[] {
+export function listAttributes(node: Model): BlockAttribute[] {
   const attributes = node.properties.filter(
     (p) => p.type === PrismaPropertyType.ATTRIBUTE,
-  ) as ModelAttribute[];
+  ) as BlockAttribute[];
   return attributes;
 }
 

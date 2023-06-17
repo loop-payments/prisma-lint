@@ -2,7 +2,7 @@ import type {
   Field,
   KeyValue,
   Model,
-  ModelAttribute,
+  BlockAttribute,
   Value,
 } from '@mrleebo/prisma-ast';
 import { z } from 'zod';
@@ -206,7 +206,7 @@ function isUniqueField(field: Field): boolean {
 }
 
 function extractPrimaryFieldNameFromRelationListAttribute(
-  attribute: ModelAttribute,
+  attribute: BlockAttribute,
 ): string {
   const [arg] = attribute.args;
   let value: Value;
