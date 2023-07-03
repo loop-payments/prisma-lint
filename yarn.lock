@@ -1000,9 +1000,9 @@ __metadata:
   linkType: hard
 
 "@tsconfig/esm@npm:^1.0.3":
-  version: 1.0.3
-  resolution: "@tsconfig/esm@npm:1.0.3"
-  checksum: 07216f491c2603fbd7a5c214f39a2efa183c810dabb77d282ae930bab62f99ff7dbb2ddd7372e5e56ce72e8fb55eb92e3ee5dd6a46c0a7f980c1b59c402fa60b
+  version: 1.0.4
+  resolution: "@tsconfig/esm@npm:1.0.4"
+  checksum: f2bd110c15ee694b730416dc24625c3ed99d6b6048b49e2794f6dad515ac1fcf0ddc99e19ccdcd6a84288367feae18190afd6c506daa07c9eb919a4a97397b97
   languageName: node
   linkType: hard
 
