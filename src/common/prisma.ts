@@ -11,7 +11,7 @@ import type {
 
 export function listFields(model: Model): Field[] {
   return model.properties.filter(
-    (property) => property.type === 'field',
+    (property: any) => property.type === 'field',
   ) as Field[];
 }
 export const PRISMA_SCALAR_TYPES = new Set<string>([
@@ -33,12 +33,14 @@ export const PrismaPropertyType = Enum({
 });
 
 export function listModelBlocks(schema: Schema) {
-  return schema.list.filter((block): block is Model => block.type === 'model');
+  return schema.list.filter(
+    (block: any): block is Model => block.type === 'model',
+  );
 }
 
 export function listAttributes(node: Model): BlockAttribute[] {
   const attributes = node.properties.filter(
-    (p) => p.type === PrismaPropertyType.ATTRIBUTE,
+    (p: any) => p.type === PrismaPropertyType.ATTRIBUTE,
   ) as BlockAttribute[];
   return attributes;
 }
