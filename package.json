@@ -17,6 +17,11 @@
     "dist/**/*",
     "!dist/**/*.test.js"
   ],
+  "prisma-ast": {
+    "parser": {
+      "nodeLocationTracking": "full"
+    }
+  },
   "scripts": {
     "build": "tsc",
     "docs": "node ./scripts/generate-docs.js",
@@ -31,7 +36,7 @@
   },
   "dependencies": {
     "@kejistan/enum": "^0.0.2",
-    "@mrleebo/prisma-ast": "^0.6.0",
+    "@mrleebo/prisma-ast": "MrLeebo/prisma-ast#cst-node-location-tracking",
     "chalk": "^5.2.0",
     "commander": "^11.0.0",
     "cosmiconfig": "^8.1.3",
