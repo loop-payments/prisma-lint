@@ -68,6 +68,31 @@ export default {
           'rule',
           matches.length,
         )}: ${matches.map((m) => `"${m.name}"`).join(', ')}.`;
+
+        // Testing out location.
+        const { location } = model;
+        if (!location) {
+          throw new Error('Expected model to have location');
+        }
+        console.log(location);
+        const lines = context.sourceCode.split('\n');
+        const { startLine, startColumn, endLine, endColumn } = location;
+        if (
+          startLine == null ||
+          startColumn == null ||
+          endLine == null ||
+          endColumn == null
+        ) {
+          throw new Error(
+            'Expected location to have startLine, startColumn, endLine, endColumn',
+          );
+        }
+        const line = lines[startLine - 1];
+        const underline =
+          ' '.repeat(startColumn - 1) + '^'.repeat(endColumn - startColumn + 1);
+        console.log(line);
+        console.log(underline);
+
         context.report({ model, field, message });
       },
     };

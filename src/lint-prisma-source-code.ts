@@ -32,7 +32,7 @@ export async function lintPrismaSourceCode({
       const { ruleName } = ruleDefinition;
       const report = (nodeViolation: NodeViolation) =>
         violations.push({ ruleName, fileName, ...nodeViolation });
-      const context = { fileName, report };
+      const context = { fileName, report, sourceCode };
       const ruleInstance = ruleDefinition.create(ruleConfig, context);
       return { ruleName, ruleInstance };
     },
