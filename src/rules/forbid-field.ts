@@ -70,13 +70,18 @@ export default {
         )}: ${matches.map((m) => `"${m.name}"`).join(', ')}.`;
 
         // Testing out location.
-        const { location } = model;
-        if (!location) {
+        const { location: modelLocation } = model;
+        const { location: fieldLocation } = field;
+        if (!modelLocation) {
           throw new Error('Expected model to have location');
         }
-        console.log(location);
+        if (!fieldLocation) {
+          throw new Error('Expected field to have location');
+        }
+        console.log(modelLocation);
+        console.log(fieldLocation);
         const lines = context.sourceCode.split('\n');
-        const { startLine, startColumn, endLine, endColumn } = location;
+        const { startLine, startColumn, endLine, endColumn } = modelLocation;
         if (
           startLine == null ||
           startColumn == null ||
