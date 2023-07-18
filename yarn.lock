@@ -892,11 +892,11 @@ __metadata:
 
 "@mrleebo/prisma-ast@MrLeebo/prisma-ast#cst-node-location-tracking":
   version: 0.6.0
-  resolution: "@mrleebo/prisma-ast@https://github.com/MrLeebo/prisma-ast.git#commit=9cda4681c82ec9f0a515de8f2493e284a662e79e"
+  resolution: "@mrleebo/prisma-ast@https://github.com/MrLeebo/prisma-ast.git#commit=3a512592aaca13f3b03015fb0fb1a275b1e4eb50"
   dependencies:
     chevrotain: ^10.5.0
     lilconfig: ^2.1.0
-  checksum: f29a79f127641a77f9812f3fe2c2d46f1b24218fa008710aaa9cd87275aa8c85992d9e94dd201b868a0e51b6420610c568799ca5c1b58494a88aa69c40650594
+  checksum: e532329e3026d90a980ded947a97f328c51b0e513ebd36e9a237c0a977b954a1f6d2728c5feb9535a16fae8ed032ccd62f81868e79cd9f09c440bb49faa70415
   languageName: node
   linkType: hard
 
