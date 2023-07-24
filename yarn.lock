@@ -900,12 +900,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mrleebo/prisma-ast@npm:^0.6.0":
-  version: 0.6.0
-  resolution: "@mrleebo/prisma-ast@npm:0.6.0"
+"@mrleebo/prisma-ast@npm:^0.7.0":
+  version: 0.7.0
+  resolution: "@mrleebo/prisma-ast@npm:0.7.0"
   dependencies:
     chevrotain: ^10.5.0
-  checksum: c0a53fb147415f4f9b0d9ddd2a02d79cdd51623c7c4b6320ab71345d4a3d6d85af50e27c4ca0ba351438b1167562d4e678e6905a04b6faf4149d5f047a038688
+    lilconfig: ^2.1.0
+  checksum: a9da6f075cead30a2ca728024055bdfee108901813be344ab37e56fc594102c8065e73e6bc40995deb662325cf877f4cd90f205e66fe13540e372d7653de61f3
   languageName: node
   linkType: hard
 
@@ -4388,7 +4389,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lilconfig@npm:2.1.0":
+"lilconfig@npm:2.1.0, lilconfig@npm:^2.1.0":
   version: 2.1.0
   resolution: "lilconfig@npm:2.1.0"
   checksum: 8549bb352b8192375fed4a74694cd61ad293904eee33f9d4866c2192865c44c4eb35d10782966242634e0cbc1e91fe62b1247f148dc5514918e3a966da7ea117
@@ -5180,7 +5181,7 @@ __metadata:
   resolution: "prisma-lint@workspace:."
   dependencies:
     "@kejistan/enum": ^0.0.2
-    "@mrleebo/prisma-ast": ^0.6.0
+    "@mrleebo/prisma-ast": ^0.7.0
     "@tsconfig/esm": ^1.0.3
     "@tsconfig/node18": ^18.2.0
     "@tsconfig/strictest": ^2.0.1
