@@ -16,19 +16,51 @@ describe('parse rule config list', () => {
       };
     },
   } satisfies ModelRuleDefinition<z.infer<typeof Config>>;
-  const ruleDefinitions = [fakeRule];
+
+  const NoConfig = z.object({}).strict();
+  const fakeRuleWithoutConfig = {
+    ruleName: 'fake-rule-without-config',
+    configSchema: NoConfig,
+    create: (_, context) => {
+      return {
+        Model: (model) => {
+          context.report({ model, message: 'fake-message' });
+        },
+      };
+    },
+  } satisfies ModelRuleDefinition<z.infer<typeof NoConfig>>;
+
+  const ruleDefinitions = [fakeRule, fakeRuleWithoutConfig];
 
   describe('valid config', () => {
-    it('returns parsed config and no parse issues', () => {
-      const result = parseRules(ruleDefinitions, {
-        rules: {
-          'fake-rule': ['error', { foo: 'bar' }],
-        },
+    describe('with rule-specific config', () => {
+      it('returns parsed config and no parse issues', () => {
+        const result = parseRules(ruleDefinitions, {
+          rules: {
+            'fake-rule': ['error', { foo: 'bar' }],
+          },
+        });
+        expect(result.parseIssues).toEqual([]);
+        expect(result.rules.length).toEqual(1);
+        expect(result.rules[0].ruleDefinition.ruleName).toEqual('fake-rule');
+        expect(result.rules[0].ruleConfig).toEqual({ foo: 'bar' });
       });
-      expect(result.parseIssues).toEqual([]);
-      expect(result.rules.length).toEqual(1);
-      expect(result.rules[0].ruleDefinition.ruleName).toEqual('fake-rule');
-      expect(result.rules[0].ruleConfig).toEqual({ foo: 'bar' });
+    });
+
+    describe('without rule-specific config', () => {
+      it('returns parsed config and no parse issues', () => {
+        const result = parseRules(ruleDefinitions, {
+          rules: {
+            'fake-rule-without-config': ['error'],
+          },
+        });
+        expect(result.parseIssues).toEqual([]);
+        expect(result.rules.length).toEqual(1);
+        expect(result.rules[0].ruleDefinition.ruleName).toEqual(
+          'fake-rule-without-config',
+        );
+        expect(result.rules[0].ruleConfig).toEqual({});
+      });
     });
   });
 
