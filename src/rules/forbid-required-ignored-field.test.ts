@@ -1,7 +1,7 @@
 import { testLintPrismaSource } from '#src/common/test.js';
 import forbidRequiredIgnoredField from '#src/rules/forbid-required-ignored-field.js';
 
-describe('forbid-field', () => {
+describe('forbid-required-ignored-field', () => {
   const getRunner = () => async (sourceCode: string) =>
     await testLintPrismaSource({
       fileName: 'fake.ts',

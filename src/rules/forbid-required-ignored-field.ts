@@ -9,6 +9,8 @@ const Config = z.object({}).strict();
 /**
  * Forbids required ignored fields.
  *
+ * <https://github.com/prisma/prisma/issues/13467>
+ *
  * @example
  *   // good
  *   type Product {
