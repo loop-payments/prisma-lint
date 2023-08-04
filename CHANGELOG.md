@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.0.19 (2023-08-04)
+
 - Add rule to forbid required ignored fields, which have [surprising side effects](https://github.com/prisma/prisma/issues/13467).
 
 ## 0.0.18 (2023-06-06)
