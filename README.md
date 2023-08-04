@@ -45,6 +45,7 @@ The configuration file format is loosely based on [eslint's conventions](https:/
         "order": ["tenantId", "..."]
       }
     ],
+    "forbid-required-ignored-field": ["error"],
     "model-name-grammatical-number": [
       "error",
       {
