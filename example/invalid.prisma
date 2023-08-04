@@ -9,10 +9,11 @@ datasource db {
 }
 
 model Users {
-  id         String @id
+  id           String @id
   emailAddress String
-  tenantId   String
-  tenant     Tenant @relation(fields: [tenantId], references: [id])
+  tenantId     String
+  removeMe     String @ignore
+  tenant       Tenant @relation(fields: [tenantId], references: [id])
   @@map(name: "users")
 }
 

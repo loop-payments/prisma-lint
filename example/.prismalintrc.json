@@ -1,6 +1,7 @@
 {
   "rules": {
     "field-name-mapping-snake-case": ["error"],
+    "forbid-required-ignored-field": ["error"],
     "model-name-grammatical-number": ["error", { "style": "singular" }],
     "model-name-mapping-snake-case": [
       "error",
