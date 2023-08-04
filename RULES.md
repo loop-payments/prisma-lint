@@ -7,6 +7,7 @@ Configuration option schemas are written with [Zod](https://github.com/colinhack
 - [field-name-mapping-snake-case](#field-name-mapping-snake-case)
 - [field-order](#field-order)
 - [forbid-field](#forbid-field)
+- [forbid-required-ignored-field](#forbid-required-ignored-field)
 - [model-name-grammatical-number](#model-name-grammatical-number)
 - [model-name-mapping-snake-case](#model-name-mapping-snake-case)
 - [model-name-prefix](#model-name-prefix)
@@ -186,6 +187,36 @@ type Product {
 type Product {
   id Int
   priceD6 Int
+}
+```
+
+## forbid-required-ignored-field
+
+Forbids required ignored fields.
+
+<https://github.com/prisma/prisma/issues/13467>
+
+### Configuration
+
+```ts
+z.object({}).strict();
+```
+
+### Examples
+
+#### Default
+
+```prisma
+// good
+type Product {
+  uuid String
+  toBeRemoved String? @ignore
+}
+
+// bad
+type Product {
+  uuid String
+  toBeRemoved String @ignore
 }
 ```
 
