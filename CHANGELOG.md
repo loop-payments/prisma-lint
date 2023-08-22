@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.0.20 (2023-08-22)
+
 - Add support for reading prisma schema configuration from `package.json`.
 
 ## 0.0.19 (2023-08-04)
