@@ -13,12 +13,14 @@ A linter for Prisma schema files.
 ## Usage
 
 ```sh
-> npx prisma-lint path/to/schema.prisma
+> npx prisma-lint
 # or
-> yarn prisma-lint path/to/schema.prisma
+> yarn prisma-lint
 ```
 
-The arguments can be globs, directories, or file paths. The default path is `prisma/schema.prisma`.
+The default schema path is `prisma/schema.prisma`. If a custom schema path is specified in the field `prisma.schema` within `package.json`, that is used instead.
+
+Alternatively, you can provide one or more explicit paths as CLI arguments. These can be globs, directories, or file paths. 
 
 Run `yarn prisma-lint --help` for all options.
 
