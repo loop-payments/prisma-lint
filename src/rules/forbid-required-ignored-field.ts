@@ -34,10 +34,13 @@ export default {
         const isIgnored = field?.attributes?.some(
           (attr) => attr.name === 'ignore',
         );
-        if (!isIgnored) return;
+        const hasDefault = field?.attributes?.some(
+          (attr) => attr.name === 'default',
+        );
+        if (!isIgnored || hasDefault) return;
         const isRequired = !field.optional;
         if (!isRequired) return;
-        const message = "Required field can't be ignored.";
+        const message = "Required fields without defaults can't be ignored.";
         context.report({ model, field, message });
       },
     };

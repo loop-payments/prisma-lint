@@ -40,5 +40,17 @@ describe('forbid-required-ignored-field', () => {
         expect(violations.length).toEqual(1);
       });
     });
+
+    describe('with required ignored field with default', () => {
+      it('returns violation', async () => {
+        const violations = await run(`
+      model Users {
+        id String
+        deleted String @ignore @default(false)
+      }
+    `);
+        expect(violations.length).toEqual(0);
+      });
+    });
   });
 });
