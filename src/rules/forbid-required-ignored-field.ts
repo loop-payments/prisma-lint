@@ -4,7 +4,11 @@ import type { FieldRuleDefinition } from '#src/common/rule.js';
 
 const RULE_NAME = 'forbid-required-ignored-field';
 
-const Config = z.object({}).strict();
+const Config = z
+  .object({
+    allowIgnoreWithDefault: z.boolean(),
+  })
+  .strict();
 
 /**
  * Forbids required ignored fields.
@@ -28,7 +32,7 @@ const Config = z.object({}).strict();
 export default {
   ruleName: RULE_NAME,
   configSchema: Config,
-  create: (_, context) => {
+  create: (config, context) => {
     return {
       Field: (model, field) => {
         const isIgnored = field?.attributes?.some(
@@ -36,8 +40,12 @@ export default {
         );
         const hasDefault = field?.attributes?.some(
           (attr) => attr.name === 'default',
+        );
+        if (
+          !isIgnored ||
+          (hasDefault && config?.allowIgnoreWithDefault === true)
         )
-        if (!isIgnored || hasDefault) return;
+          return;
 
         const isRequired = !field.optional;
         if (!isRequired) return;
