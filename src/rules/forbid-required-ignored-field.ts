@@ -41,15 +41,18 @@ export default {
         const hasDefault = field?.attributes?.some(
           (attr) => attr.name === 'default',
         );
-        if (
-          !isIgnored ||
-          (hasDefault && config?.allowIgnoreWithDefault === true)
-        )
-          return;
+
+        if (!isIgnored) return;
+
+        if (hasDefault && config.allowIgnoreWithDefault) return;
 
         const isRequired = !field.optional;
         if (!isRequired) return;
-        const message = "Required field can't be ignored.";
+
+        const message = config.allowIgnoredWithDefault
+          ? "Required field without defaults can't be ignored."
+          : "Required field can't be ignored.";
+
         context.report({ model, field, message });
       },
     };
