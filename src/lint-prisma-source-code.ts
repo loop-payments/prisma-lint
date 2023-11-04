@@ -12,7 +12,7 @@ import type { Violation, NodeViolation } from '#src/common/violation.js';
 
 type NamedRuleInstance = { ruleName: string; ruleInstance: RuleInstance };
 
-export async function lintPrismaSourceCode({
+export function lintPrismaSourceCode({
   rules,
   fileName,
   sourceCode,
@@ -20,7 +20,7 @@ export async function lintPrismaSourceCode({
   rules: Rule[];
   fileName: string;
   sourceCode: string;
-}) {
+}): Violation[] {
   const prismaSchema = getPrismaSchema(sourceCode);
 
   // Mutable list of violations added to by rule instances.

@@ -78,8 +78,6 @@ export default {
         if (!fieldLocation) {
           throw new Error('Expected field to have location');
         }
-        console.log(modelLocation);
-        console.log(fieldLocation);
         logUnderline(context.sourceCode, modelLocation);
         logUnderline(context.sourceCode, fieldLocation);
 
