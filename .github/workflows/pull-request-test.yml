@@ -22,6 +22,7 @@ jobs:
         with:
           node-version: '20.9.0'
           cache: 'yarn'
+      - run: corepack enable
       - run: yarn install
       - run: yarn tsc
       - run: yarn docs
