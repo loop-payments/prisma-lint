@@ -10,7 +10,7 @@ import type { Rule, RuleInstance } from '#src/common/rule.js';
 
 import type { Violation, NodeViolation } from '#src/common/violation.js';
 
-type RuleInstances = { ruleName: string; ruleInstance: RuleInstance }[];
+type NamedRuleInstance = { ruleName: string; ruleInstance: RuleInstance };
 
 export async function lintPrismaSourceCode({
   rules,
@@ -27,7 +27,7 @@ export async function lintPrismaSourceCode({
   const violations: Violation[] = [];
 
   // Create rule instances.
-  const ruleInstanceList: RuleInstances = rules.map(
+  const namedRuleInstances: NamedRuleInstance[] = rules.map(
     ({ ruleDefinition, ruleConfig }) => {
       const { ruleName } = ruleDefinition;
       const report = (nodeViolation: NodeViolation) =>
@@ -46,7 +46,7 @@ export async function lintPrismaSourceCode({
       return;
     }
     const fields = listFields(model);
-    ruleInstanceList
+    namedRuleInstances
       .filter(({ ruleName }) => !isRuleEntirelyIgnored(ruleName, comments))
       .forEach(({ ruleInstance }) => {
         if ('Model' in ruleInstance) {

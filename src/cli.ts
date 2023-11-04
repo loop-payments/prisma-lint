@@ -8,6 +8,8 @@ import { program } from 'commander';
 import { cosmiconfig } from 'cosmiconfig';
 import { glob } from 'glob';
 
+import { readPackageUp } from 'read-pkg-up';
+
 import { parseRules } from '#src/common/parse-rules.js';
 import { renderViolations } from '#src/common/render.js';
 import { lintPrismaFiles } from '#src/lint-prisma-files.js';
@@ -38,6 +40,11 @@ const explorer = cosmiconfig('prismalint');
 const options = program.opts();
 const { args } = program;
 
+const getSchemaFromPackageJson = async (cwd: string) => {
+  const pkgJson = await readPackageUp({ cwd });
+  return pkgJson?.packageJson?.prisma?.schema;
+};
+
 const getRootConfigResult = async () => {
   if (options.config != null) {
     const result = await explorer.load(options.config);
@@ -54,8 +61,12 @@ const getRootConfigResult = async () => {
   return result;
 };
 
-const resolvePrismaFiles = (args: string[]) => {
+const resolvePrismaFiles = async (args: string[]) => {
   if (args.length == 0) {
+    const schemaFromPackageJson = await getSchemaFromPackageJson(process.cwd());
+    if (schemaFromPackageJson != null) {
+      return [schemaFromPackageJson];
+    }
     return [DEFAULT_PRISMA_FILE_PATH];
   }
 
@@ -112,7 +123,7 @@ const run = async () => {
     process.exit(1);
   }
 
-  const fileNames = resolvePrismaFiles(args);
+  const fileNames = await resolvePrismaFiles(args);
   const fileViolationList = await lintPrismaFiles({
     rules,
     fileNames,

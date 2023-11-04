@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+## 0.0.20 (2023-08-22)
+
+- Add support for reading prisma schema configuration from `package.json`.
+
+## 0.0.19 (2023-08-04)
+
+- Add rule to forbid required ignored fields, which have [surprising side effects](https://github.com/prisma/prisma/issues/13467).
+
 ## 0.0.18 (2023-06-06)
 
 - [#59](https://github.com/loop-payments/prisma-lint/issues/59) Add support for `@map` and `@@map` without keys.

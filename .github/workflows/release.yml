@@ -31,8 +31,12 @@ jobs:
         if: steps.version-check.outputs.new-version
         uses: actions/setup-node@v2
         with:
-          node-version: 18
+          node-version: '20.9.0'
           cache: 'yarn'
+
+      - name: Enable corepack
+        if: steps.version-check.outputs.new-version
+        run: corepack enable
 
       - name: Install dependencies
         if: steps.version-check.outputs.new-version
