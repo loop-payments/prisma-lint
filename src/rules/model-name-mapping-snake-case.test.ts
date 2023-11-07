@@ -65,4 +65,63 @@ describe('model-name-mapping-snake-case', () => {
       });
     });
   });
+
+  describe('expecting plural names', () => {
+    const run = getRunner({ pluralize: true });
+
+    describe('with a plural name', () => {
+      it('returns no violations', async () => {
+        const violations = await run(`
+      model UserRole {
+        id String @id
+        @@map(name: "user_roles")
+      }
+    `);
+        expect(violations.length).toEqual(0);
+      });
+    });
+
+    describe('with a singular name', () => {
+      it('returns violation', async () => {
+        const violations = await run(`
+      model UserRole {
+        id String @id
+        @@map(name: "user_role")
+      }
+    `);
+        expect(violations.length).toEqual(1);
+      });
+    });
+  });
+
+  describe('expecting irregular plural names', () => {
+    const run = getRunner({
+      pluralize: true,
+      irregularPlurals: { qux: 'quxora' },
+    });
+
+    describe('with a plural name', () => {
+      it('returns no violations', async () => {
+        const violations = await run(`
+      model Qux {
+        id String @id
+        @@map(name: "quxora")
+      }
+    `);
+        expect(violations.length).toEqual(0);
+      });
+    });
+
+    describe('with a singular name', () => {
+      it('returns violation', async () => {
+        const violations = await run(`
+      model Qux {
+        id String @id
+        @@map(name: "qux")
+      }
+    `);
+        expect(violations.length).toEqual(1);
+      });
+    });
+  });
 });

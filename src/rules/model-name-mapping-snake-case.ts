@@ -12,6 +12,8 @@ const Config = z
   .object({
     compoundWords: z.array(z.string()).optional(),
     trimPrefix: z.string().optional(),
+    pluralize: z.boolean().optional(),
+    irregularPlurals: z.record(z.string()).optional(),
   })
   .strict()
   .optional();
@@ -64,6 +66,24 @@ const Config = z
  *     @@map(name: "graph_q_l_persisted_query")
  *   }
  *
+ * 
+ * @example { pluralize: true }
+ *   // good
+ *   model UserRole {
+ *     id String @id
+ *     @@map(name: "user_roles")
+ *   }
+ *
+ *   // bad
+ *   model UserRole {
+ *     id String @id
+ *   }
+ *
+ *   model UserRole {
+ *     id String @id
+ *     @@map(name: "user_role")
+ *   }
+ *
  */
 export default {
   ruleName: RULE_NAME,
@@ -71,6 +91,8 @@ export default {
   create: (config, context) => {
     const compoundWords = config?.compoundWords ?? [];
     const trimPrefix = config?.trimPrefix ?? '';
+    const shouldPluralize = config?.pluralize ?? false;
+    const irregularPlurals = config?.irregularPlurals ?? {};
     return {
       Model: (model) => {
         const attributes = listAttributes(model);
@@ -94,6 +116,8 @@ export default {
         const expectedSnakeCase = toSnakeCase(nodeName, {
           compoundWords,
           trimPrefix,
+          pluralize: shouldPluralize,
+          irregularPlurals,
         });
         if (mappedName !== expectedSnakeCase) {
           context.report({
