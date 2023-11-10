@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-## 0.0.21 (2023-11-10)
+## 0.0.22 (2023-11-10)
 
 - Add option to pluralize snake case model names.
 
