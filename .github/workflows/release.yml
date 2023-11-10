@@ -3,6 +3,9 @@ name: Release
 on:
   workflow_dispatch:
 
+concurrency:
+  group: release
+
 jobs:
   release:
     runs-on: ubuntu-latest
