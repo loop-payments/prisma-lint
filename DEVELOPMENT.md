@@ -37,8 +37,7 @@ To prepare a pull request for review:
 
 To release a new version:
 
-- Check out a new branch
-- Run `yarn bump-version`
-- Create a pull request
-- Merge it
-- The `release.yml` GitHub Action will publish to NPM
+- Check out a new branch.
+- Run `yarn bump-version`.
+- Create a pull request and merge it.
+- The `release.yml` GitHub Action will publish to NPM.
