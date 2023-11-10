@@ -9,8 +9,14 @@ yarn
 
 ## Test
 
-```sh
-yarn test
+Three options:
+
+1. To run unit tests use `yarn test`.
+2. To run the full development version of the `prisma-lint` CLI against example test cases, see [./example/README.md]. Feel free to add or edit examples.
+3. To use a local version of `prisma-lint` from within a different repository, update the other repository's `package.json` dependency as shown below, then run `yarn prisma-lint` within the other repository.
+
+```
+"prisma-lint": "portal:/Users/max/loop/prisma-lint",
 ```
 
 ## Review
