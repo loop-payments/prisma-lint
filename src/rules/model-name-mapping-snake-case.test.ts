@@ -97,15 +97,15 @@ describe('model-name-mapping-snake-case', () => {
   describe('expecting irregular plural names', () => {
     const run = getRunner({
       pluralize: true,
-      irregularPlurals: { qux: 'quxora' },
+      irregularPlurals: { bill_of_lading: 'bills_of_lading' },
     });
 
     describe('with a plural name', () => {
       it('returns no violations', async () => {
         const violations = await run(`
-      model Qux {
+      model BillOfLading {
         id String @id
-        @@map(name: "quxora")
+        @@map(name: "bills_of_lading")
       }
     `);
         expect(violations.length).toEqual(0);
@@ -115,9 +115,9 @@ describe('model-name-mapping-snake-case', () => {
     describe('with a singular name', () => {
       it('returns violation', async () => {
         const violations = await run(`
-      model Qux {
+      model BillOfLading {
         id String @id
-        @@map(name: "qux")
+        @@map(name: "bill_of_lading")
       }
     `);
         expect(violations.length).toEqual(1);
