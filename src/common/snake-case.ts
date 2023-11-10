@@ -1,3 +1,5 @@
+import pluralize from 'pluralize';
+
 /**
  * Returns a snake case string expected based on input string,
  * accounting for compound words and prefix.
@@ -19,6 +21,19 @@ export function toSnakeCase(
      * to "graphql".
      */
     compoundWords?: string[];
+
+    /**
+     * Whether to convert to singular or plural snake case.
+     */
+    pluralize?: boolean;
+
+    /**
+     * A mapping from singular form to irregular plural form,
+     * for use when `pluralize` is true. Both forms should be
+     * in snake case.
+     * Example: `{ bill_of_lading: "bills_of_lading" }`
+     */
+    irregularPlurals?: Record<string, string>;
   } = {},
 ): string {
   const { trimPrefix = '', compoundWords = [] } = options;
@@ -39,5 +54,15 @@ export function toSnakeCase(
       acc.replace(compoundWord, compoundWord.replace(/_/g, '')),
     snakeCase,
   );
+  if (options.pluralize) {
+    if (options.irregularPlurals) {
+      for (const [singular, plural] of Object.entries(
+        options.irregularPlurals,
+      )) {
+        pluralize.addIrregularRule(singular, plural);
+      }
+    }
+    return pluralize(snakeCaseWithCompoundWords);
+  }
   return snakeCaseWithCompoundWords;
 }
