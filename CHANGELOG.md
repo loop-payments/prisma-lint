@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add option to pluralize snake case model names.
+
 ## 0.0.20 (2023-08-22)
 
 - Add support for reading prisma schema configuration from `package.json`.
