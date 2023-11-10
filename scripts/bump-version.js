@@ -47,6 +47,7 @@ if (newVersion === currentVersion) {
     fs.writeFileSync(changelogPath, changelog);
   }
 
+  execSync('yarn prettier -w package.json');
   execSync('git add package.json CHANGELOG.md');
   execSync(`git commit -m "Bump version to ${newVersion}"`);
 }
