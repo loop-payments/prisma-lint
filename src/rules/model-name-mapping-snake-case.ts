@@ -66,7 +66,7 @@ const Config = z
  *     @@map(name: "graph_q_l_persisted_query")
  *   }
  *
- * 
+ *
  * @example { pluralize: true }
  *   // good
  *   model UserRole {
