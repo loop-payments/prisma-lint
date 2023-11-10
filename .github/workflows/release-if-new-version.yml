@@ -29,4 +29,4 @@ jobs:
 
       - name: Release new version
         if: steps.version-check.outputs.new-version
-        uses: ./github/workflows/release.yml
+        uses: ./.github/workflows/release.yml
