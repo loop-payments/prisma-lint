@@ -28,9 +28,10 @@ export function toSnakeCase(
     pluralize?: boolean;
 
     /**
-     * A set of irregular plurals to use when converting
-     * to plural snake case. Both the singular and plural
-     * forms should already be in snake case.
+     * A mapping from singular form to irregular plural form,
+     * for use when `pluralize` is true. Both forms should be
+     * in snake case.
+     * Example: `{ bill_of_lading: "bills_of_lading" }`
      */
     irregularPlurals?: Record<string, string>;
   } = {},
