@@ -1,0 +1,32 @@
+name: Release if new version
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+
+      - name: Check versions
+        id: version-check
+        run: |
+          git checkout HEAD -- package.json
+          curr="$(jq -r '.version' package.json)"
+          git checkout HEAD~1 -- package.json
+          prev="$(jq -r '.version' package.json)"
+          if [[ "$curr" != "$prev" ]]; then
+            echo "new-version=$curr" >> "$GITHUB_OUTPUT"
+          fi
+          git checkout HEAD -- package.json
+
+      - name: Release new version
+        if: steps.version-check.outputs.new-version
+        uses: ./github/workflows/release.yml
