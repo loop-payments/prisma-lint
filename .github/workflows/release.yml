@@ -15,6 +15,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - name: Determine new package version
+        id: version
+        run: |
+          git checkout HEAD -- package.json
+          curr="$(jq -r '.version' package.json)"
+          echo "new-version=$curr" >> "$GITHUB_OUTPUT"
+
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
@@ -40,7 +47,7 @@ jobs:
         run: |
           EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
           echo "notes<<$EOF" >> "$GITHUB_OUTPUT"
-          node ./scripts/generate-release-notes.js ${{ steps.version-check.outputs.new-version }} >> "$GITHUB_OUTPUT"
+          node ./scripts/generate-release-notes.js ${{ steps.version.outputs.new-version }} >> "$GITHUB_OUTPUT"
           echo "$EOF" >> "$GITHUB_OUTPUT"
 
       - name: Create GitHub release
@@ -48,8 +55,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: v${{ steps.version-check.outputs.new-version }}
-          release_name: prisma-lint v${{ steps.version-check.outputs.new-version }}
+          tag_name: v${{ steps.version.outputs.new-version }}
+          release_name: prisma-lint v${{ steps.version.outputs.new-version }}
           body: ${{ steps.release-notes.outputs.notes }}
           draft: false
           prerelease: false
