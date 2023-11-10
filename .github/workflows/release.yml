@@ -21,26 +21,21 @@ jobs:
           node-version: '20.9.0'
 
       - name: Enable corepack
-        if: steps.version-check.outputs.new-version
         run: corepack enable
 
       - name: Install dependencies
-        if: steps.version-check.outputs.new-version
         run: yarn install
 
       - name: Build
-        if: steps.version-check.outputs.new-version
         run: yarn build
 
       - name: Publish to NPM
-        if: steps.version-check.outputs.new-version
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npm publish
 
       - name: Generate release notes
-        if: steps.version-check.outputs.new-version
         id: release-notes
         run: |
           EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
@@ -49,7 +44,6 @@ jobs:
           echo "$EOF" >> "$GITHUB_OUTPUT"
 
       - name: Create GitHub release
-        if: steps.version-check.outputs.new-version
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
