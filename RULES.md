@@ -274,6 +274,8 @@ Checks that the mapped name of a model is the expected snake case.
 z.object({
   compoundWords: z.array(z.string()).optional(),
   trimPrefix: z.string().optional(),
+  pluralize: z.boolean().optional(),
+  irregularPlurals: z.record(z.string()).optional(),
 })
   .strict()
   .optional();
@@ -330,6 +332,26 @@ model GraphQLPersistedQuery {
 model GraphQLPersistedQuery {
   id String @id
   @@map(name: "graph_q_l_persisted_query")
+}
+```
+
+#### With `{ pluralize: true }`
+
+```prisma
+// good
+model UserRole {
+  id String @id
+  @@map(name: "user_roles")
+}
+
+// bad
+model UserRole {
+  id String @id
+}
+
+model UserRole {
+  id String @id
+  @@map(name: "user_role")
 }
 ```
 
