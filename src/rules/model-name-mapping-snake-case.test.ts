@@ -65,4 +65,63 @@ describe('model-name-mapping-snake-case', () => {
       });
     });
   });
+
+  describe('expecting plural names', () => {
+    const run = getRunner({ pluralize: true });
+
+    describe('with a plural name', () => {
+      it('returns no violations', async () => {
+        const violations = await run(`
+      model UserRole {
+        id String @id
+        @@map(name: "user_roles")
+      }
+    `);
+        expect(violations.length).toEqual(0);
+      });
+    });
+
+    describe('with a singular name', () => {
+      it('returns violation', async () => {
+        const violations = await run(`
+      model UserRole {
+        id String @id
+        @@map(name: "user_role")
+      }
+    `);
+        expect(violations.length).toEqual(1);
+      });
+    });
+  });
+
+  describe('expecting irregular plural names', () => {
+    const run = getRunner({
+      pluralize: true,
+      irregularPlurals: { bill_of_lading: 'bills_of_lading' },
+    });
+
+    describe('with a plural name', () => {
+      it('returns no violations', async () => {
+        const violations = await run(`
+      model BillOfLading {
+        id String @id
+        @@map(name: "bills_of_lading")
+      }
+    `);
+        expect(violations.length).toEqual(0);
+      });
+    });
+
+    describe('with a singular name', () => {
+      it('returns violation', async () => {
+        const violations = await run(`
+      model BillOfLading {
+        id String @id
+        @@map(name: "bill_of_lading")
+      }
+    `);
+        expect(violations.length).toEqual(1);
+      });
+    });
+  });
 });

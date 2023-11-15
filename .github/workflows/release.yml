@@ -1,9 +1,11 @@
 name: Release
 
 on:
-  push:
-    branches:
-      - main
+  workflow_call:
+  workflow_dispatch:
+
+concurrency:
+  group: release
 
 jobs:
   release:
@@ -12,60 +14,49 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-        with:
-          fetch-depth: 2
 
-      - name: Check versions
-        id: version-check
+      - name: Determine new package version
+        id: version
         run: |
           git checkout HEAD -- package.json
           curr="$(jq -r '.version' package.json)"
-          git checkout HEAD~1 -- package.json
-          prev="$(jq -r '.version' package.json)"
-          if [[ "$curr" != "$prev" ]]; then
-            echo "new-version=$curr" >> "$GITHUB_OUTPUT"
-          fi
-          git checkout HEAD -- package.json
+          echo "new-version=$curr" >> "$GITHUB_OUTPUT"
 
       - name: Set up Node.js
-        if: steps.version-check.outputs.new-version
         uses: actions/setup-node@v2
         with:
-          node-version: 18
-          cache: 'yarn'
+          node-version: '20.9.0'
+
+      - name: Enable corepack
+        run: corepack enable
 
       - name: Install dependencies
-        if: steps.version-check.outputs.new-version
         run: yarn install
 
       - name: Build
-        if: steps.version-check.outputs.new-version
         run: yarn build
 
       - name: Publish to NPM
-        if: steps.version-check.outputs.new-version
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npm publish
 
       - name: Generate release notes
-        if: steps.version-check.outputs.new-version
         id: release-notes
         run: |
           EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
           echo "notes<<$EOF" >> "$GITHUB_OUTPUT"
-          node ./scripts/generate-release-notes.js ${{ steps.version-check.outputs.new-version }} >> "$GITHUB_OUTPUT"
+          node ./scripts/generate-release-notes.js ${{ steps.version.outputs.new-version }} >> "$GITHUB_OUTPUT"
           echo "$EOF" >> "$GITHUB_OUTPUT"
 
       - name: Create GitHub release
-        if: steps.version-check.outputs.new-version
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: v${{ steps.version-check.outputs.new-version }}
-          release_name: prisma-lint v${{ steps.version-check.outputs.new-version }}
+          tag_name: v${{ steps.version.outputs.new-version }}
+          release_name: prisma-lint v${{ steps.version.outputs.new-version }}
           body: ${{ steps.release-notes.outputs.notes }}
           draft: false
           prerelease: false

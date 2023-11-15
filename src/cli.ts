@@ -8,7 +8,7 @@ import { program } from 'commander';
 import { cosmiconfig } from 'cosmiconfig';
 import { glob } from 'glob';
 
-import { readPackageUp } from 'read-pkg-up';
+import { readPackageUp } from 'read-package-up';
 
 import { parseRules } from '#src/common/parse-rules.js';
 import { renderViolations } from '#src/common/render.js';
