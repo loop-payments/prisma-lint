@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Allow ignoring required fields with default values in `forbid-required-ignored-field`.
+
 ## 0.0.22 (2023-11-10)
 
 - Add option to pluralize snake case model names.
