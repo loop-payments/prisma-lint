@@ -29,6 +29,18 @@ describe('forbid-required-ignored-field', () => {
       });
     });
 
+    describe('with required ignored field with default', () => {
+      it('returns no violations', async () => {
+        const violations = await run(`
+      model Users {
+        id String
+        deleted String @ignore @default(false)
+      }
+    `);
+        expect(violations.length).toEqual(0);
+      });
+    });
+
     describe('with required ignored field', () => {
       it('returns violation', async () => {
         const violations = await run(`
@@ -38,18 +50,6 @@ describe('forbid-required-ignored-field', () => {
       }
     `);
         expect(violations.length).toEqual(1);
-      });
-    });
-
-    describe('with required ignored field with default', () => {
-      it('returns violation', async () => {
-        const violations = await run(`
-      model Users {
-        id String
-        deleted String @ignore @default(false)
-      }
-    `);
-        expect(violations.length).toEqual(0);
       });
     });
   });
