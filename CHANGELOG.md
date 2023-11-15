@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.0.23 (2023-11-15)
+
 - Allow ignoring required fields with default values in `forbid-required-ignored-field`.
 
 ## 0.0.22 (2023-11-10)
