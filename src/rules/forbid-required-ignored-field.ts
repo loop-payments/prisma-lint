@@ -40,7 +40,7 @@ export default {
         if (!isIgnored || hasDefault) return;
         const isRequired = !field.optional;
         if (!isRequired) return;
-        const message = "Cannot ignore a required field without a default value.";
+        const message = 'Cannot ignore a required field without a default value.';
         context.report({ model, field, message });
       },
     };
