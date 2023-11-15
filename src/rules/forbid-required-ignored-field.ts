@@ -7,9 +7,14 @@ const RULE_NAME = 'forbid-required-ignored-field';
 const Config = z.object({}).strict();
 
 /**
- * Forbids required ignored fields.
+ * Forbids required ignored fields without default values.
  *
- * <https://github.com/prisma/prisma/issues/13467>
+ * This prevents a client from being generated without a field while
+ * the database still expects the corresponding column to be non-nullable.
+ *
+ * For more protection against breaking changes, consider using:
+ *
+ * https://github.com/loop-payments/prisma-safety
  *
  * @example
  *   // good
@@ -24,6 +29,18 @@ const Config = z.object({}).strict();
  *     toBeRemoved String @ignore
  *   }
  *
+ * @example
+ *   // good
+ *   type Product {
+ *     uuid String
+ *     toBeRemoved Boolean @default(false) @ignore
+ *   }
+ *
+ *   // bad
+ *   type Product {
+ *     uuid String
+ *     toBeRemoved Boolean @ignore
+ *   }
  */
 export default {
   ruleName: RULE_NAME,
@@ -40,7 +57,8 @@ export default {
         if (!isIgnored || hasDefault) return;
         const isRequired = !field.optional;
         if (!isRequired) return;
-        const message = 'Cannot ignore a required field without a default value.';
+        const message =
+          'Do not ignore a required field without a default value.';
         context.report({ model, field, message });
       },
     };
