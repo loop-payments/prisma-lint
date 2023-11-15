@@ -14,7 +14,7 @@ const Config = z.object({}).strict();
  *
  * For more protection against breaking changes, consider using:
  *
- * https://github.com/loop-payments/prisma-safety
+ * <https://github.com/loop-payments/prisma-safety>
  *
  * @example
  *   // good
