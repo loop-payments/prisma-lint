@@ -6,15 +6,15 @@ on:
       - main
 
 jobs:
-  release:
+  version-check:
     runs-on: ubuntu-latest
-
+    outputs:
+      new-version: ${{ steps.version-check.outputs.new-version }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
         with:
           fetch-depth: 2
-
       - name: Check versions
         id: version-check
         run: |
@@ -27,6 +27,7 @@ jobs:
           fi
           git checkout HEAD -- package.json
 
-      - name: Release new version
-        if: steps.version-check.outputs.new-version
-        uses: ./.github/workflows/release.yml
+  maybe-release:
+    needs: 'version-check'
+    if: needs.version-check.outputs.new-version
+    uses: ./.github/workflows/release.yml
