@@ -192,9 +192,14 @@ type Product {
 
 ## forbid-required-ignored-field
 
-Forbids required ignored fields.
+Forbids required ignored fields without default values.
 
-<https://github.com/prisma/prisma/issues/13467>
+This prevents a client from being generated without a field while
+the database still expects the corresponding column to be non-nullable.
+
+For more protection against breaking changes, consider using:
+
+<https://github.com/loop-payments/prisma-safety>
 
 ### Configuration
 
@@ -217,6 +222,22 @@ type Product {
 type Product {
   uuid String
   toBeRemoved String @ignore
+}
+```
+
+#### Default
+
+```prisma
+// good
+type Product {
+  uuid String
+  toBeRemoved Boolean @default(false) @ignore
+}
+
+// bad
+type Product {
+  uuid String
+  toBeRemoved Boolean @ignore
 }
 ```
 
