@@ -1,10 +1,11 @@
-import type { Violation } from '#src/common/violation.js';
 import chalk from 'chalk';
+
+import type { Violation } from '#src/common/violation.js';
 
 export const renderViolations = (
   sourceCode: string,
   violations: Violation[],
-  outputFormat: 'simple' | 'contextual' | 'json' | 'none',
+  outputFormat: 'simple' | 'contextual' | 'json',
 ): string => {
   switch (outputFormat) {
     case 'contextual':
@@ -13,8 +14,6 @@ export const renderViolations = (
       return renderViolationsSimple(violations);
     case 'json':
       return renderViolationsJson(violations);
-    case 'none':
-      return '';
   }
 };
 
@@ -30,24 +29,41 @@ export const renderViolationsContextual = (
     if (!rawLocation) {
       throw new Error('No location');
     }
-    const { startLine, startColumn, endLine, endColumn, startOffset, endOffset } = rawLocation;
-    if (!startLine || !startColumn || !endLine || !endColumn || !startOffset || !endOffset) {
+    const {
+      startLine,
+      startColumn,
+      endLine,
+      endColumn,
+      startOffset,
+      endOffset,
+    } = rawLocation;
+    if (
+      !startLine ||
+      !startColumn ||
+      !endLine ||
+      !endColumn ||
+      !startOffset ||
+      !endOffset
+    ) {
       throw new Error('No line or column');
     }
     const lines = sourceCode.split('\n');
     const containingLine = lines[startLine - 1];
-    const pointer = ' '.repeat(startColumn - 1) + '^'.repeat(endColumn - startColumn + 1);
+    const pointer =
+      ' '.repeat(startColumn - 1) + '^'.repeat(endColumn - startColumn + 1);
     return [
       '',
       `${fileName}:${startLine}:${startColumn} ${chalk.gray(`${key}`)}`,
       `${containingLine}`,
       `${pointer}`,
-    ].concat(violations.flatMap((violation) => {
-      const { ruleName, message } = violation;
-      return [
-        `  ${chalk.red('error')} ${message} ${chalk.gray(`${ruleName}`)}`
-      ];
-    }));
+    ].concat(
+      violations.flatMap((violation) => {
+        const { ruleName, message } = violation;
+        return [
+          `  ${chalk.red('error')} ${message} ${chalk.gray(`${ruleName}`)}`,
+        ];
+      }),
+    );
   });
   return lines.join('\n');
 };
@@ -55,7 +71,7 @@ export const renderViolationsContextual = (
 export const renderViolationsJson = (violations: Violation[]) => {
   const jsonObject = renderViolationsJsonObject(violations);
   return JSON.stringify(jsonObject);
-}
+};
 
 export const renderViolationsJsonObject = (
   violations: Violation[],
@@ -110,17 +126,22 @@ const keyViolationListPairs = (
 
 export const renderViolationsSimple = (violations: Violation[]) => {
   const pairs = keyViolationListPairs(violations);
-  return pairs.flatMap(([key, violations]) => {
-    const first = violations[0];
-    const location = first.field?.location ?? first.model.location;
-    if (!location) {
-      throw new Error('No location');
-    }
-    const { startLine, startColumn } = location;
-    return [`  ${key} ${chalk.gray(`${startLine}:${startColumn}`)}`, ...violations.flatMap(renderViolationSimple)];
-  }).join('\n');
+  return pairs
+    .flatMap(([key, violations]) => {
+      const first = violations[0];
+      const location = first.field?.location ?? first.model.location;
+      if (!location) {
+        throw new Error('No location');
+      }
+      const { startLine, startColumn } = location;
+      return [
+        `  ${key} ${chalk.gray(`${startLine}:${startColumn}`)}`,
+        ...violations.flatMap(renderViolationSimple),
+      ];
+    })
+    .join('\n');
 };
 
 const renderViolationSimple = ({ ruleName, message }: Violation) => [
-  `   ${chalk.red('error')} ${message} ${chalk.gray(`${ruleName}`)}`,
+  `    ${chalk.red('error')} ${message} ${chalk.gray(`${ruleName}`)}`,
 ];

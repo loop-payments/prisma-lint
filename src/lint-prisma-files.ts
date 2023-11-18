@@ -8,7 +8,7 @@ import type { Rule } from '#src/common/rule.js';
 import type { Violation } from '#src/common/violation.js';
 import { lintPrismaSourceCode } from '#src/lint-prisma-source-code.js';
 
-type FileViolationList = {
+export type FileViolationList = {
   fileName: string;
   sourceCode: string;
   violations: Violation[];
