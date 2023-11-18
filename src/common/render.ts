@@ -45,7 +45,7 @@ export const renderViolationsContextual = (
     ].concat(violations.flatMap((violation) => {
       const { ruleName, message } = violation;
       return [
-        `${chalk.red('error')} ${message} ${chalk.gray(`${ruleName}`)}`
+        `  ${chalk.red('error')} ${message} ${chalk.gray(`${ruleName}`)}`
       ];
     }));
   });
@@ -111,11 +111,16 @@ const keyViolationListPairs = (
 export const renderViolationsSimple = (violations: Violation[]) => {
   const pairs = keyViolationListPairs(violations);
   return pairs.flatMap(([key, violations]) => {
-    return [`  ${key}`, ...violations.flatMap(renderViolationSimple)];
+    const first = violations[0];
+    const location = first.field?.location ?? first.model.location;
+    if (!location) {
+      throw new Error('No location');
+    }
+    const { startLine, startColumn } = location;
+    return [`  ${key} ${chalk.gray(`${startLine}:${startColumn}`)}`, ...violations.flatMap(renderViolationSimple)];
   }).join('\n');
 };
 
 const renderViolationSimple = ({ ruleName, message }: Violation) => [
-  `    ${ruleName}`,
-  `      ${message}`,
+  `   ${chalk.red('error')} ${message} ${chalk.gray(`${ruleName}`)}`,
 ];
