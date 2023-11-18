@@ -68,42 +68,8 @@ export default {
           'rule',
           matches.length,
         )}: ${matches.map((m) => `"${m.name}"`).join(', ')}.`;
-
-        // Testing out location.
-        const { location: modelLocation } = model;
-        const { location: fieldLocation } = field;
-        if (!modelLocation) {
-          throw new Error('Expected model to have location');
-        }
-        if (!fieldLocation) {
-          throw new Error('Expected field to have location');
-        }
-        logUnderline(context.sourceCode, modelLocation);
-        logUnderline(context.sourceCode, fieldLocation);
-
         context.report({ model, field, message });
       },
     };
   },
 } satisfies FieldRuleDefinition<z.infer<typeof Config>>;
-
-// Ideally I could import CstNodeLocation.
-function logUnderline(sourceCode: string, location: any) {
-  const lines = sourceCode.split('\n');
-  const { startLine, startColumn, endLine, endColumn } = location;
-  if (
-    startLine == null ||
-    startColumn == null ||
-    endLine == null ||
-    endColumn == null
-  ) {
-    throw new Error(
-      'Expected location to have startLine, startColumn, endLine, endColumn',
-    );
-  }
-  const line = lines[startLine - 1];
-  const underline =
-    ' '.repeat(startColumn - 1) + '^'.repeat(endColumn - startColumn + 1);
-  console.log(line);
-  console.log(underline);
-}
