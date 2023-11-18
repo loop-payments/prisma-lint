@@ -192,9 +192,14 @@ type Product {
 
 ## forbid-required-ignored-field
 
-Forbids required ignored fields.
+Forbids required ignored fields without default values.
 
-<https://github.com/prisma/prisma/issues/13467>
+This prevents a client from being generated without a field while
+the database still expects the corresponding column to be non-nullable.
+
+For more protection against breaking changes, consider using:
+
+<https://github.com/loop-payments/prisma-safety>
 
 ### Configuration
 
@@ -217,6 +222,22 @@ type Product {
 type Product {
   uuid String
   toBeRemoved String @ignore
+}
+```
+
+#### Default
+
+```prisma
+// good
+type Product {
+  uuid String
+  toBeRemoved Boolean @default(false) @ignore
+}
+
+// bad
+type Product {
+  uuid String
+  toBeRemoved Boolean @ignore
 }
 ```
 
@@ -274,6 +295,8 @@ Checks that the mapped name of a model is the expected snake case.
 z.object({
   compoundWords: z.array(z.string()).optional(),
   trimPrefix: z.string().optional(),
+  pluralize: z.boolean().optional(),
+  irregularPlurals: z.record(z.string()).optional(),
 })
   .strict()
   .optional();
@@ -330,6 +353,26 @@ model GraphQLPersistedQuery {
 model GraphQLPersistedQuery {
   id String @id
   @@map(name: "graph_q_l_persisted_query")
+}
+```
+
+#### With `{ pluralize: true }`
+
+```prisma
+// good
+model UserRole {
+  id String @id
+  @@map(name: "user_roles")
+}
+
+// bad
+model UserRole {
+  id String @id
+}
+
+model UserRole {
+  id String @id
+  @@map(name: "user_role")
 }
 ```
 
