@@ -26,6 +26,9 @@ export function outputToConsole(
       return;
     }
     const output = renderViolations(sourceCode, violations, outputFormat);
+    if (output === '') {
+      return;
+    }
     console.error(output);
   });
 }
