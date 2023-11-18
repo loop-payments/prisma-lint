@@ -1,4 +1,5 @@
 import type { Violation } from '#src/common/violation.js';
+import chalk from 'chalk';
 
 export const renderViolations = (
   sourceCode: string,
@@ -7,7 +8,7 @@ export const renderViolations = (
 ): string => {
   switch (outputFormat) {
     case 'contextual':
-      throw new Error('Not implemented');
+      return renderViolationsContextual(sourceCode, violations);
     case 'simple':
       return renderViolationsSimple(violations);
     case 'json':
@@ -15,6 +16,40 @@ export const renderViolations = (
     case 'none':
       return '';
   }
+};
+
+export const renderViolationsContextual = (
+  sourceCode: string,
+  violations: Violation[],
+): string => {
+  const pairs = keyViolationListPairs(violations);
+  const lines = pairs.flatMap(([key, violations]) => {
+    const first = violations[0];
+    const { fileName } = first;
+    const rawLocation = first.field?.location ?? first.model.location;
+    if (!rawLocation) {
+      throw new Error('No location');
+    }
+    const { startLine, startColumn, endLine, endColumn, startOffset, endOffset } = rawLocation;
+    if (!startLine || !startColumn || !endLine || !endColumn || !startOffset || !endOffset) {
+      throw new Error('No line or column');
+    }
+    const lines = sourceCode.split('\n');
+    const containingLine = lines[startLine - 1];
+    const pointer = ' '.repeat(startColumn - 1) + '^'.repeat(endColumn - startColumn + 1);
+    return [
+      '',
+      `${fileName}:${startLine}:${startColumn}`,
+      `${containingLine}`,
+      `${pointer}`,
+    ].concat(violations.flatMap((violation) => {
+      const { ruleName, message } = violation;
+      return [
+        `${chalk.red('error')} ${message} ${chalk.gray(`${ruleName}`)}`
+      ];
+    }));
+  });
+  return lines.join('\n');
 };
 
 export const renderViolationsJson = (violations: Violation[]) => {
@@ -63,12 +98,10 @@ const keyViolationListPairs = (
 ): [string, Violation[]][] => {
   const groupedByKey = violations.reduce(
     (acc, violation) => {
-      const { ruleName } = violation;
-      if (!acc[ruleName]) {
-        acc[ruleName] = [];
-      }
-      acc[ruleName].push(violation);
-      return acc;
+      const { model, field } = violation;
+      const key = field ? `${model.name}.${field.name}` : model.name;
+      const violations = acc[key] ?? [];
+      return { ...acc, [key]: [...violations, violation] };
     },
     {} as Record<string, Violation[]>,
   );
