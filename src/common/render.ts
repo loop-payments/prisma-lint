@@ -39,7 +39,7 @@ export const renderViolationsContextual = (
     const pointer = ' '.repeat(startColumn - 1) + '^'.repeat(endColumn - startColumn + 1);
     return [
       '',
-      `${fileName}:${startLine}:${startColumn}`,
+      `${fileName}:${startLine}:${startColumn} ${chalk.gray(`${key}`)}`,
       `${containingLine}`,
       `${pointer}`,
     ].concat(violations.flatMap((violation) => {
