@@ -1,10 +1,13 @@
 import type { Violation } from '#src/common/violation.js';
 
 export const renderViolations = (
+  sourceCode: string,
   violations: Violation[],
-  outputFormat: 'simple' | 'json' | 'none',
+  outputFormat: 'simple' | 'contextual' | 'json' | 'none',
 ): string => {
   switch (outputFormat) {
+    case 'contextual':
+      throw new Error('Not implemented');
     case 'simple':
       return renderViolationsSimple(violations);
     case 'json':

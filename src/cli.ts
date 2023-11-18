@@ -25,7 +25,7 @@ program
     'A path to a config file. ' +
     'If omitted, cosmiconfig is used to search for a config file.',
   )
-  .option('-o, --output-format <format>', 'Output format. simple, json, or quiet.', 'simple')
+  .option('-o, --output-format <format>', 'Output format. simple, contextual, json, or quiet.', 'simple')
   .option('--no-color', 'Disable color output.')
   .option('--quiet', 'Suppress all output except for errors.')
   .argument(
@@ -130,13 +130,13 @@ const run = async () => {
     fileNames,
   });
   let hasViolations = false;
-  fileViolationList.forEach(({ fileName, violations }) => {
+  fileViolationList.forEach(({ fileName, violations, sourceCode }) => {
     const truncatedFileName = getTruncatedFileName(fileName);
     if (violations.length > 0) {
       hasViolations = true;
       console.error(`${truncatedFileName} ${chalk.red('✖')}`);
-      const string = renderViolations(violations, outputFormat);
-      console.error(string);
+      const output = renderViolations(sourceCode, violations, outputFormat);
+      console.error(output);
     } else {
       if (!quiet) {
         console.log(`${truncatedFileName} ${chalk.green('✔')}`);
