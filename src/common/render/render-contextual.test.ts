@@ -1,6 +1,7 @@
+import type { Model } from '@mrleebo/prisma-ast';
+
 import { renderViolationsContextual } from '#src/common/render/render-contextual.js';
 import type { Violation } from '#src/common/violation.js';
-import type { Model } from '@mrleebo/prisma-ast';
 
 describe('render-contextual', () => {
   const sourceCode = `model Foo {
