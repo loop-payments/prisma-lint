@@ -1,6 +1,6 @@
 export type OutputFormat =
-  | 'simple'
   | 'contextual'
+  | 'filepath'
   | 'json'
   | 'none'
-  | 'filepath';
+  | 'simple';
