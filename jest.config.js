@@ -9,6 +9,7 @@ const isDebuggerAttached = (() => {
 const testTimeout = () => (isDebuggerAttached ? Infinity : 60000);
 
 const unitTestConfig = {
+  preset: 'ts-jest/presets/default-esm',
   moduleDirectories: ['node_modules'],
   extensionsToTreatAsEsm: ['.ts'],
   moduleFileExtensions: ['js', 'ts'],
@@ -23,7 +24,7 @@ const unitTestConfig = {
     '^#src/(.*)\\.js$': '<rootDir>/src/$1',
   },
   transform: {
-    '^.+\\.ts$': ['ts-jest', { tsconfig: './tsconfig.test.json' }],
+    '^.+\\.ts$': ['ts-jest', { useESM: true, tsconfig: './tsconfig.test.json' }],
   },
 };
 
