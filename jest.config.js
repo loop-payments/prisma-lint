@@ -9,7 +9,6 @@ const isDebuggerAttached = (() => {
 const testTimeout = () => (isDebuggerAttached ? Infinity : 60000);
 
 const unitTestConfig = {
-  preset: 'ts-jest/presets/default-esm',
   moduleDirectories: ['node_modules'],
   extensionsToTreatAsEsm: ['.ts'],
   moduleFileExtensions: ['js', 'ts'],
