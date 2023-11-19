@@ -1,6 +1,6 @@
 
-import type { Violation } from '#src/common/violation.js';
 import { keyViolationListPairs } from '#src/common/render/render-util.js';
+import type { Violation } from '#src/common/violation.js';
 
 export const renderViolationsJson = (violations: Violation[]) => {
   const jsonObject = renderViolationsJsonObject(violations);
