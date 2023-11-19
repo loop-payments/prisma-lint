@@ -57,9 +57,7 @@ function outputSimple(fileViolationList: FileViolationList, quiet: boolean) {
   });
 }
 
-function outputContextual(
-  fileViolationList: FileViolationList,
-) {
+function outputContextual(fileViolationList: FileViolationList) {
   fileViolationList.forEach(({ sourceCode, violations }) => {
     const lines = renderViolationsContextual(sourceCode, violations);
     console.error(lines.join('\n'));
