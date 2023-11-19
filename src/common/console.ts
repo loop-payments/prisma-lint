@@ -2,7 +2,7 @@ import chalk from 'chalk';
 
 import { getTruncatedFileName } from '#src/common/file.js';
 import type { OutputFormat } from '#src/common/output-format.js';
-import { renderViolations } from '#src/common/render.js';
+import { renderViolations } from '#src/common/render/render-json.js';
 import type { Violation } from '#src/common/violation.js';
 import type { FileViolationList } from '#src/lint-prisma-files.js';
 

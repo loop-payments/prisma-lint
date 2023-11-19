@@ -2,20 +2,6 @@ import chalk from 'chalk';
 
 import type { Violation } from '#src/common/violation.js';
 
-export const renderViolations = (
-  sourceCode: string,
-  violations: Violation[],
-  outputFormat: 'simple' | 'contextual' | 'json',
-): string => {
-  switch (outputFormat) {
-    case 'contextual':
-      return renderViolationsContextual(sourceCode, violations);
-    case 'simple':
-      return renderViolationsSimple(violations);
-    case 'json':
-      return renderViolationsJson(violations);
-  }
-};
 
 export const renderViolationsContextual = (
   sourceCode: string,
