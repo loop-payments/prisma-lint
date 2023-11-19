@@ -12,6 +12,7 @@ const unitTestConfig = {
   moduleDirectories: ['node_modules'],
   extensionsToTreatAsEsm: ['.ts'],
   moduleFileExtensions: ['js', 'ts'],
+  setupFiles: ['./jest-setup/unit-test-setup.ts'],
   roots: ['<rootDir>/src/'],
   testEnvironment: 'node',
   testRegex: '.*\\.test\\.ts$',
