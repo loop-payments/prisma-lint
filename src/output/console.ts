@@ -1,12 +1,12 @@
 import chalk from 'chalk';
 
 import { getTruncatedFileName } from '#src/common/file.js';
+import type { Violation } from '#src/common/violation.js';
+import type { FileViolationList } from '#src/lint-prisma-files.js';
 import type { OutputFormat } from '#src/output/output-format.js';
 import { renderViolationsContextual } from '#src/output/render/render-contextual.js';
 import { renderViolationsJsonObject } from '#src/output/render/render-json.js';
 import { renderViolationsSimple } from '#src/output/render/render-simple.js';
-import type { Violation } from '#src/common/violation.js';
-import type { FileViolationList } from '#src/lint-prisma-files.js';
 
 /* eslint-disable no-console */
 

@@ -104,6 +104,14 @@ model User {
 
 Omitting `revisionNumber` and `revisionCreatedAt` fields from this model will not result in a violation. Other required fields remain required.
 
+## Output
+
+There are a few output options:
+
+```
+
+```
+
 ## Contributing
 
 Pull requests are welcome. Please see [DEVELOPMENT.md](./DEVELOPMENT.md).

@@ -10,10 +10,10 @@ import { glob } from 'glob';
 
 import { readPackageUp } from 'read-package-up';
 
-import { outputToConsole } from '#src/output/console.js';
 import { getTruncatedFileName } from '#src/common/file.js';
 import { parseRules } from '#src/common/parse-rules.js';
 import { lintPrismaFiles } from '#src/lint-prisma-files.js';
+import { outputToConsole } from '#src/output/console.js';
 import ruleDefinitions from '#src/rule-definitions.js';
 
 const DEFAULT_PRISMA_FILE_PATH = 'prisma/schema.prisma';
@@ -28,7 +28,7 @@ program
   )
   .option(
     '-o, --output-format <format>',
-    'Output format. Options: default, contextual, json, filepath, none.',
+    'Output format. Options: simple, contextual, json, filepath, none.',
     'simple',
   )
   .option('--no-color', 'Disable color output.')

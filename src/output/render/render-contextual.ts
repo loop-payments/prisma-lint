@@ -1,7 +1,7 @@
 import chalk from 'chalk';
 
-import { keyViolationListPairs } from '#src/output/render/render-util.js';
 import type { Violation } from '#src/common/violation.js';
+import { keyViolationListPairs } from '#src/output/render/render-util.js';
 
 export const renderViolationsContextual = (
   sourceCode: string,
