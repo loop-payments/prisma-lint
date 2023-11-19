@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`render-contextual should render model and field violations: should render violations contextual 1`] = `
+exports[`render contextual matches snapshot 1`] = `
 [
   "",
   "test.prisma:1:1 [90mFoo[39m",

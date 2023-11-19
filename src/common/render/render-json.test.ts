@@ -1,9 +1,11 @@
+
 import { renderViolationsContextual } from '#src/common/render/render-contextual.js';
+import { renderViolationsJsonObject } from '#src/common/render/render-json.js';
 import { MOCK_SOURCE_CODE, MOCK_VIOLATIONS } from '#src/common/render/render-test-util.js';
 
-describe('render contextual', () => {
+describe('render json', () => {
   it('matches snapshot', () => {
-    const result = renderViolationsContextual(MOCK_SOURCE_CODE, MOCK_VIOLATIONS);
+    const result = renderViolationsJsonObject(MOCK_VIOLATIONS);
     expect(result).toBeDefined();
     expect(result).toMatchSnapshot();
   });

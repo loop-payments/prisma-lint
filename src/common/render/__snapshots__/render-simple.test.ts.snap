@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`render json matches snapshot 1`] = `
+[
+  "  Foo [90m1:1[39m",
+  "    [31merror[39m Fake model rule violation message [90mfake-model-rule-name[39m",
+  "  Foo.displayName [90m2:3[39m",
+  "    [31merror[39m Fake field rule violation message [90mfake-field-rule-name[39m",
+]
+`;
