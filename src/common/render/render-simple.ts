@@ -3,7 +3,7 @@ import chalk from 'chalk';
 import type { Violation } from '#src/common/violation.js';
 import { keyViolationListPairs } from '#src/common/render/render-util.js';
 
-export const renderViolationsSimple = (violations: Violation[]) => {
+export const renderViolationsSimple = (violations: Violation[]): string[] => {
   const pairs = keyViolationListPairs(violations);
   return pairs
     .flatMap(([key, violations]) => {
@@ -18,7 +18,6 @@ export const renderViolationsSimple = (violations: Violation[]) => {
         ...violations.flatMap(renderViolationSimple),
       ];
     })
-    .join('\n');
 };
 
 const renderViolationSimple = ({ ruleName, message }: Violation) => [
