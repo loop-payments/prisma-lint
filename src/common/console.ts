@@ -40,7 +40,7 @@ function outputFilepath(
   quiet: boolean,
 ) {
   fileViolationList.forEach(({ fileName, violations }) => {
-    outputPath(fileName, violations, quiet);
+    maybeOutputPath(fileName, violations, quiet);
   });
 }
 
@@ -59,7 +59,7 @@ function outputSimple(
 ) {
   fileViolationList.forEach(({ fileName, violations }) => {
     const truncatedFileName = getTruncatedFileName(fileName);
-    outputPath(truncatedFileName, violations, quiet);
+    maybeOutputPath(truncatedFileName, violations, quiet);
     const lines = renderViolationsSimple(violations);
     console.error(lines.join('\n'));
   });
@@ -71,13 +71,13 @@ function outputContextual(
 ) {
   fileViolationList.forEach(({ sourceCode, fileName, violations }) => {
     const truncatedFileName = getTruncatedFileName(fileName);
-    outputPath(truncatedFileName, violations, quiet);
+    maybeOutputPath(truncatedFileName, violations, quiet);
     const lines = renderViolationsContextual(sourceCode, violations);
     console.error(lines.join('\n'));
   });
 }
 
-function outputPath(
+function maybeOutputPath(
   fileName: string,
   violations: Violation[],
   quiet: boolean,
