@@ -108,9 +108,47 @@ Omitting `revisionNumber` and `revisionCreatedAt` fields from this model will no
 
 There are a few output options:
 
-```
+### Simple (default)
 
 ```
+example/invalid.prisma ✖
+  Users 11:1
+    error Expected singular model name. model-name-grammatical-number
+    error Missing required fields: "createdAt". require-field
+  Users.emailAddress 13:3
+    error Field name must be mapped to snake case. field-name-mapping-snake-case
+example/valid.prisma ✔
+```
+
+### Contextual
+
+```
+example/invalid.prisma:11:1 Users
+model Users {
+^^^^^^^^^^^
+  error Expected singular model name. model-name-grammatical-number
+  error Missing required fields: "createdAt". require-field
+
+example/invalid.prisma:13:3 Users.emailAddress
+  emailAddress String
+  ^^^^^^^^^^^^
+  error Field name must be mapped to snake case. field-name-mapping-snake-case
+```
+
+### Filepath
+
+```
+example/invalid.prisma ✖
+example/valid.prisma ✔
+```
+
+### None
+
+No output, for when you just want to use the status code.
+
+### JSON
+
+Returns a JSON string containing an array where each violation is an object. Try it out to see example output.
 
 ## Contributing
 

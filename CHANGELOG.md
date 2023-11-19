@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add new `-o, --output` option which accepts `simple` (the default), `none`, `contextual`, `filepath`, and `json`.
+
 ## 0.0.23 (2023-11-15)
 
 - Allow ignoring required fields with default values in `forbid-required-ignored-field`.

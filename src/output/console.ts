@@ -23,7 +23,7 @@ export function outputToConsole(
       outputSimple(fileViolationList, quiet);
       break;
     case 'contextual':
-      outputContextual(fileViolationList, quiet);
+      outputContextual(fileViolationList);
       break;
     case 'json':
       outputJson(fileViolationList);
@@ -59,11 +59,8 @@ function outputSimple(fileViolationList: FileViolationList, quiet: boolean) {
 
 function outputContextual(
   fileViolationList: FileViolationList,
-  quiet: boolean,
 ) {
-  fileViolationList.forEach(({ sourceCode, fileName, violations }) => {
-    const truncatedFileName = getTruncatedFileName(fileName);
-    maybeOutputPath(truncatedFileName, violations, quiet);
+  fileViolationList.forEach(({ sourceCode, violations }) => {
     const lines = renderViolationsContextual(sourceCode, violations);
     console.error(lines.join('\n'));
   });
