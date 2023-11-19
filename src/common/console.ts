@@ -35,28 +35,20 @@ export function outputToConsole(
   }
 }
 
-function outputFilepath(
-  fileViolationList: FileViolationList,
-  quiet: boolean,
-) {
+function outputFilepath(fileViolationList: FileViolationList, quiet: boolean) {
   fileViolationList.forEach(({ fileName, violations }) => {
     maybeOutputPath(fileName, violations, quiet);
   });
 }
 
-function outputJson(
-  fileViolationList: FileViolationList,
-) {
+function outputJson(fileViolationList: FileViolationList) {
   const list = fileViolationList.flatMap(({ violations }) =>
-    renderViolationsJsonObject(violations)
+    renderViolationsJsonObject(violations),
   );
   console.error(JSON.stringify(list));
 }
 
-function outputSimple(
-  fileViolationList: FileViolationList,
-  quiet: boolean,
-) {
+function outputSimple(fileViolationList: FileViolationList, quiet: boolean) {
   fileViolationList.forEach(({ fileName, violations }) => {
     const truncatedFileName = getTruncatedFileName(fileName);
     maybeOutputPath(truncatedFileName, violations, quiet);

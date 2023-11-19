@@ -18,7 +18,7 @@ const model: Model = {
     endLine: 1,
     endColumn: 9,
     endOffset: 1,
-  }
+  },
 };
 const fileName = 'test.prisma';
 export const MOCK_VIOLATIONS: Violation[] = [
@@ -26,7 +26,7 @@ export const MOCK_VIOLATIONS: Violation[] = [
     ruleName: 'fake-model-rule-name',
     message: 'Fake model rule violation message',
     fileName,
-    model
+    model,
   },
   {
     ruleName: 'fake-field-rule-name',
@@ -44,7 +44,7 @@ export const MOCK_VIOLATIONS: Violation[] = [
         endLine: 2,
         endColumn: 12,
         endOffset: 1,
-      }
-    }
+      },
+    },
   },
 ];

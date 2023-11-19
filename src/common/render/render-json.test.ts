@@ -1,4 +1,3 @@
-
 import { renderViolationsJsonObject } from '#src/common/render/render-json.js';
 import { MOCK_VIOLATIONS } from '#src/common/render/render-test-util.js';
 
