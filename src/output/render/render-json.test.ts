@@ -1,5 +1,5 @@
-import { renderViolationsJsonObject } from '#src/common/render/render-json.js';
-import { MOCK_VIOLATIONS } from '#src/common/render/render-test-util.js';
+import { renderViolationsJsonObject } from '#src/output/render/render-json.js';
+import { MOCK_VIOLATIONS } from '#src/output/render/render-test-util.js';
 
 describe('render json', () => {
   it('matches snapshot', () => {

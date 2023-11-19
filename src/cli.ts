@@ -10,7 +10,7 @@ import { glob } from 'glob';
 
 import { readPackageUp } from 'read-package-up';
 
-import { outputToConsole } from '#src/common/console.js';
+import { outputToConsole } from '#src/output/console.js';
 import { getTruncatedFileName } from '#src/common/file.js';
 import { parseRules } from '#src/common/parse-rules.js';
 import { lintPrismaFiles } from '#src/lint-prisma-files.js';
@@ -24,11 +24,11 @@ program
   .option(
     '-c, --config <path>',
     'A path to a config file. ' +
-      'If omitted, cosmiconfig is used to search for a config file.',
+    'If omitted, cosmiconfig is used to search for a config file.',
   )
   .option(
     '-o, --output-format <format>',
-    'Output format. Options: default, contextual, json, file, none.',
+    'Output format. Options: default, contextual, json, filepath, none.',
     'simple',
   )
   .option('--no-color', 'Disable color output.')

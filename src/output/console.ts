@@ -1,10 +1,10 @@
 import chalk from 'chalk';
 
 import { getTruncatedFileName } from '#src/common/file.js';
-import type { OutputFormat } from '#src/common/output-format.js';
-import { renderViolationsContextual } from '#src/common/render/render-contextual.js';
-import { renderViolationsJsonObject } from '#src/common/render/render-json.js';
-import { renderViolationsSimple } from '#src/common/render/render-simple.js';
+import type { OutputFormat } from '#src/output/output-format.js';
+import { renderViolationsContextual } from '#src/output/render/render-contextual.js';
+import { renderViolationsJsonObject } from '#src/output/render/render-json.js';
+import { renderViolationsSimple } from '#src/output/render/render-simple.js';
 import type { Violation } from '#src/common/violation.js';
 import type { FileViolationList } from '#src/lint-prisma-files.js';
 
@@ -16,7 +16,7 @@ export function outputToConsole(
   quiet: boolean,
 ) {
   switch (outputFormat) {
-    case 'file':
+    case 'filepath':
       outputFilepath(fileViolationList, quiet);
       break;
     case 'simple':
