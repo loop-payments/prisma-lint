@@ -17,11 +17,6 @@
     "dist/**/*",
     "!dist/**/*.test.js"
   ],
-  "prisma-ast": {
-    "parser": {
-      "nodeLocationTracking": "full"
-    }
-  },
   "scripts": {
     "build": "tsc",
     "docs": "node ./scripts/generate-docs.js",
