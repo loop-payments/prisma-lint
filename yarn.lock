@@ -1025,15 +1025,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mrleebo/prisma-ast@npm:^0.7.0":
-  version: 0.7.0
-  resolution: "@mrleebo/prisma-ast@npm:0.7.0"
+"@mrleebo/prisma-ast@portal:/Users/max/projects/prisma-ast::locator=prisma-lint%40workspace%3A.":
+  version: 0.0.0-use.local
+  resolution: "@mrleebo/prisma-ast@portal:/Users/max/projects/prisma-ast::locator=prisma-lint%40workspace%3A."
   dependencies:
     chevrotain: "npm:^10.5.0"
     lilconfig: "npm:^2.1.0"
-  checksum: 55c0bcc22b1ca55a2a64ecbc5a1fca6868010df697b6dbe73938af63541f25e40c3dbd3c264f1b4c88996d30c1d4246661c7ab1cee4359f2597b4d1b5e2fe060
   languageName: node
-  linkType: hard
+  linkType: soft
 
 "@nodelib/fs.scandir@npm:2.1.5":
   version: 2.1.5
@@ -5578,7 +5577,7 @@ __metadata:
   resolution: "prisma-lint@workspace:."
   dependencies:
     "@kejistan/enum": "npm:^0.0.2"
-    "@mrleebo/prisma-ast": "npm:^0.7.0"
+    "@mrleebo/prisma-ast": "portal:/Users/max/projects/prisma-ast"
     "@tsconfig/esm": "npm:^1.0.3"
     "@tsconfig/node18": "npm:^18.2.0"
     "@tsconfig/strictest": "npm:^2.0.1"
