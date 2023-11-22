@@ -7,10 +7,8 @@ exports[`render json matches snapshot 1`] = `
     "location": {
       "endColumn": 9,
       "endLine": 1,
-      "endOffset": 1,
       "startColumn": 1,
       "startLine": 1,
-      "startOffset": 1,
     },
     "message": "Fake model rule violation message",
     "ruleName": "fake-model-rule-name",
@@ -20,10 +18,8 @@ exports[`render json matches snapshot 1`] = `
     "location": {
       "endColumn": 12,
       "endLine": 2,
-      "endOffset": 1,
       "startColumn": 3,
       "startLine": 2,
-      "startOffset": 1,
     },
     "message": "Fake field rule violation message",
     "ruleName": "fake-field-rule-name",
