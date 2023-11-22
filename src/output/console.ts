@@ -45,7 +45,7 @@ function outputJson(fileViolationList: FileViolationList) {
   const list = fileViolationList.flatMap(({ violations }) =>
     renderViolationsJsonObject(violations),
   );
-  console.error(JSON.stringify(list));
+  console.error(JSON.stringify({ violations: list }));
 }
 
 function outputSimple(fileViolationList: FileViolationList, quiet: boolean) {
