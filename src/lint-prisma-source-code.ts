@@ -1,9 +1,4 @@
-import {
-  PrismaParser,
-  VisitorClassFactory,
-  getSchema as getPrismaSchema,
-} from '@mrleebo/prisma-ast';
-
+import { getPrismaSchema } from '#src/common/get-prisma-schema.js';
 import {
   isModelEntirelyIgnored,
   isRuleEntirelyIgnored,
@@ -25,10 +20,8 @@ export function lintPrismaSourceCode({
   fileName: string;
   sourceCode: string;
 }): Violation[] {
-  const parser = new PrismaParser({ nodeLocationTracking: 'full' });
-  const VisitorClass = VisitorClassFactory(parser);
-  const visitor = new VisitorClass();
-  const prismaSchema = getPrismaSchema(sourceCode, { parser, visitor });
+  // Parse source code into AST.
+  const prismaSchema = getPrismaSchema(sourceCode);
 
   // Mutable list of violations added to by rule instances.
   const violations: Violation[] = [];
