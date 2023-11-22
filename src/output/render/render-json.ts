@@ -17,21 +17,20 @@ export const renderViolationsJsonObject = (
     if (!rawLocation) {
       throw new Error('No location');
     }
-    const {
-      startLine,
-      startColumn,
-      startOffset,
-      endLine,
-      endColumn,
-      endOffset,
-    } = rawLocation;
+    const { startLine, startColumn, endLine, endColumn } = rawLocation;
+    if (
+      startLine === undefined ||
+      startColumn === undefined ||
+      endLine === undefined ||
+      endColumn === undefined
+    ) {
+      throw new Error('No location');
+    }
     const location = {
       startLine,
       startColumn,
-      startOffset,
       endLine,
       endColumn,
-      endOffset,
     };
     return violations.map((v) => ({
       ruleName: v.ruleName,
