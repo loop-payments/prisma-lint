@@ -148,7 +148,7 @@ No output, for when you just want to use the status code.
 
 ### JSON
 
-Returns a JSON string containing an array where each violation is an object. Try it out to see example output.
+Returns a JSON string representations of an object with list of violations. Useful for editor plugins.
 
 ## Contributing
 
