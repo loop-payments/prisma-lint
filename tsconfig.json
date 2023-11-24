@@ -1,5 +1,5 @@
 {
-  "extends": ["@tsconfig/esm/tsconfig.json", "@tsconfig/node18/tsconfig"],
+  "extends": ["@tsconfig/esm/tsconfig.json", "@tsconfig/node20/tsconfig"],
   "compilerOptions": {
     "moduleResolution": "nodenext",
     "outDir": "./dist",
