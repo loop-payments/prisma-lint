@@ -106,7 +106,7 @@ Omitting `revisionNumber` and `revisionCreatedAt` fields from this model will no
 
 ## Output
 
-There are a few output options:
+There are a few output options.
 
 ### Simple (default)
 
@@ -148,7 +148,7 @@ No output, for when you just want to use the status code.
 
 ### JSON
 
-Returns a JSON string representations of an object with list of violations. Useful for editor plugins.
+Returns a serialized JSON object with list of violations. Useful for editor plugins.
 
 ## Contributing
 
