@@ -3,7 +3,9 @@
 ## Set up
 
 ```sh
+asdf install
 corepack enable
+asdf reshim
 yarn
 ```
 
