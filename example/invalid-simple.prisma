@@ -1,0 +1,5 @@
+model DbUser {
+  id           String @id
+  fooBar       String
+  @@map(name: "users")
+}

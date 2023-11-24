@@ -1,5 +1,4 @@
-import { getSchema as getPrismaSchema } from '@mrleebo/prisma-ast';
-
+import { getPrismaSchema } from '#src/common/get-prisma-schema.js';
 import {
   isModelEntirelyIgnored,
   isRuleEntirelyIgnored,
@@ -12,7 +11,7 @@ import type { Violation, NodeViolation } from '#src/common/violation.js';
 
 type NamedRuleInstance = { ruleName: string; ruleInstance: RuleInstance };
 
-export async function lintPrismaSourceCode({
+export function lintPrismaSourceCode({
   rules,
   fileName,
   sourceCode,
@@ -20,7 +19,8 @@ export async function lintPrismaSourceCode({
   rules: Rule[];
   fileName: string;
   sourceCode: string;
-}) {
+}): Violation[] {
+  // Parse source code into AST.
   const prismaSchema = getPrismaSchema(sourceCode);
 
   // Mutable list of violations added to by rule instances.
@@ -32,7 +32,7 @@ export async function lintPrismaSourceCode({
       const { ruleName } = ruleDefinition;
       const report = (nodeViolation: NodeViolation) =>
         violations.push({ ruleName, fileName, ...nodeViolation });
-      const context = { fileName, report };
+      const context = { fileName, report, sourceCode };
       const ruleInstance = ruleDefinition.create(ruleConfig, context);
       return { ruleName, ruleInstance };
     },

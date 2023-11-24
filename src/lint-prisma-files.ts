@@ -8,7 +8,11 @@ import type { Rule } from '#src/common/rule.js';
 import type { Violation } from '#src/common/violation.js';
 import { lintPrismaSourceCode } from '#src/lint-prisma-source-code.js';
 
-type FileViolations = { fileName: string; violations: Violation[] }[];
+export type FileViolationList = {
+  fileName: string;
+  sourceCode: string;
+  violations: Violation[];
+}[];
 
 export const lintPrismaFiles = async ({
   rules,
@@ -16,28 +20,15 @@ export const lintPrismaFiles = async ({
 }: {
   rules: Rule[];
   fileNames: string[];
-}): Promise<FileViolations> => {
-  const fileViolationList: FileViolations = [];
+}): Promise<FileViolationList> => {
+  const fileViolationList: FileViolationList = [];
   for (const fileName of fileNames) {
-    const violations = await lintPrismaFile({
-      rules,
-      fileName,
+    const filePath = path.resolve(fileName);
+    const sourceCode = await promisify(fs.readFile)(filePath, {
+      encoding: 'utf8',
     });
-    fileViolationList.push({ fileName, violations });
+    const violations = lintPrismaSourceCode({ fileName, sourceCode, rules });
+    fileViolationList.push({ fileName, sourceCode, violations });
   }
   return fileViolationList;
-};
-
-const lintPrismaFile = async ({
-  rules,
-  fileName,
-}: {
-  rules: Rule[];
-  fileName: string;
-}): Promise<Violation[]> => {
-  const filePath = path.resolve(fileName);
-  const sourceCode = await promisify(fs.readFile)(filePath, {
-    encoding: 'utf8',
-  });
-  return lintPrismaSourceCode({ rules, fileName, sourceCode });
 };

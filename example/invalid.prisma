@@ -30,6 +30,6 @@ model UserRoleFoo {
 
 model UserRole {
   id         String @id
-  userId     String
+  userId     String @map(name: "userid")
   // No mapping.
 }

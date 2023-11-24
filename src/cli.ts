@@ -10,9 +10,10 @@ import { glob } from 'glob';
 
 import { readPackageUp } from 'read-package-up';
 
+import { getTruncatedFileName } from '#src/common/file.js';
 import { parseRules } from '#src/common/parse-rules.js';
-import { renderViolations } from '#src/common/render.js';
 import { lintPrismaFiles } from '#src/lint-prisma-files.js';
+import { outputToConsole } from '#src/output/console.js';
 import ruleDefinitions from '#src/rule-definitions.js';
 
 const DEFAULT_PRISMA_FILE_PATH = 'prisma/schema.prisma';
@@ -24,6 +25,11 @@ program
     '-c, --config <path>',
     'A path to a config file. ' +
       'If omitted, cosmiconfig is used to search for a config file.',
+  )
+  .option(
+    '-o, --output-format <format>',
+    'Output format. Options: simple, contextual, json, filepath, none.',
+    'simple',
   )
   .option('--no-color', 'Disable color output.')
   .option('--quiet', 'Suppress all output except for errors.')
@@ -92,22 +98,25 @@ const resolvePrismaFiles = async (args: string[]) => {
   return resolvedFiles;
 };
 
-function getTruncatedFileName(fileName: string) {
-  const cwd = process.cwd();
-  return fileName.includes(cwd)
-    ? path.relative(process.cwd(), fileName)
-    : fileName;
-}
-
-/* eslint-disable no-console */
+const outputParseIssues = (filepath: string, parseIssues: string[]) => {
+  const truncatedFileName = getTruncatedFileName(filepath);
+  // eslint-disable-next-line no-console
+  console.error(`${truncatedFileName} ${chalk.red('✖')}`);
+  for (const parseIssue of parseIssues) {
+    // eslint-disable-next-line no-console
+    console.error(`  ${parseIssue.replaceAll('\n', '\n  ')}`);
+  }
+  process.exit(1);
+};
 
 const run = async () => {
   if (!options.color) {
     chalk.level = 0;
   }
-  const { quiet } = options;
+  const { quiet, outputFormat } = options;
   const rootConfig = await getRootConfigResult();
   if (rootConfig == null) {
+    // eslint-disable-next-line no-console
     console.error(
       'Unable to find configuration file for prisma-lint. Please create a ".prismalintrc.json" file.',
     );
@@ -115,12 +124,7 @@ const run = async () => {
   }
   const { rules, parseIssues } = parseRules(ruleDefinitions, rootConfig.config);
   if (parseIssues.length > 0) {
-    const truncatedFileName = getTruncatedFileName(rootConfig.filepath);
-    console.error(`${truncatedFileName} ${chalk.red('✖')}`);
-    for (const parseIssue of parseIssues) {
-      console.error(`  ${parseIssue.replaceAll('\n', '\n  ')}`);
-    }
-    process.exit(1);
+    outputParseIssues(rootConfig.filepath, parseIssues);
   }
 
   const fileNames = await resolvePrismaFiles(args);
@@ -128,28 +132,19 @@ const run = async () => {
     rules,
     fileNames,
   });
-  let hasViolations = false;
-  fileViolationList.forEach(({ fileName, violations }) => {
-    const truncatedFileName = getTruncatedFileName(fileName);
-    if (violations.length > 0) {
-      hasViolations = true;
-      console.error(`${truncatedFileName} ${chalk.red('✖')}`);
-      const lines = renderViolations(violations);
-      for (const line of lines) {
-        console.error(line);
-      }
-    } else {
-      if (!quiet) {
-        console.log(`${truncatedFileName} ${chalk.green('✔')}`);
-      }
-    }
-  });
+
+  outputToConsole(fileViolationList, outputFormat, quiet);
+
+  const hasViolations = fileViolationList.some(
+    ({ violations }) => violations.length > 0,
+  );
   if (hasViolations) {
     process.exit(1);
   }
 };
 
 run().catch((err) => {
+  // eslint-disable-next-line no-console
   console.error(err);
   // Something's wrong with prisma-lint.
   process.exit(2);

@@ -1,0 +1,28 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`render json matches snapshot 1`] = `
+[
+  {
+    "fileName": "test.prisma",
+    "location": {
+      "endColumn": 9,
+      "endLine": 1,
+      "startColumn": 1,
+      "startLine": 1,
+    },
+    "message": "Fake model rule violation message",
+    "ruleName": "fake-model-rule-name",
+  },
+  {
+    "fileName": "test.prisma",
+    "location": {
+      "endColumn": 12,
+      "endLine": 2,
+      "startColumn": 3,
+      "startLine": 2,
+    },
+    "message": "Fake field rule violation message",
+    "ruleName": "fake-field-rule-name",
+  },
+]
+`;

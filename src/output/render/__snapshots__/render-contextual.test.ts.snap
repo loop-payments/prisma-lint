@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`render contextual matches snapshot 1`] = `
+[
+  "",
+  "test.prisma:1:1 [90mFoo[39m",
+  "model Foo {",
+  "^^^^^^^^^",
+  "  [31merror[39m Fake model rule violation message [90mfake-model-rule-name[39m",
+  "",
+  "test.prisma:2:3 [90mFoo.displayName[39m",
+  "  id     Int    @id",
+  "  ^^^^^^^^^^",
+  "  [31merror[39m Fake field rule violation message [90mfake-field-rule-name[39m",
+]
+`;
