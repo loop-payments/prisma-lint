@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.0.24 (2023-11-24)
+
 - Add new `-o, --output` option which accepts `simple` (the default), `none`, `contextual`, `filepath`, and `json`.
 
 ## 0.0.23 (2023-11-15)
