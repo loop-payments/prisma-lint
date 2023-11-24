@@ -1,7 +1,14 @@
 export const isRegexOrRegexStr = (value: any) => {
-  return (
-    value instanceof RegExp || (value.startsWith('/') && value.endsWith('/'))
-  );
+  if (value == null) {
+    return false;
+  }
+  if (value instanceof RegExp) {
+    return true;
+  }
+  if (typeof value !== 'string') {
+    return false;
+  }
+  return value.startsWith('/') && value.endsWith('/');
 };
 
 export const toRegExp = (value: string | RegExp) => {

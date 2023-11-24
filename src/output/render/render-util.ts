@@ -1,6 +1,8 @@
 import type { Violation } from '#src/common/violation.js';
 
-export const renderViolations = (violations: Violation[]) => {
+export const keyViolationListPairs = (
+  violations: Violation[],
+): [string, Violation[]][] => {
   const groupedByKey = violations.reduce(
     (acc, violation) => {
       const { model, field } = violation;
@@ -10,14 +12,5 @@ export const renderViolations = (violations: Violation[]) => {
     },
     {} as Record<string, Violation[]>,
   );
-  return Object.entries(groupedByKey)
-    .sort()
-    .flatMap(([key, violations]) => {
-      return [`  ${key}`, ...violations.flatMap(renderViolation)];
-    });
+  return Object.entries(groupedByKey).sort();
 };
-
-const renderViolation = ({ ruleName, message }: Violation) => [
-  `    ${ruleName}`,
-  `      ${message}`,
-];
