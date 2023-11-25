@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.0.25 (2023-11-25)
+
 - Avoid empty line in `simple` output format.
 
 ## 0.0.24 (2023-11-24)
