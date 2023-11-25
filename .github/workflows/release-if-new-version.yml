@@ -31,3 +31,6 @@ jobs:
     needs: 'version-check'
     if: needs.version-check.outputs.new-version
     uses: ./.github/workflows/release.yml
+    secrets:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
