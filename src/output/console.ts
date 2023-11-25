@@ -53,7 +53,9 @@ function outputSimple(fileViolationList: FileViolationList, quiet: boolean) {
     const truncatedFileName = getTruncatedFileName(fileName);
     maybeOutputPath(truncatedFileName, violations, quiet);
     const lines = renderViolationsSimple(violations);
-    console.error(lines.join('\n'));
+    if (lines.length !== 0) {
+      console.error(lines.join('\n'));
+    }
   });
 }
 
