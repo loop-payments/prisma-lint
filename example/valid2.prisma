@@ -1,0 +1,24 @@
+generator client {
+  provider        = "prisma-client-js"
+  output          = "../generated/prisma/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = "fake-url"
+}
+
+model DbUser {
+  id         String @id
+  createdAt  DateTime @map(name: "created_at")
+  tenantId   String @map(name: "tenant_id")
+  tenant     DbTenant @relation(fields: [tenantId], references: [id])
+  @@index(tenantId)
+  @@map(name: "user")
+}
+
+model DbTenant {
+  /// prisma-lint-ignore-model require-field createdAt
+  id         String @id
+  @@map(name: "tenant")
+}
