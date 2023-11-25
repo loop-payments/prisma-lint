@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Avoid empty line in `simple` output format.
+
 ## 0.0.24 (2023-11-24)
 
 - Add new `-o, --output` option which accepts `simple` (the default), `none`, `contextual`, `filepath`, and `json`.
