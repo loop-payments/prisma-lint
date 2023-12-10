@@ -204,7 +204,7 @@ For more protection against breaking changes, consider using:
 ### Configuration
 
 ```ts
-z.object({}).strict();
+z.object({}).strict().optional();
 ```
 
 ### Examples
@@ -218,16 +218,6 @@ type Product {
   toBeRemoved String? @ignore
 }
 
-// bad
-type Product {
-  uuid String
-  toBeRemoved String @ignore
-}
-```
-
-#### Default
-
-```prisma
 // good
 type Product {
   uuid String
@@ -237,7 +227,7 @@ type Product {
 // bad
 type Product {
   uuid String
-  toBeRemoved Boolean @ignore
+  toBeRemoved String @ignore
 }
 ```
 

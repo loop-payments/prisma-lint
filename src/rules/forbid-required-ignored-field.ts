@@ -4,7 +4,7 @@ import type { FieldRuleDefinition } from '#src/common/rule.js';
 
 const RULE_NAME = 'forbid-required-ignored-field';
 
-const Config = z.object({}).strict();
+const Config = z.object({}).strict().optional();
 
 /**
  * Forbids required ignored fields without default values.
@@ -23,13 +23,6 @@ const Config = z.object({}).strict();
  *     toBeRemoved String? @ignore
  *   }
  *
- *   // bad
- *   type Product {
- *     uuid String
- *     toBeRemoved String @ignore
- *   }
- *
- * @example
  *   // good
  *   type Product {
  *     uuid String
@@ -39,7 +32,7 @@ const Config = z.object({}).strict();
  *   // bad
  *   type Product {
  *     uuid String
- *     toBeRemoved Boolean @ignore
+ *     toBeRemoved String @ignore
  *   }
  */
 export default {
