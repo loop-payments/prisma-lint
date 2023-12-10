@@ -30,6 +30,29 @@ describe('model-name-mapping-snake-case', () => {
       });
     });
 
+    describe('single word name with mapping', () => {
+      it('returns no violations', async () => {
+        const violations = await run(`
+      model User {
+        id String @id
+        @@map(name: "user")
+      }
+    `);
+        expect(violations.length).toEqual(0);
+      });
+    });
+
+    describe('single word name without mapping', () => {
+      it('returns violation', async () => {
+        const violations = await run(`
+      model User {
+        id String @id
+      }
+    `);
+        expect(violations.length).toEqual(1);
+      });
+    });
+
     describe('valid with no key', () => {
       it('returns no violations', async () => {
         const violations = await run(`
