@@ -1,4 +1,4 @@
-import type { Attribute, Field } from '@mrleebo/prisma-ast';
+import type { Attribute } from '@mrleebo/prisma-ast';
 
 import { z } from 'zod';
 
@@ -58,30 +58,38 @@ export default {
     const compoundWords = config?.compoundWords;
     return {
       Field: (model, field) => {
-        if (allowedToHaveNoMapping(field)) {
+        if (isAssociation(field.fieldType)) {
           return;
         }
+
+        // A helper function to report a problem with the field.
         const report = (message: string) =>
           context.report({ model, field, message });
-        const { attributes } = field;
+
+        const { name, attributes } = field;
+        const expectedSnakeCase = toSnakeCase(name, { compoundWords });
+        const isMappingRequired = !isAllLowerCase(name);
+
         if (!attributes) {
-          report('Field name must be mapped to snake case.');
+          if (isMappingRequired) {
+            report('Field name must be mapped to snake case.');
+          }
           return;
         }
         const mapAttribute = findMapAttribute(attributes);
         if (!mapAttribute || !mapAttribute.args) {
-          report('Field name must be mapped to snake case.');
+          if (isMappingRequired) {
+            report('Field name must be mapped to snake case.');
+          }
           return;
         }
         const mappedName = getMappedName(mapAttribute.args);
         if (!mappedName) {
-          report('Field name must be mapped to snake case.');
+          if (isMappingRequired) {
+            report('Field name must be mapped to snake case.');
+          }
           return;
         }
-        const fieldName = field.name;
-        const expectedSnakeCase = toSnakeCase(fieldName, {
-          compoundWords,
-        });
         if (mappedName !== expectedSnakeCase) {
           report(`Field name must be mapped to "${expectedSnakeCase}".`);
         }
@@ -101,10 +109,6 @@ function findMapAttribute(attributes: Attribute[]): Attribute | undefined {
     );
   }
   return filtered[0];
-}
-
-export function allowedToHaveNoMapping(field: Field) {
-  return isAllLowerCase(field.name) || isAssociation(field.fieldType);
 }
 
 function isAssociation(fieldType: any) {

@@ -99,6 +99,28 @@ describe('field-name-mapping-snake-case', () => {
       });
     });
 
+    describe('single word with incorrect mapping', () => {
+      it('returns violation', async () => {
+        const violations = await run(`
+      model User {
+        email String @map(name: "email_address")
+      }
+    `);
+        expect(violations.length).toEqual(1);
+      });
+    });
+
+    describe('association without mapping', () => {
+      it('returns no violations', async () => {
+        const violations = await run(`
+      model User {
+        associatedModel AssociatedModel?
+      }
+    `);
+        expect(violations.length).toEqual(0);
+      });
+    });
+
     describe('missing @map', () => {
       it('returns violation', async () => {
         const violations = await run(`
