@@ -1327,20 +1327,20 @@ __metadata:
   linkType: hard
 
 "@typescript-eslint/parser@npm:^6.0.0":
-  version: 6.15.0
-  resolution: "@typescript-eslint/parser@npm:6.15.0"
+  version: 6.16.0
+  resolution: "@typescript-eslint/parser@npm:6.16.0"
   dependencies:
-    "@typescript-eslint/scope-manager": "npm:6.15.0"
-    "@typescript-eslint/types": "npm:6.15.0"
-    "@typescript-eslint/typescript-estree": "npm:6.15.0"
-    "@typescript-eslint/visitor-keys": "npm:6.15.0"
+    "@typescript-eslint/scope-manager": "npm:6.16.0"
+    "@typescript-eslint/types": "npm:6.16.0"
+    "@typescript-eslint/typescript-estree": "npm:6.16.0"
+    "@typescript-eslint/visitor-keys": "npm:6.16.0"
     debug: "npm:^4.3.4"
   peerDependencies:
     eslint: ^7.0.0 || ^8.0.0
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: fdd1f584e5068216c36a01e40750950ef309b36a522f6ecde36931690558a319960a702b4b4a806f335fb28ca99f8a07bb206571141550aaab1f6f40066f6605
+  checksum: 3d941ce345dc2ce29957e2110957662873d514b094b8939923c3281d858c11cd1f9058db862644afe14f68d087770f39a0a1f9e523a2013ed5d2fdf3421b34d0
   languageName: node
   linkType: hard
 
