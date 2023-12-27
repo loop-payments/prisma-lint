@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Show violation for incorrect mapping of single-word field name.
+
 ## 0.0.25 (2023-11-25)
 
 - Avoid empty line in `simple` output format.
