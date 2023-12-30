@@ -111,6 +111,7 @@ There are a few output options.
 ### Simple (default)
 
 ```
+> yarn prisma-lint -o simple
 example/invalid.prisma ✖
   Users 11:1
     error Expected singular model name. model-name-grammatical-number
@@ -123,6 +124,7 @@ example/valid.prisma ✔
 ### Contextual
 
 ```
+> yarn prisma-lint -o contextual
 example/invalid.prisma:11:1 Users
 model Users {
 ^^^^^^^^^^^
@@ -138,17 +140,26 @@ example/invalid.prisma:13:3 Users.emailAddress
 ### Filepath
 
 ```
+> yarn prisma-lint -o filepath
 example/invalid.prisma ✖
 example/valid.prisma ✔
 ```
 
 ### None
 
+```
+> yarn prisma-lint -o none
+```
+
 No output, for when you just want to use the status code.
 
 ### JSON
 
-Returns a serialized JSON object with list of violations. Useful for editor plugins.
+```
+> yarn prisma-lint -o json
+```
+
+Outputs a serialized JSON object with list of violations. Useful for editor plugins.
 
 ## Contributing
 
