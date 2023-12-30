@@ -17,11 +17,12 @@ yarn build && node ./dist/cli.js -c example/.prismalintrc.json example/valid.pri
 
 ## Test
 
-Three options:
+A few options:
 
-1. To run unit tests use `yarn test`.
-2. To run a local version against example test cases, see [example/README.md](./example/README.md). Feel free to add or edit examples.
-3. To use a local version of `prisma-lint` within a different repository, update the other repository's `package.json` dependency as shown below, then run `yarn prisma-lint` within the other repository.
+1. To run all unit tests use `yarn test`.
+2. To run a specific unit test use `yarn test <test>`.
+3. To run a local version against example test cases, see [example/README.md](./example/README.md). Feel free to add or edit examples.
+4. To use a local version of `prisma-lint` within a different repository, update the other repository's `package.json` dependency as shown below, then run `yarn prisma-lint` within the other repository.
 
 ```
 "prisma-lint": "portal:/Users/max/loop/prisma-lint",

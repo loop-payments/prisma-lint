@@ -11,6 +11,7 @@ Configuration option schemas are written with [Zod](https://github.com/colinhack
 - [model-name-grammatical-number](#model-name-grammatical-number)
 - [model-name-mapping-snake-case](#model-name-mapping-snake-case)
 - [model-name-prefix](#model-name-prefix)
+- [require-default-empty-arrays](#require-default-empty-arrays)
 - [require-field-index](#require-field-index)
 - [require-field-type](#require-field-type)
 - [require-field](#require-field)
@@ -397,6 +398,32 @@ model DbUser {
 // bad
 model Users {
   id String @id
+}
+```
+
+## require-default-empty-arrays
+
+Checks that the mapped name of a field is the expected snake case.
+
+### Configuration
+
+```ts
+z.object({}).strict().optional();
+```
+
+### Examples
+
+#### Default
+
+```prisma
+// good
+model Post {
+ tags String[] @default([])
+}
+
+// bad
+model Post {
+  tags String[]
 }
 ```
 
