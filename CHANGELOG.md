@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.0.26 (2023-12-30)
+
 - Show violation for incorrect mapping of single-word field name.
 
 ## 0.0.25 (2023-11-25)
