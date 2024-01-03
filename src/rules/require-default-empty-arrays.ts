@@ -9,7 +9,10 @@ const RULE_NAME = 'require-default-empty-arrays';
 const Config = z.object({}).strict().optional();
 
 /**
- * Checks that the mapped name of a field is the expected snake case.
+ * Requires default empty arrays for array fields.
+ *
+ * Motivation:
+ * <https://github.com/loop-payments/prisma-lint/issues/275>
  *
  * @example
  *   // good

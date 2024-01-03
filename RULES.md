@@ -403,7 +403,10 @@ model Users {
 
 ## require-default-empty-arrays
 
-Checks that the mapped name of a field is the expected snake case.
+Requires default empty arrays for array fields.
+
+Motivation:
+<https://github.com/loop-payments/prisma-lint/issues/275>
 
 ### Configuration
 
