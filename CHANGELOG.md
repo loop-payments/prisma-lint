@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- [#275](https://github.com/loop-payments/prisma-lint/issues/275) Add new rule `require-default-empty-arrays`.
+
 ## 0.0.26 (2023-12-30)
 
 - Show violation for incorrect mapping of single-word field name.
