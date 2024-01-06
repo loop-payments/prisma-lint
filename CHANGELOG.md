@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.1.0 (2024-01-06)
+
 - [#275](https://github.com/loop-payments/prisma-lint/issues/275) Add new rule `require-default-empty-arrays`.
 
 ## 0.0.26 (2023-12-30)
