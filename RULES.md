@@ -202,12 +202,6 @@ For more protection against breaking changes, consider using:
 
 <https://github.com/loop-payments/prisma-safety>
 
-### Configuration
-
-```ts
-z.object({}).strict().optional();
-```
-
 ### Examples
 
 #### Default
@@ -407,12 +401,6 @@ Requires default empty arrays for array fields.
 
 Motivation:
 <https://github.com/loop-payments/prisma-lint/issues/275>
-
-### Configuration
-
-```ts
-z.object({}).strict().optional();
-```
 
 ### Examples
 

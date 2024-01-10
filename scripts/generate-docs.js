@@ -95,6 +95,8 @@ function extractRulesFromSourceCode(filePath) {
   return null;
 }
 
+const EMPTY_CONFIG_SCHEMA = 'z.object({}).strict().optional();';
+
 function buildRulesMarkdownFile(rules) {
   let markdownContent = RULES_HEADER;
 
@@ -109,7 +111,7 @@ function buildRulesMarkdownFile(rules) {
   rules.forEach((rule) => {
     markdownContent += `## ${rule.ruleName}\n\n`;
     markdownContent += `${rule.description}\n\n`;
-    if (rule.configSchema !== '{}') {
+    if (rule.configSchema !== EMPTY_CONFIG_SCHEMA) {
       markdownContent += '### Configuration\n\n';
       markdownContent += '```ts\n';
       markdownContent += `${rule.configSchema}\n`;
