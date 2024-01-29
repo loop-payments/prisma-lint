@@ -55,7 +55,7 @@
     "eslint-plugin-canonical": "^4.2.2",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-jest": "^27.2.1",
-    "husky": "^8.0.3",
+    "husky": "^9.0.7",
     "jest": "^29.3.1",
     "lint-staged": "^15.0.1",
     "prettier": "3.2.4",
