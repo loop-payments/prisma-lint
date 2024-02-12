@@ -1143,9 +1143,9 @@ __metadata:
   linkType: hard
 
 "@tsconfig/strictest@npm:^2.0.1":
-  version: 2.0.2
-  resolution: "@tsconfig/strictest@npm:2.0.2"
-  checksum: 5409233288d872a2d79aca5eb65d3da681c6e0baa9ee58744adceda834fececdaa8265869793cfd5a80f4c887e3296b4d13309ef5bffbf7c8272071f00b60ba7
+  version: 2.0.3
+  resolution: "@tsconfig/strictest@npm:2.0.3"
+  checksum: 65e636bc4a8b721db7805a07de847b68c3441da9f19fca2c7d5e54e8c59e1eb76bfc7bee2ff64482cb4d54bbbe87ae43dedbdd4843a9d92669f26bb3dfb4c204
   languageName: node
   linkType: hard
 
