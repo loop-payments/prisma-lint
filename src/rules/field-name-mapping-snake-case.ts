@@ -11,6 +11,7 @@ const RULE_NAME = 'field-name-mapping-snake-case';
 const Config = z
   .object({
     compoundWords: z.array(z.string()).optional(),
+    requirePrefix: z.string().optional(),
   })
   .strict()
   .optional();
@@ -50,12 +51,23 @@ const Config = z
  *     graphQLId String @map(name: "graph_q_l_id")
  *   }
  *
+ * @example { requirePrefix: ["_"] }
+ *   // good
+ *   model PersistedQuery {
+ *     fooId String @map(name: "_foo_id")
+ *   }
+ *
+ *   // bad
+ *   model PersistedQuery {
+ *     fooId String @map(name: "foo_id")
+ *   }
+ *
  */
 export default {
   ruleName: RULE_NAME,
   configSchema: Config,
   create: (config, context) => {
-    const compoundWords = config?.compoundWords;
+    const { compoundWords, requirePrefix } = config ?? {};
     return {
       Field: (model, field) => {
         if (isAssociation(field.fieldType)) {
@@ -67,7 +79,10 @@ export default {
           context.report({ model, field, message });
 
         const { name, attributes } = field;
-        const expectedSnakeCase = toSnakeCase(name, { compoundWords });
+        const expectedSnakeCase = toSnakeCase(name, {
+          compoundWords,
+          requirePrefix,
+        });
         const isMappingRequired = !isAllLowerCase(name);
 
         if (!attributes) {
