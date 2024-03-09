@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.1.1 (2024-03-09)
+
 - Upgrade dependencies.
 
 ## 0.1.0 (2024-01-06)
