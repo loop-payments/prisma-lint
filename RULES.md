@@ -1,10 +1,8 @@
-
 # Rules
 
 > This document is automatically generated from the source code. Do not edit it directly.
 
-Configuration option schemas are written with [Zod](
-<https://github.com/colinhacks/zod>).
+Configuration option schemas are written with [Zod](https://github.com/colinhacks/zod).
 
 - [field-name-mapping-snake-case](#field-name-mapping-snake-case)
 - [field-order](#field-order)
@@ -22,15 +20,13 @@ Configuration option schemas are written with [Zod](
 
 Checks that the mapped name of a field is the expected snake case.
 
-
 ### Configuration
 
 ```ts
-z
-  .object({
-    compoundWords: z.array(z.string()).optional(),
-    requirePrefix: z.string().optional(),
-  })
+z.object({
+  compoundWords: z.array(z.string()).optional(),
+  requirePrefix: z.string().optional(),
+})
   .strict()
   .optional();
 ```
@@ -104,15 +100,12 @@ number of fields can appear in the model at that point. This can
 be used at the end of the `order` list to indicate that remaining
 fields can appear in any order at the end of the model.
 
-
 ### Configuration
 
 ```ts
-z
-  .object({
-    order: z.array(z.string()),
-  })
-  .strict();
+z.object({
+  order: z.array(z.string()),
+}).strict();
 ```
 
 ### Examples
@@ -173,15 +166,12 @@ model User {
 
 Forbids fields with certain names.
 
-
 ### Configuration
 
 ```ts
-z
-  .object({
-    forbid: z.array(z.union([z.string(), z.instanceof(RegExp)])),
-  })
-  .strict();
+z.object({
+  forbid: z.array(z.union([z.string(), z.instanceof(RegExp)])),
+}).strict();
 ```
 
 ### Examples
@@ -227,7 +217,6 @@ For more protection against breaking changes, consider using:
 
 <https://github.com/loop-payments/prisma-safety>
 
-
 ### Examples
 
 #### Default
@@ -258,15 +247,12 @@ Checks that each model name matches the plural or singlar enforced style.
 
 <https://en.wikipedia.org/wiki/Grammatical_number>
 
-
 ### Configuration
 
 ```ts
-z
-  .object({
-    style: z.enum(['singular', 'plural']),
-  })
-  .strict();
+z.object({
+  style: z.enum(['singular', 'plural']),
+}).strict();
 ```
 
 ### Examples
@@ -303,17 +289,15 @@ model User {
 
 Checks that the mapped name of a model is the expected snake case.
 
-
 ### Configuration
 
 ```ts
-z
-  .object({
-    compoundWords: z.array(z.string()).optional(),
-    trimPrefix: z.string().optional(),
-    pluralize: z.boolean().optional(),
-    irregularPlurals: z.record(z.string()).optional(),
-  })
+z.object({
+  compoundWords: z.array(z.string()).optional(),
+  trimPrefix: z.string().optional(),
+  pluralize: z.boolean().optional(),
+  irregularPlurals: z.record(z.string()).optional(),
+})
   .strict()
   .optional();
 ```
@@ -402,15 +386,12 @@ domain object is persisted in multiple tables,
 and the application type differs from the table
 structure.
 
-
 ### Configuration
 
 ```ts
-z
-  .object({
-    prefix: z.string(),
-  })
-  .strict();
+z.object({
+  prefix: z.string(),
+}).strict();
 ```
 
 ### Examples
@@ -435,7 +416,6 @@ Requires default empty arrays for array fields.
 
 Motivation:
 <https://github.com/loop-payments/prisma-lint/issues/275>
-
 
 ### Examples
 
@@ -466,18 +446,15 @@ That will ignore only `tenantId` violations for the model. Other
 required indices will still be enforced. A comma-separated list of fields
 can be provided to ignore multiple fields.
 
-
 ### Configuration
 
 ```ts
-z
-  .object({
-    forAllRelations: z.boolean().optional(),
-    forNames: z
-      .union([z.string(), z.array(z.union([z.string(), z.instanceof(RegExp)]))])
-      .optional(),
-  })
-  .strict();
+z.object({
+  forAllRelations: z.boolean().optional(),
+  forNames: z
+    .union([z.string(), z.array(z.union([z.string(), z.instanceof(RegExp)]))])
+    .optional(),
+}).strict();
 ```
 
 ### Examples
@@ -549,20 +526,17 @@ type Bar {
 
 Checks that certain fields have a specific type.
 
-
 ### Configuration
 
 ```ts
-z
-  .object({
-    require: z.array(
-      z.object({
-        ifName: z.union([z.string(), z.instanceof(RegExp)]),
-        type: z.string(),
-      }),
-    ),
-  })
-  .strict();
+z.object({
+  require: z.array(
+    z.object({
+      ifName: z.union([z.string(), z.instanceof(RegExp)]),
+      type: z.string(),
+    }),
+  ),
+}).strict();
 ```
 
 ### Examples
@@ -610,23 +584,20 @@ That will ignore only `tenantId` field violations for the model. Other
 required fields will still be enforced. A comma-separated list of fields
 can be provided to ignore multiple required fields.
 
-
 ### Configuration
 
 ```ts
-z
-  .object({
-    require: z.array(
-      z.union([
-        z.string(),
-        z.object({
-          name: z.string(),
-          ifSibling: z.union([z.string(), z.instanceof(RegExp)]),
-        }),
-      ]),
-    ),
-  })
-  .strict();
+z.object({
+  require: z.array(
+    z.union([
+      z.string(),
+      z.object({
+        name: z.string(),
+        ifSibling: z.union([z.string(), z.instanceof(RegExp)]),
+      }),
+    ]),
+  ),
+}).strict();
 ```
 
 ### Examples
@@ -659,4 +630,3 @@ model Product {
   priceAmountD6 Int
 }
 ```
-
