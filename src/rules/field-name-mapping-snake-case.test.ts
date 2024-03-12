@@ -15,7 +15,44 @@ describe('field-name-mapping-snake-case', () => {
       ruleDefinitions: [fieldNameMappingSnakeCase],
     });
 
-  describe('with config', () => {
+  describe('with requirePrefix', () => {
+    const run = getRunner({ requirePrefix: '_' });
+
+    describe('valid with mapping', () => {
+      it('returns no violations', async () => {
+        const violations = await run(`
+      model User {
+        fooBar String @map(name: "_foo_bar")
+      }
+    `);
+        expect(violations.length).toEqual(0);
+      });
+    });
+
+    describe('missing @map', () => {
+      it('returns violation', async () => {
+        const violations = await run(`
+      model User {
+        fooBar String
+      }
+    `);
+        expect(violations.length).toEqual(1);
+      });
+    });
+
+    describe('without prefix', () => {
+      it('returns violation', async () => {
+        const violations = await run(`
+      model user {
+        fooBar String @map(name: "foo_bar")
+      }
+    `);
+        expect(violations.length).toEqual(1);
+      });
+    });
+  });
+
+  describe('with compoundWords', () => {
     const run = getRunner({ compoundWords: ['graphQL'] });
 
     describe('valid with mapping', () => {
