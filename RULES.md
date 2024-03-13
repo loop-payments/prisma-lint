@@ -25,6 +25,7 @@ Checks that the mapped name of a field is the expected snake case.
 ```ts
 z.object({
   compoundWords: z.array(z.string()).optional(),
+  requirePrefix: z.string().optional(),
 })
   .strict()
   .optional();
@@ -66,6 +67,20 @@ model PersistedQuery {
 // bad
 model PersistedQuery {
   graphQLId String @map(name: "graph_q_l_id")
+}
+```
+
+#### With `{ requirePrefix: ["_"] }`
+
+```prisma
+// good
+model PersistedQuery {
+  fooId String @map(name: "_foo_id")
+}
+
+// bad
+model PersistedQuery {
+  fooId String @map(name: "foo_id")
 }
 ```
 

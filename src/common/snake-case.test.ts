@@ -43,6 +43,16 @@ describe('toSnakeCase', () => {
     });
   });
 
+  describe('require prefix', () => {
+    it('respects required prefix', () => {
+      const input = 'FooBar';
+      const result = toSnakeCase(input, {
+        requirePrefix: '_',
+      });
+      expect(result).toEqual('_foo_bar');
+    });
+  });
+
   describe('numbers', () => {
     it('makes numbers their own words', () => {
       const input = 'AmazonS3';

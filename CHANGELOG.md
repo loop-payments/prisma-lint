@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.1.2 (2024-03-13)
+
+- Add `require-prefix` option to `field-name-mapping-snake-case` to support MongoDB naming conventions.
+
 ## 0.1.1 (2024-03-09)
 
 - Upgrade dependencies.

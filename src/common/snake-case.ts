@@ -8,6 +8,11 @@ export function toSnakeCase(
   input: string,
   options: {
     /**
+     * A prefix to require in the input string
+     */
+    requirePrefix?: string;
+
+    /**
      * A prefix to remove from the input string
      * before converting to snake case.
      */
@@ -54,6 +59,8 @@ export function toSnakeCase(
       acc.replace(compoundWord, compoundWord.replace(/_/g, '')),
     snakeCase,
   );
+  let result = snakeCaseWithCompoundWords;
+
   if (options.pluralize) {
     if (options.irregularPlurals) {
       for (const [singular, plural] of Object.entries(
@@ -62,7 +69,12 @@ export function toSnakeCase(
         pluralize.addIrregularRule(singular, plural);
       }
     }
-    return pluralize(snakeCaseWithCompoundWords);
+    result = pluralize(snakeCaseWithCompoundWords);
   }
-  return snakeCaseWithCompoundWords;
+
+  if (options.requirePrefix) {
+    result = `${options.requirePrefix}${snakeCaseWithCompoundWords}`;
+  }
+
+  return result;
 }
