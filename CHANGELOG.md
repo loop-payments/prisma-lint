@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Upgrade `@mrleebo/prisma-ast` to get new version that supports mapped enums.
+
 ## 0.1.2 (2024-03-13)
 
 - Add `require-prefix` option to `field-name-mapping-snake-case` to support MongoDB naming conventions.
