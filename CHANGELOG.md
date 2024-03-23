@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.1.3 (2024-03-23)
+
 - Upgrade `@mrleebo/prisma-ast` to get new version that supports mapped enums.
 
 ## 0.1.2 (2024-03-13)
