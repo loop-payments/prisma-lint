@@ -11,9 +11,9 @@ const RULE_NAME = 'model-name-mapping-snake-case';
 const Config = z
   .object({
     compoundWords: z.array(z.string()).optional(),
-    trimPrefix: z.string().optional(),
-    pluralize: z.boolean().optional(),
     irregularPlurals: z.record(z.string()).optional(),
+    pluralize: z.boolean().optional(),
+    trimPrefix: z.string().optional(),
   })
   .strict()
   .optional();
