@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.2.0 (2024-03-29)
+
 - [#354](https://github.com/loop-payments/prisma-lint/issues/354) Add `allowlist` to `model-name-grammatical-number`.
 
 ## 0.1.3 (2024-03-23)
