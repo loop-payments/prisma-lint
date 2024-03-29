@@ -89,4 +89,61 @@ describe('model-name-grammatical-number', () => {
       });
     });
   });
+
+  describe('allowlist', () => {
+    describe('without allowlist', () => {
+      const run = getRunner({ style: 'singular' });
+
+      it('returns violation', async () => {
+        const violations = await run(`
+      model UserData {
+        id String @id
+      }
+    `);
+        expect(violations.length).toEqual(1);
+      });
+    });
+
+    describe('with string allowlist', () => {
+      const run = getRunner({ style: 'singular', allowlist: ['UserData'] });
+
+      it('returns no violations', async () => {
+        const violations = await run(`
+      model UserData {
+        id String @id
+      }
+    `);
+        expect(violations.length).toEqual(0);
+      });
+    });
+
+    describe('with regexp allowlist', () => {
+      const run = getRunner({ style: 'singular', allowlist: ['/Data$/'] });
+
+      describe('with matching suffix', () => {
+        it('returns no violations', async () => {
+          const violations = await run(`
+      model UserData {
+        id String @id
+      }
+      model TenantData {
+        id String @id
+      }
+    `);
+          expect(violations.length).toEqual(0);
+        });
+      });
+
+      describe('without matching suffix', () => {
+        it('returns violation', async () => {
+          const violations = await run(`
+      model DataRecords {
+        id String @id
+      }
+    `);
+          expect(violations.length).toEqual(1);
+        });
+      });
+    });
+  });
 });

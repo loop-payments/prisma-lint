@@ -252,6 +252,7 @@ Checks that each model name matches the plural or singlar enforced style.
 ```ts
 z.object({
   style: z.enum(['singular', 'plural']),
+  allowlist: z.array(z.union([z.string(), z.instanceof(RegExp)])).optional(),
 }).strict();
 ```
 
@@ -285,6 +286,38 @@ model User {
 }
 ```
 
+#### With `{ style: "singular", allowlist: ["UserData"] }`
+
+```prisma
+// good
+model UserData {
+  id String @id
+}
+
+// bad
+model TenantData {
+  id String @id
+}
+```
+
+#### With `{ style: "singular", allowlist: ["/Data$/"] }`
+
+```prisma
+// good
+model UserData {
+  id String @id
+}
+
+model TenantData {
+  id String @id
+}
+
+// bad
+model DataRecords {
+  id String @id
+}
+```
+
 ## model-name-mapping-snake-case
 
 Checks that the mapped name of a model is the expected snake case.
@@ -294,9 +327,9 @@ Checks that the mapped name of a model is the expected snake case.
 ```ts
 z.object({
   compoundWords: z.array(z.string()).optional(),
-  trimPrefix: z.string().optional(),
-  pluralize: z.boolean().optional(),
   irregularPlurals: z.record(z.string()).optional(),
+  pluralize: z.boolean().optional(),
+  trimPrefix: z.string().optional(),
 })
   .strict()
   .optional();
