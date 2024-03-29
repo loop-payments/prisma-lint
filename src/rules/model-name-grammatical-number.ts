@@ -47,8 +47,20 @@ const Config = z
  *     id String @id
  *   }
  *
- *   // bad
+ *   model User {
+ *     id String @id
+ *   }
+ *
+ *   model Tenant {
+ *     id String @id
+ *   }
+ *
+ *   // bad ("data" is considered plural by default)
  *   model TenantData {
+ *     id String @id
+ *   }
+ *
+ *   model Users {
  *     id String @id
  *   }
  *
@@ -64,6 +76,10 @@ const Config = z
  *
  *   // bad
  *   model DataRecords {
+ *     id String @id
+ *   }
+ *
+ *   model Users {
  *     id String @id
  *   }
  */
