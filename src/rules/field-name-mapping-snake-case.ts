@@ -51,7 +51,7 @@ const Config = z
  *     graphQLId String @map(name: "graph_q_l_id")
  *   }
  *
- * @example { requireUnderscorePrefixForId: ["_"] }
+ * @example { requireUnderscorePrefixForId: true }
  *   // good
  *   model PersistedQuery {
  *     id String @id @map(name: "_id")
