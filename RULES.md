@@ -70,7 +70,7 @@ model PersistedQuery {
 }
 ```
 
-#### With `{ requireUnderscorePrefixForId: true }`
+#### With `{ requireUnderscorePrefixForIds: true }`
 
 ```prisma
 // good
