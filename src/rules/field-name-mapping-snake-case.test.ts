@@ -15,17 +15,18 @@ describe('field-name-mapping-snake-case', () => {
       ruleDefinitions: [fieldNameMappingSnakeCase],
     });
 
-  describe('with requirePrefix', () => {
-    const run = getRunner({ requirePrefix: '_' });
+  describe('with requireUnderscorePrefixForIds', () => {
+    const run = getRunner({ requireUnderscorePrefixForIds: true });
 
     describe('valid with mapping', () => {
       it('returns no violations', async () => {
         const violations = await run(`
       model User {
-        fooBar String @map(name: "_foo_bar")
+        id String @id @map(name: "_id")
+        otherField String @map(name: "other_field")
       }
     `);
-        expect(violations.length).toEqual(0);
+        expect(violations.map((v) => v.message)).toEqual([]);
       });
     });
 
@@ -33,10 +34,10 @@ describe('field-name-mapping-snake-case', () => {
       it('returns violation', async () => {
         const violations = await run(`
       model User {
-        fooBar String
+        idFoo String @id
       }
     `);
-        expect(violations.length).toEqual(1);
+        expect(violations).toHaveLength(1);
       });
     });
 
@@ -44,7 +45,20 @@ describe('field-name-mapping-snake-case', () => {
       it('returns violation', async () => {
         const violations = await run(`
       model user {
-        fooBar String @map(name: "foo_bar")
+        id String @id @map(name: "id")
+      }
+    `);
+        expect(violations.map((v) => v.message)).toEqual([
+          'Field name must be mapped to "_id".',
+        ]);
+      });
+    });
+
+    describe('with wrong mapping', () => {
+      it('returns violation', async () => {
+        const violations = await run(`
+      model user {
+        idTwo String @id @map(name: "_id_one")
       }
     `);
         expect(violations.length).toEqual(1);

@@ -25,7 +25,7 @@ Checks that the mapped name of a field is the expected snake case.
 ```ts
 z.object({
   compoundWords: z.array(z.string()).optional(),
-  requirePrefix: z.string().optional(),
+  requireUnderscorePrefixForIds: z.boolean().optional(),
 })
   .strict()
   .optional();
@@ -70,17 +70,19 @@ model PersistedQuery {
 }
 ```
 
-#### With `{ requirePrefix: ["_"] }`
+#### With `{ requireUnderscorePrefixForIds: true }`
 
 ```prisma
 // good
 model PersistedQuery {
-  fooId String @map(name: "_foo_id")
+  id String @id @map(name: "_id")
+  otherField String @map(name: "other_field")
 }
 
 // bad
 model PersistedQuery {
-  fooId String @map(name: "foo_id")
+  id String @id @map(name: "id")
+  otherField String @map(name: "other_field")
 }
 ```
 
