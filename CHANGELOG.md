@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- [#330](https://github.com/loop-payments/prisma-lint/issues/330) Remove `requirePrefix` option and add `requireUnderscorePrefixForIds` to `field-name-mapping-snake-case` to actually support MongoDB naming conventions. 
+
 ## 0.2.0 (2024-03-29)
 
 - [#354](https://github.com/loop-payments/prisma-lint/issues/354) Add `allowlist` to `model-name-grammatical-number`.

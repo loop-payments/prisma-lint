@@ -11,7 +11,7 @@ const RULE_NAME = 'field-name-mapping-snake-case';
 const Config = z
   .object({
     compoundWords: z.array(z.string()).optional(),
-    requirePrefix: z.string().optional(),
+    requireUnderscorePrefixForIds: z.boolean().optional(),
   })
   .strict()
   .optional();
@@ -51,15 +51,17 @@ const Config = z
  *     graphQLId String @map(name: "graph_q_l_id")
  *   }
  *
- * @example { requirePrefix: ["_"] }
+ * @example { requireUnderscorePrefixForId: ["_"] }
  *   // good
  *   model PersistedQuery {
- *     fooId String @map(name: "_foo_id")
+ *     id String @id @map(name: "_id")
+ *     otherField String @map(name: "other_field")
  *   }
  *
  *   // bad
  *   model PersistedQuery {
- *     fooId String @map(name: "foo_id")
+ *     id String @id @map(name: "id")
+ *     otherField String @map(name: "other_field")
  *   }
  *
  */
@@ -67,7 +69,7 @@ export default {
   ruleName: RULE_NAME,
   configSchema: Config,
   create: (config, context) => {
-    const { compoundWords, requirePrefix } = config ?? {};
+    const { compoundWords, requireUnderscorePrefixForIds } = config ?? {};
     return {
       Field: (model, field) => {
         if (isAssociation(field.fieldType)) {
@@ -78,12 +80,12 @@ export default {
         const report = (message: string) =>
           context.report({ model, field, message });
 
-        const { name, attributes } = field;
-        const expectedSnakeCase = toSnakeCase(name, {
-          compoundWords,
-          requirePrefix,
-        });
-        const isMappingRequired = !isAllLowerCase(name);
+        const { attributes, name: fieldName } = field;
+        const isIdWithRequiredPrefix =
+          requireUnderscorePrefixForIds &&
+          attributes?.find((a) => a.name === 'id');
+        const isMappingRequired =
+          !isAllLowerCase(fieldName) || isIdWithRequiredPrefix;
 
         if (!attributes) {
           if (isMappingRequired) {
@@ -104,6 +106,10 @@ export default {
             report('Field name must be mapped to snake case.');
           }
           return;
+        }
+        let expectedSnakeCase = toSnakeCase(fieldName, { compoundWords });
+        if (isIdWithRequiredPrefix) {
+          expectedSnakeCase = `_${expectedSnakeCase}`;
         }
         if (mappedName !== expectedSnakeCase) {
           report(`Field name must be mapped to "${expectedSnakeCase}".`);
