@@ -15,7 +15,7 @@ describe('field-name-mapping-snake-case', () => {
       ruleDefinitions: [fieldNameMappingSnakeCase],
     });
 
-  describe('with requireUnderscorePrefixForId', () => {
+  describe('with requireUnderscorePrefixForIds', () => {
     const run = getRunner({ requireUnderscorePrefixForIds: true });
 
     describe('valid with mapping', () => {
