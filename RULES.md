@@ -42,8 +42,10 @@ model UserRole {
 }
 
 model UserRole {
-  // No mapping needed.
+  // No mapping needed for single-word field name.
   id String
+  // No mapping needed for association field.
+  grantedByUser User
 }
 
 // bad
@@ -53,6 +55,25 @@ model UserRole {
 
 model UserRole {
   userId String @map(name: "user_i_d")
+}
+```
+
+#### With `with enum`
+
+```prisma
+// good
+enum RoleType {
+  ADMIN
+  MEMBER
+}
+
+model UserRole {
+  roleType RoleType @map(name: "role_type")
+}
+
+// bad
+model UserRole {
+  roleType RoleType
 }
 ```
 

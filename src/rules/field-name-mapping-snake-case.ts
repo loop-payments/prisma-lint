@@ -23,8 +23,6 @@ const Config = z
  *   // good
  *   model UserRole {
  *     userId String @map(name: "user_id")
- *     // Mapping required for enum field.
- *     roleType RoleType @map(name: "role_type")
  *   }
  *
  *   model UserRole {
@@ -32,11 +30,6 @@ const Config = z
  *     id String
  *     // No mapping needed for association field.
  *     grantedByUser User
- *   }
- *
- *   enum RoleType {
- *     ADMIN
- *     MEMBER
  *   }
  *
  *   // bad
@@ -56,17 +49,12 @@ const Config = z
  *   }
  *
  *   model UserRole {
- *     // Mapping required for enum field.
  *     roleType RoleType @map(name: "role_type")
  *   }
  *
  *   // bad
  *   model UserRole {
  *     roleType RoleType
- *   }
- *
- *   model UserRole {
- *     userId String @map(name: "user_i_d")
  *   }
  *
  * @example { compoundWords: ["GraphQL"] }
