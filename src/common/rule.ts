@@ -15,6 +15,7 @@ export type Rule = { ruleConfig: RuleConfig; ruleDefinition: RuleDefinition };
  * Context passed to rules.
  */
 export type RuleContext<T extends NodeViolation> = {
+  enumNames: Set<string>;
   fileName: string;
   sourceCode: string;
   report: (nodeViolation: T) => void;

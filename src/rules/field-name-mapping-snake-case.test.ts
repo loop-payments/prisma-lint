@@ -194,4 +194,56 @@ describe('field-name-mapping-snake-case', () => {
       });
     });
   });
+
+  describe('with enum', () => {
+    const run = getRunner();
+
+    describe('valid with mapping', () => {
+      it('returns no violations', async () => {
+        const violations = await run(`
+      enum RoleType {
+        ADMIN
+        USER
+      }
+
+      model User {
+        roleType RoleType @map(name: "role_type")
+      }
+    `);
+        expect(violations.length).toEqual(0);
+      });
+    });
+
+    describe('valid without mapping', () => {
+      it('returns no violations', async () => {
+        const violations = await run(`
+      enum RoleType {
+        ADMIN
+        USER
+      }
+
+      model User {
+        role RoleType
+      }
+    `);
+        expect(violations.length).toEqual(0);
+      });
+    });
+
+    describe('multiple words without mapping', () => {
+      it('returns violation', async () => {
+        const violations = await run(`
+      enum RoleType {
+        ADMIN
+        USER
+      }
+
+      model User {
+        roleType RoleType
+      }
+    `);
+        expect(violations.length).toEqual(1);
+      });
+    });
+  });
 });

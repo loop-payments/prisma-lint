@@ -23,11 +23,20 @@ const Config = z
  *   // good
  *   model UserRole {
  *     userId String @map(name: "user_id")
+ *     // Mapping required for enum field.
+ *     roleType RoleType @map(name: "role_type")
  *   }
  *
  *   model UserRole {
- *     // No mapping needed.
+ *     // No mapping needed for single-word field name.
  *     id String
+ *     // No mapping needed for association field.
+ *     grantedByUser User
+ *   }
+ *
+ *   enum RoleType {
+ *     ADMIN
+ *     MEMBER
  *   }
  *
  *   // bad
@@ -39,6 +48,26 @@ const Config = z
  *     userId String @map(name: "user_i_d")
  *   }
  *
+ * @example with enum
+ *   // good
+ *   enum RoleType {
+ *     ADMIN
+ *     MEMBER
+ *   }
+ *
+ *   model UserRole {
+ *     // Mapping required for enum field.
+ *     roleType RoleType @map(name: "role_type")
+ *   }
+ *
+ *   // bad
+ *   model UserRole {
+ *     roleType RoleType
+ *   }
+ *
+ *   model UserRole {
+ *     userId String @map(name: "user_i_d")
+ *   }
  *
  * @example { compoundWords: ["GraphQL"] }
  *   // good
@@ -72,7 +101,11 @@ export default {
     const { compoundWords, requireUnderscorePrefixForIds } = config ?? {};
     return {
       Field: (model, field) => {
-        if (isAssociation(field.fieldType)) {
+        const { fieldType } = field;
+        if (
+          !isEnumField(context.enumNames, fieldType) &&
+          looksLikeAssociation(fieldType)
+        ) {
           return;
         }
 
@@ -132,7 +165,7 @@ function findMapAttribute(attributes: Attribute[]): Attribute | undefined {
   return filtered[0];
 }
 
-function isAssociation(fieldType: any) {
+function looksLikeAssociation(fieldType: any) {
   if (typeof fieldType != 'string') {
     return false;
   }
@@ -144,4 +177,11 @@ function isAssociation(fieldType: any) {
 
 function isAllLowerCase(s: string) {
   return s.toLowerCase() == s;
+}
+
+function isEnumField(enumNames: Set<string>, fieldType: any) {
+  if (typeof fieldType != 'string') {
+    return false;
+  }
+  return enumNames.has(fieldType);
 }
