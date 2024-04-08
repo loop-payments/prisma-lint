@@ -41,7 +41,7 @@ const Config = z
  *     userId String @map(name: "user_i_d")
  *   }
  *
- * @example with enum
+ * @example enum
  *   // good
  *   enum RoleType {
  *     ADMIN

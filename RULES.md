@@ -58,7 +58,7 @@ model UserRole {
 }
 ```
 
-#### With `with enum`
+#### With `enum`
 
 ```prisma
 // good
