@@ -41,22 +41,6 @@ const Config = z
  *     userId String @map(name: "user_i_d")
  *   }
  *
- * @example enum
- *   // good
- *   enum RoleType {
- *     ADMIN
- *     MEMBER
- *   }
- *
- *   model UserRole {
- *     roleType RoleType @map(name: "role_type")
- *   }
- *
- *   // bad
- *   model UserRole {
- *     roleType RoleType
- *   }
- *
  * @example { compoundWords: ["GraphQL"] }
  *   // good
  *   model PersistedQuery {
@@ -79,6 +63,37 @@ const Config = z
  *   model PersistedQuery {
  *     id String @id @map(name: "id")
  *     otherField String @map(name: "other_field")
+ *   }
+ *
+ * @example enum
+ *   // good
+ *   enum RoleType {
+ *     ADMIN
+ *     MEMBER
+ *   }
+ *
+ *   model UserRole {
+ *     roleType RoleType @map(name: "role_type")
+ *   }
+ *
+ *   // bad
+ *   model UserRole {
+ *     roleType RoleType
+ *   }
+ *
+ * @example custom types
+ *   // good
+ *   type UserInfo {
+ *     institution String
+ *   }
+ *
+ *   model User {
+ *     userInfo UserInfo @map(name: "user_info")
+ *   }
+ *
+ *   // bad
+ *   model User {
+ *     userInfo UserInfo
  *   }
  *
  */
