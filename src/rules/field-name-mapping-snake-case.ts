@@ -92,6 +92,7 @@ export default {
         const { fieldType } = field;
         if (
           !isEnumField(context.enumNames, fieldType) &&
+          !isCustomTypeField(context.customTypeNames, fieldType) &&
           looksLikeAssociation(fieldType)
         ) {
           return;
@@ -172,4 +173,11 @@ function isEnumField(enumNames: Set<string>, fieldType: any) {
     return false;
   }
   return enumNames.has(fieldType);
+}
+
+function isCustomTypeField(customTypeNames: Set<string>, fieldType: any) {
+  if (typeof fieldType != 'string') {
+    return false;
+  }
+  return customTypeNames.has(fieldType);
 }

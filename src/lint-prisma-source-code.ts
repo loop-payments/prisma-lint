@@ -8,6 +8,7 @@ import {
   listModelBlocks,
   listFields,
   listEnumBlocks,
+  listCustomTypeBlocks,
 } from '#src/common/prisma.js';
 import type { Rule, RuleInstance } from '#src/common/rule.js';
 
@@ -32,6 +33,8 @@ export function lintPrismaSourceCode({
 
   const enums = listEnumBlocks(prismaSchema);
   const enumNames = new Set(enums.map((e) => e.name));
+  const customTypes = listCustomTypeBlocks(prismaSchema);
+  const customTypeNames = new Set(customTypes.map((e) => e.name));
 
   // Create rule instances.
   const namedRuleInstances: NamedRuleInstance[] = rules.map(
@@ -39,7 +42,13 @@ export function lintPrismaSourceCode({
       const { ruleName } = ruleDefinition;
       const report = (nodeViolation: NodeViolation) =>
         violations.push({ ruleName, fileName, ...nodeViolation });
-      const context = { fileName, report, sourceCode, enumNames };
+      const context = {
+        customTypeNames,
+        enumNames,
+        fileName,
+        report,
+        sourceCode,
+      };
       const ruleInstance = ruleDefinition.create(ruleConfig, context);
       return { ruleName, ruleInstance };
     },

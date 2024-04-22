@@ -16,6 +16,7 @@ export type Rule = { ruleConfig: RuleConfig; ruleDefinition: RuleDefinition };
  */
 export type RuleContext<T extends NodeViolation> = {
   enumNames: Set<string>;
+  customTypeNames: Set<string>;
   fileName: string;
   sourceCode: string;
   report: (nodeViolation: T) => void;

@@ -7,6 +7,7 @@ import type {
   KeyValue,
   Model,
   Schema,
+  Type as PrismaCustomType,
   Value,
 } from '@mrleebo/prisma-ast';
 
@@ -40,6 +41,12 @@ export function listModelBlocks(schema: Schema) {
 export function listEnumBlocks(schema: Schema) {
   return schema.list.filter(
     (block): block is PrismaEnum => block.type === 'enum',
+  );
+}
+
+export function listCustomTypeBlocks(schema: Schema) {
+  return schema.list.filter(
+    (block): block is PrismaCustomType => block.type === 'type',
   );
 }
 
