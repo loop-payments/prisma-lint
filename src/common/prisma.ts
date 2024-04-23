@@ -2,10 +2,12 @@ import { Enum } from '@kejistan/enum';
 import type {
   AttributeArgument,
   BlockAttribute,
+  Enum as PrismaEnum,
   Field,
   KeyValue,
   Model,
   Schema,
+  Type as PrismaCustomType,
   Value,
 } from '@mrleebo/prisma-ast';
 
@@ -34,6 +36,18 @@ export const PrismaPropertyType = Enum({
 
 export function listModelBlocks(schema: Schema) {
   return schema.list.filter((block): block is Model => block.type === 'model');
+}
+
+export function listEnumBlocks(schema: Schema) {
+  return schema.list.filter(
+    (block): block is PrismaEnum => block.type === 'enum',
+  );
+}
+
+export function listCustomTypeBlocks(schema: Schema) {
+  return schema.list.filter(
+    (block): block is PrismaCustomType => block.type === 'type',
+  );
 }
 
 export function listAttributes(node: Model): BlockAttribute[] {

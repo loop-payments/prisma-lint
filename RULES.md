@@ -42,8 +42,10 @@ model UserRole {
 }
 
 model UserRole {
-  // No mapping needed.
+  // No mapping needed for single-word field name.
   id String
+  // No mapping needed for association field.
+  grantedByUser User
 }
 
 // bad
@@ -83,6 +85,43 @@ model PersistedQuery {
 model PersistedQuery {
   id String @id @map(name: "id")
   otherField String @map(name: "other_field")
+}
+```
+
+#### With `enum`
+
+```prisma
+// good
+enum RoleType {
+  ADMIN
+  MEMBER
+}
+
+model UserRole {
+  roleType RoleType @map(name: "role_type")
+}
+
+// bad
+model UserRole {
+  roleType RoleType
+}
+```
+
+#### With `custom types`
+
+```prisma
+// good
+type UserInfo {
+  institution String
+}
+
+model User {
+  userInfo UserInfo @map(name: "user_info")
+}
+
+// bad
+model User {
+  userInfo UserInfo
 }
 ```
 

@@ -194,4 +194,120 @@ describe('field-name-mapping-snake-case', () => {
       });
     });
   });
+
+  describe('with enum', () => {
+    const run = getRunner();
+
+    describe('valid with mapping', () => {
+      it('returns no violations', async () => {
+        const violations = await run(`
+      enum RoleType {
+        ADMIN
+        USER
+      }
+
+      model User {
+        roleType RoleType @map(name: "role_type")
+      }
+    `);
+        expect(violations.length).toEqual(0);
+      });
+    });
+
+    describe('valid without mapping', () => {
+      it('returns no violations', async () => {
+        const violations = await run(`
+      enum RoleType {
+        ADMIN
+        USER
+      }
+
+      model User {
+        role RoleType
+      }
+    `);
+        expect(violations.length).toEqual(0);
+      });
+    });
+
+    describe('multiple words without mapping', () => {
+      it('returns violation', async () => {
+        const violations = await run(`
+      enum RoleType {
+        ADMIN
+        USER
+      }
+
+      model User {
+        roleType RoleType
+      }
+    `);
+        expect(violations.length).toEqual(1);
+      });
+    });
+  });
+
+  describe('with custom type', () => {
+    const run = getRunner();
+
+    describe('valid with mapping', () => {
+      it('returns no violations', async () => {
+        const violations = await run(`
+      model User {
+        userInfo UserInfo @map(name: "user_info")
+      }
+
+      type UserInfo {
+        institution String
+      }
+    `);
+        expect(violations.length).toEqual(0);
+      });
+    });
+
+    describe('valid without mapping', () => {
+      it('returns no violations', async () => {
+        const violations = await run(`
+      model User {
+        info UserInfo
+      }
+
+      type UserInfo {
+        institution String
+      }
+    `);
+        expect(violations.length).toEqual(0);
+      });
+    });
+
+    describe('multiple words without mapping', () => {
+      it('returns violation', async () => {
+        const violations = await run(`
+      model User {
+        userInfo UserInfo
+      }
+
+      type UserInfo {
+        institution String
+      }
+    `);
+        expect(violations.length).toEqual(1);
+      });
+    });
+
+    describe('wrong mapping', () => {
+      it('returns violation', async () => {
+        const violations = await run(`
+      model User {
+        userInfo UserInfo @map(name: "something_wrong")
+      }
+
+      type UserInfo {
+        institution String
+      }
+    `);
+        expect(violations.length).toEqual(1);
+      });
+    });
+  });
 });

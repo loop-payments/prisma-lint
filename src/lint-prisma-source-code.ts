@@ -4,7 +4,12 @@ import {
   isRuleEntirelyIgnored,
   listIgnoreModelComments,
 } from '#src/common/ignore.js';
-import { listModelBlocks, listFields } from '#src/common/prisma.js';
+import {
+  listModelBlocks,
+  listFields,
+  listEnumBlocks,
+  listCustomTypeBlocks,
+} from '#src/common/prisma.js';
 import type { Rule, RuleInstance } from '#src/common/rule.js';
 
 import type { Violation, NodeViolation } from '#src/common/violation.js';
@@ -26,13 +31,24 @@ export function lintPrismaSourceCode({
   // Mutable list of violations added to by rule instances.
   const violations: Violation[] = [];
 
+  const enums = listEnumBlocks(prismaSchema);
+  const enumNames = new Set(enums.map((e) => e.name));
+  const customTypes = listCustomTypeBlocks(prismaSchema);
+  const customTypeNames = new Set(customTypes.map((e) => e.name));
+
   // Create rule instances.
   const namedRuleInstances: NamedRuleInstance[] = rules.map(
     ({ ruleDefinition, ruleConfig }) => {
       const { ruleName } = ruleDefinition;
       const report = (nodeViolation: NodeViolation) =>
         violations.push({ ruleName, fileName, ...nodeViolation });
-      const context = { fileName, report, sourceCode };
+      const context = {
+        customTypeNames,
+        enumNames,
+        fileName,
+        report,
+        sourceCode,
+      };
       const ruleInstance = ruleDefinition.create(ruleConfig, context);
       return { ruleName, ruleInstance };
     },
