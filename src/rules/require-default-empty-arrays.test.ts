@@ -1,6 +1,5 @@
 import type { RuleConfig } from '#src/common/config.js';
-import { printPrismaSchema } from '#src/common/print-prisma-schema.js';
-import { testLintPrismaSource } from '#src/common/test.js';
+import { getExpectSchemaFix, testLintPrismaSource } from '#src/common/test.js';
 import requireDefaultEmptyArrays from '#src/rules/require-default-empty-arrays.js';
 
 describe('require-default-empty-arrays', () => {
@@ -18,6 +17,7 @@ describe('require-default-empty-arrays', () => {
 
   describe('without config', () => {
     const run = getRunner();
+    const expectSchemaFix = getExpectSchemaFix(run);
 
     describe('valid default empty array', () => {
       it('returns no violations', async () => {
@@ -40,26 +40,34 @@ describe('require-default-empty-arrays', () => {
         expect(violations.length).toEqual(1);
       });
 
-      it('returns fix', async () => {
-        const { violations, prismaSchema } = await run(`
-      model Post {
-        tags String[]
-      }
-    `);
-        expect(violations.length).toEqual(1);
-        const violation = violations[0];
-        const { fix, field } = violation;
-        if (fix == null || field == null) {
-          throw new Error('fail');
-        }
-        fix();
-        const fixed = printPrismaSchema(prismaSchema);
-        expect(fixed.trim()).toEqual(
-          `
+      describe('auto-fixing', () => {
+        it('fixes missing attribute by adding new one', async () => {
+          await expectSchemaFix(
+            `
+model Post {
+  tags String[]
+}
+---
 model Post {
   tags String[] @default([])
-}`.trim(),
-        );
+}
+`,
+          );
+        });
+
+        it('preserves existing attributes', async () => {
+          await expectSchemaFix(
+            `
+model Post {
+  tags String[] @map(name: "tag_mapped")
+}
+---
+model Post {
+  tags String[] @map(name: "tag_mapped") @default([])
+}
+`,
+          );
+        });
       });
     });
 
@@ -71,6 +79,36 @@ model Post {
       }
     `);
         expect(violations.length).toEqual(1);
+      });
+
+      describe('auto-fixing', () => {
+        it('replaces bad attribute', async () => {
+          await expectSchemaFix(
+            `
+model Post {
+  tags String[] @default("foo")
+}
+---
+model Post {
+  tags String[] @default([])
+}
+`,
+          );
+        });
+
+        it('preserves order', async () => {
+          await expectSchemaFix(
+            `
+model Post {
+  tags String[] @default("foo") @map(name: "tags_mapped")
+}
+---
+model Post {
+  tags String[] @default([]) @map(name: "tags_mapped")
+}
+`,
+          );
+        });
       });
     });
 

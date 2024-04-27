@@ -1,6 +1,9 @@
 import { type RootConfig } from '#src/common/config.js';
+import type { PrismaSchema } from '#src/common/get-prisma-schema.js';
 import { parseRules } from '#src/common/parse-rules.js';
+import { printPrismaSchema } from '#src/common/print-prisma-schema.js';
 import type { RuleDefinition } from '#src/common/rule.js';
+import type { Violation } from '#src/common/violation.js';
 import { lintPrismaSourceCode } from '#src/lint-prisma-source-code.js';
 
 export async function testLintPrismaSource({
@@ -29,4 +32,32 @@ export async function testLintPrismaSource({
   });
 
   return { violations, prismaSchema };
+}
+
+export function getExpectSchemaFix(
+  run: (sourceCode: string) => Promise<{
+    violations: Violation[];
+    prismaSchema: PrismaSchema;
+  }>,
+) {
+  return async (input: string) => {
+    const [original, fixed] = input.split('---');
+    const { violations, prismaSchema } = await run(original);
+    expect(violations.length).toEqual(1);
+    expectViolationFix(violations[0], prismaSchema, fixed);
+  };
+}
+
+export function expectViolationFix(
+  violation: Violation,
+  prismaSchema: PrismaSchema,
+  result: string,
+) {
+  const { fix } = violation;
+  if (fix == null) {
+    throw new Error('Expected fix function!');
+  }
+  fix();
+  const fixed = printPrismaSchema(prismaSchema);
+  expect(fixed.trim()).toEqual(result.trim());
 }
