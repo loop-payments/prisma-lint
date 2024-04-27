@@ -160,6 +160,7 @@ const run = async () => {
           }`,
         );
       }
+      // TODO - run in a loop until there are no violations?
     }
     process.exit(1);
   }
