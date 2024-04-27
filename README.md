@@ -161,6 +161,16 @@ No output, for when you just want to use the status code.
 
 Outputs a serialized JSON object with list of violations. Useful for editor plugins.
 
+## Automatically fixing violations
+
+There is limited support for automatically fixing violations.
+Rules that that support auto-fixing are indicated as such in [RULES.md](./RULES.md).
+To run the linter with auto-fixing:
+
+```
+yarn prisma-lint --fix
+```
+
 ## Contributing
 
 Pull requests are welcome. Please see [DEVELOPMENT.md](./DEVELOPMENT.md).
