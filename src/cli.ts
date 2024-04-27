@@ -19,6 +19,7 @@ import { parseRules } from '#src/common/parse-rules.js';
 import { lintPrismaFiles } from '#src/lint-prisma-files.js';
 import { outputToConsole } from '#src/output/console.js';
 import ruleDefinitions from '#src/rule-definitions.js';
+import pluralize from 'pluralize';
 
 const DEFAULT_PRISMA_FILE_PATH = 'prisma/schema.prisma';
 
@@ -35,7 +36,7 @@ program
     'Output format. Options: simple, contextual, json, filepath, none.',
     'simple',
   )
-  .option('--fix', 'Apply automatic fixes where possible.')
+  .option('-f, --fix', 'Apply automatic fixes where possible.')
   .option('--no-color', 'Disable color output.')
   .option('--quiet', 'Suppress all output except for errors.')
   .argument(
@@ -146,7 +147,7 @@ const run = async () => {
   if (hasViolations) {
     if (options.fix) {
       // eslint-disable-next-line no-console
-      console.log('Attempting to automatically fix violations...');
+      console.log('\nAttempting to automatically fix violations...');
       for (const fileResult of fileResults) {
         const fixedCount = applyFixesToPrismaSchema(fileResult);
         if (fixedCount > 0) {
@@ -154,7 +155,9 @@ const run = async () => {
         }
         // eslint-disable-next-line no-console
         console.log(
-          `Fixed ${fixedCount} violation(s) in ${fileResult.fileName}`,
+          `Fixed ${fixedCount} ${pluralize('violations', fixedCount)} in ${
+            fileResult.fileName
+          }`,
         );
       }
     }
