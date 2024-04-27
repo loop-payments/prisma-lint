@@ -20,7 +20,10 @@ export type FixableFieldViolation = {
   fix: () => void;
 };
 
-export type NodeViolation = ModelViolation | FieldViolation;
+export type NodeViolation =
+  | ModelViolation
+  | FieldViolation
+  | FixableFieldViolation;
 
 export type Violation = {
   ruleName: string;

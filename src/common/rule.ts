@@ -15,17 +15,17 @@ export type Rule = { ruleConfig: RuleConfig; ruleDefinition: RuleDefinition };
 /**
  * Context passed to rules.
  */
-export type RuleContext<T extends NodeViolation> = {
+export type RuleContext<V extends NodeViolation> = {
   fileName: string;
   sourceCode: string;
-  report: (nodeViolation: T) => void;
+  report: (nodeViolation: V) => void;
 };
 
-export type ModelRuleDefinition<T> = {
+export type ModelRuleDefinition<C> = {
   ruleName: string;
-  configSchema: z.ZodSchema<T>;
+  configSchema: z.ZodSchema<C>;
   create: (
-    config: T,
+    config: C,
     context: RuleContext<ModelViolation>,
   ) => ModelRuleInstance;
 };
