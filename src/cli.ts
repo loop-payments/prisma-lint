@@ -145,6 +145,8 @@ const run = async () => {
   );
   if (hasViolations) {
     if (options.fix) {
+      // eslint-disable-next-line no-console
+      console.log('Attempting to automatically fix violations...');
       for (const fileResult of fileResults) {
         const fixedCount = applyFixesToPrismaSchema(fileResult);
         if (fixedCount > 0) {
