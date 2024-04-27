@@ -11,6 +11,10 @@ import { glob } from 'glob';
 import { readPackageUp } from 'read-package-up';
 
 import { getTruncatedFileName } from '#src/common/file.js';
+import {
+  applyFixesToPrismaSchema,
+  overwriteSourceCode,
+} from '#src/common/fix.js';
 import { parseRules } from '#src/common/parse-rules.js';
 import { lintPrismaFiles } from '#src/lint-prisma-files.js';
 import { outputToConsole } from '#src/output/console.js';
@@ -31,6 +35,7 @@ program
     'Output format. Options: simple, contextual, json, filepath, none.',
     'simple',
   )
+  .option('--fix', 'Apply automatic fixes where possible.')
   .option('--no-color', 'Disable color output.')
   .option('--quiet', 'Suppress all output except for errors.')
   .argument(
@@ -128,17 +133,29 @@ const run = async () => {
   }
 
   const fileNames = await resolvePrismaFiles(args);
-  const fileViolationList = await lintPrismaFiles({
+  const fileResults = await lintPrismaFiles({
     rules,
     fileNames,
   });
 
-  outputToConsole(fileViolationList, outputFormat, quiet);
+  outputToConsole(fileResults, outputFormat, quiet);
 
-  const hasViolations = fileViolationList.some(
+  const hasViolations = fileResults.some(
     ({ violations }) => violations.length > 0,
   );
   if (hasViolations) {
+    if (options.fix) {
+      for (const fileResult of fileResults) {
+        const fixedCount = applyFixesToPrismaSchema(fileResult);
+        if (fixedCount > 0) {
+          await overwriteSourceCode(fileResult);
+        }
+        // eslint-disable-next-line no-console
+        console.log(
+          `Fixed ${fixedCount} violation(s) in ${fileResult.fileName}`,
+        );
+      }
+    }
     process.exit(1);
   }
 };

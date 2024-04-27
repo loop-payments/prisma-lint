@@ -20,7 +20,7 @@ describe('model-name-mapping-snake-case', () => {
 
     describe('valid with key', () => {
       it('returns no violations', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model UserRole {
         id String @id
         @@map(name: "user_role")
@@ -32,7 +32,7 @@ describe('model-name-mapping-snake-case', () => {
 
     describe('single word name with mapping', () => {
       it('returns no violations', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model User {
         id String @id
         @@map(name: "user")
@@ -44,7 +44,7 @@ describe('model-name-mapping-snake-case', () => {
 
     describe('single word name without mapping', () => {
       it('returns violation', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model User {
         id String @id
       }
@@ -55,7 +55,7 @@ describe('model-name-mapping-snake-case', () => {
 
     describe('valid with no key', () => {
       it('returns no violations', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model UserRole {
         id String @id
         @@map("user_role")
@@ -67,7 +67,7 @@ describe('model-name-mapping-snake-case', () => {
 
     describe('missing @@map', () => {
       it('returns violation', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model UserRole {
         id String @id
       }
@@ -78,7 +78,7 @@ describe('model-name-mapping-snake-case', () => {
 
     describe('@@map has no name', () => {
       it('returns violation', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model UserRole {
         id String @id
         @@map(other: "user_role")
@@ -94,7 +94,7 @@ describe('model-name-mapping-snake-case', () => {
 
     describe('with a plural name', () => {
       it('returns no violations', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model UserRole {
         id String @id
         @@map(name: "user_roles")
@@ -106,7 +106,7 @@ describe('model-name-mapping-snake-case', () => {
 
     describe('with a singular name', () => {
       it('returns violation', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model UserRole {
         id String @id
         @@map(name: "user_role")
@@ -125,7 +125,7 @@ describe('model-name-mapping-snake-case', () => {
 
     describe('with a plural name', () => {
       it('returns no violations', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model BillOfLading {
         id String @id
         @@map(name: "bills_of_lading")
@@ -137,7 +137,7 @@ describe('model-name-mapping-snake-case', () => {
 
     describe('with a singular name', () => {
       it('returns violation', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model BillOfLading {
         id String @id
         @@map(name: "bill_of_lading")

@@ -19,7 +19,7 @@ describe('model-name-prefix', () => {
     const run = getRunner({ prefix: 'Db' });
 
     it('respects rule-specific ignore comments', async () => {
-      const violations = await run(`
+      const { violations } = await run(`
     model Users {
       /// prisma-lint-ignore-model model-name-prefix
       id String @id
@@ -29,7 +29,7 @@ describe('model-name-prefix', () => {
     });
 
     it('respects model-wide ignore comments', async () => {
-      const violations = await run(`
+      const { violations } = await run(`
     model Users {
       /// prisma-lint-ignore-model
       id String @id
@@ -44,7 +44,7 @@ describe('model-name-prefix', () => {
 
     describe('with prefix', () => {
       it('returns no violations', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model DbUser {
         id String @id
       }
@@ -55,7 +55,7 @@ describe('model-name-prefix', () => {
 
     describe('without prefix', () => {
       it('returns violation', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model Users {
         id String @id
       }

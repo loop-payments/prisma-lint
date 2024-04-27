@@ -22,7 +22,7 @@ describe('require-field-type', () => {
 
     describe('correct type', () => {
       it('returns no violations', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model User {
         id String
       }
@@ -33,7 +33,7 @@ describe('require-field-type', () => {
 
     describe('incorrect type', () => {
       it('returns violation', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model Users {
         id Int 
       }
@@ -50,7 +50,7 @@ describe('require-field-type', () => {
 
     describe('correct type', () => {
       it('returns no violations', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model User {
         createdAt DateTime
       }
@@ -61,7 +61,7 @@ describe('require-field-type', () => {
 
     describe('incorrect type', () => {
       it('returns violation', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model Users {
         createdAt Int 
       }
@@ -78,7 +78,7 @@ describe('require-field-type', () => {
 
     describe('correct type', () => {
       it('returns no violations', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model User {
         createdAt DateTime
       }
@@ -89,7 +89,7 @@ describe('require-field-type', () => {
 
     describe('incorrect type', () => {
       it('returns violation', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model Users {
         createdAt Int 
       }

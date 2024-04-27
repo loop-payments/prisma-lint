@@ -17,7 +17,7 @@ const Config = z.object({}).strict().optional();
  * @example
  *   // good
  *   model Post {
- *    tags String[] @default([])
+ *     tags String[] @default([])
  *   }
  *
  *   // bad
@@ -37,12 +37,43 @@ export default {
             model,
             field,
             message: 'Array field must default to empty array.',
+            fix: () => {
+              field.attributes = upsertDefaultEmptyArrayAttribute(
+                field.attributes,
+              );
+            },
           });
         }
       },
     };
   },
 } satisfies FieldRuleDefinition<z.infer<typeof Config>>;
+
+const DEFAULT_EMPTY_ARRAY_ATTRIBUTE: Attribute = {
+  type: 'attribute',
+  name: 'default',
+  kind: 'field',
+  args: [
+    {
+      type: 'attributeArgument',
+      value: { type: 'array', args: [] },
+    },
+  ],
+};
+
+function upsertDefaultEmptyArrayAttribute(
+  attributes: Attribute[] = [],
+): Attribute[] {
+  const defaultAttributeIndex = findDefaultAttributeIndex(attributes);
+  if (defaultAttributeIndex !== -1) {
+    return [
+      ...attributes.slice(0, defaultAttributeIndex),
+      DEFAULT_EMPTY_ARRAY_ATTRIBUTE,
+      ...attributes.slice(defaultAttributeIndex + 1),
+    ];
+  }
+  return [...attributes, DEFAULT_EMPTY_ARRAY_ATTRIBUTE];
+}
 
 function hasViolation(field: Field): boolean {
   const { attributes, array } = field;
@@ -78,14 +109,21 @@ function hasViolation(field: Field): boolean {
 }
 
 function findDefaultAttribute(attributes: Attribute[]): Attribute | undefined {
-  const filtered = attributes.filter((a) => a.name === 'default');
-  if (filtered.length === 0) {
+  const index = findDefaultAttributeIndex(attributes);
+  if (index === -1) {
     return;
   }
-  if (filtered.length > 1) {
-    throw Error(
-      `Unexpected multiple default attributes! ${JSON.stringify(filtered)}`,
-    );
+  return attributes[index];
+}
+
+function findDefaultAttributeIndex(attributes: Attribute[]): number {
+  const firstIndex = attributes.findIndex((a) => a.name === 'default');
+  if (firstIndex === -1) {
+    return -1;
   }
-  return filtered[0];
+  const lastIndex = attributes.findLastIndex((a) => a.name === 'default');
+  if (firstIndex !== lastIndex) {
+    throw Error('Unexpected multiple default attributes!');
+  }
+  return firstIndex;
 }

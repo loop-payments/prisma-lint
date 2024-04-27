@@ -22,10 +22,11 @@ export async function testLintPrismaSource({
         .join('\n')}`,
     );
   }
-  const violations = await lintPrismaSourceCode({
+  const { violations, prismaSchema } = lintPrismaSourceCode({
     rules,
     fileName,
     sourceCode,
   });
-  return violations;
+
+  return { violations, prismaSchema };
 }

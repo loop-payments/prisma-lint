@@ -2,7 +2,7 @@ import chalk from 'chalk';
 
 import { getTruncatedFileName } from '#src/common/file.js';
 import type { Violation } from '#src/common/violation.js';
-import type { FileViolationList } from '#src/lint-prisma-files.js';
+import type { FileResult } from '#src/lint-prisma-files.js';
 import type { OutputFormat } from '#src/output/output-format.js';
 import { renderViolationsContextual } from '#src/output/render/render-contextual.js';
 import { renderViolationsJsonObject } from '#src/output/render/render-json.js';
@@ -11,22 +11,22 @@ import { renderViolationsSimple } from '#src/output/render/render-simple.js';
 /* eslint-disable no-console */
 
 export function outputToConsole(
-  fileViolationList: FileViolationList,
+  fileResults: FileResult[],
   outputFormat: OutputFormat,
   quiet: boolean,
 ) {
   switch (outputFormat) {
     case 'filepath':
-      outputFilepath(fileViolationList, quiet);
+      outputFilepath(fileResults, quiet);
       break;
     case 'simple':
-      outputSimple(fileViolationList, quiet);
+      outputSimple(fileResults, quiet);
       break;
     case 'contextual':
-      outputContextual(fileViolationList);
+      outputContextual(fileResults);
       break;
     case 'json':
-      outputJson(fileViolationList);
+      outputJson(fileResults);
       break;
     case 'none':
       break;
@@ -35,21 +35,21 @@ export function outputToConsole(
   }
 }
 
-function outputFilepath(fileViolationList: FileViolationList, quiet: boolean) {
-  fileViolationList.forEach(({ fileName, violations }) => {
+function outputFilepath(fileResults: FileResult[], quiet: boolean) {
+  fileResults.forEach(({ fileName, violations }) => {
     maybeOutputPath(fileName, violations, quiet);
   });
 }
 
-function outputJson(fileViolationList: FileViolationList) {
-  const list = fileViolationList.flatMap(({ violations }) =>
+function outputJson(fileResults: FileResult[]) {
+  const list = fileResults.flatMap(({ violations }) =>
     renderViolationsJsonObject(violations),
   );
   console.error(JSON.stringify({ violations: list }));
 }
 
-function outputSimple(fileViolationList: FileViolationList, quiet: boolean) {
-  fileViolationList.forEach(({ fileName, violations }) => {
+function outputSimple(fileResults: FileResult[], quiet: boolean) {
+  fileResults.forEach(({ fileName, violations }) => {
     const truncatedFileName = getTruncatedFileName(fileName);
     maybeOutputPath(truncatedFileName, violations, quiet);
     const lines = renderViolationsSimple(violations);
@@ -59,8 +59,8 @@ function outputSimple(fileViolationList: FileViolationList, quiet: boolean) {
   });
 }
 
-function outputContextual(fileViolationList: FileViolationList) {
-  fileViolationList.forEach(({ sourceCode, violations }) => {
+function outputContextual(fileResults: FileResult[]) {
+  fileResults.forEach(({ sourceCode, violations }) => {
     const lines = renderViolationsContextual(sourceCode, violations);
     console.error(lines.join('\n'));
   });

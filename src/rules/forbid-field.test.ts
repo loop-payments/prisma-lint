@@ -22,7 +22,7 @@ describe('forbid-field', () => {
 
     describe('with parameterized comment', () => {
       it('returns no violations', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model User {
         /// prisma-lint-ignore-model forbid-field id
         id String
@@ -40,7 +40,7 @@ describe('forbid-field', () => {
 
     describe('with uuid', () => {
       it('returns no violations', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model User {
         uuid String
       }
@@ -51,7 +51,7 @@ describe('forbid-field', () => {
 
     describe('with id', () => {
       it('returns violation', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model Users {
         id String
       }
@@ -68,7 +68,7 @@ describe('forbid-field', () => {
 
     describe('with amount d6', () => {
       it('returns no violations', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model Product {
         priceAmountD6 Int
         amountD6 Int
@@ -81,7 +81,7 @@ describe('forbid-field', () => {
 
     describe('without amount prefix', () => {
       it('returns violation', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model Product {
         priceD6 Int
       }
