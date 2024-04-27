@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 import type { ModelRuleDefinition } from '#src/common/rule.js';
+import type { FixableModelViolation } from '#src/common/violation.js';
 
 const RULE_NAME = 'model-name-prefix';
 
@@ -42,8 +43,14 @@ export default {
           return;
         }
         const message = `Model name should start with "${prefix}".`;
-        context.report({ model, message });
+        context.report({
+          model,
+          message,
+          fix: () => {
+            model.name = `${prefix}${model.name}`;
+          },
+        });
       },
     };
   },
-} satisfies ModelRuleDefinition<z.infer<typeof Config>>;
+} satisfies ModelRuleDefinition<z.infer<typeof Config>, FixableModelViolation>;

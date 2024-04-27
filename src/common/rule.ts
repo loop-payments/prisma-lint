@@ -6,6 +6,7 @@ import type { RuleConfig } from '#src/common/config.js';
 import type {
   FieldViolation,
   FixableFieldViolation,
+  FixableModelViolation,
   ModelViolation,
   NodeViolation,
 } from '#src/common/violation.js';
@@ -21,13 +22,13 @@ export type RuleContext<V extends NodeViolation> = {
   report: (nodeViolation: V) => void;
 };
 
-export type ModelRuleDefinition<C> = {
+export type ModelRuleDefinition<
+  C,
+  V extends ModelViolation | FixableModelViolation = ModelViolation,
+> = {
   ruleName: string;
   configSchema: z.ZodSchema<C>;
-  create: (
-    config: C,
-    context: RuleContext<ModelViolation>,
-  ) => ModelRuleInstance;
+  create: (config: C, context: RuleContext<V>) => ModelRuleInstance;
 };
 
 export type ModelRuleInstance = {
@@ -48,6 +49,6 @@ export type FieldRuleInstance = {
 };
 
 export type RuleDefinition =
-  | ModelRuleDefinition<any>
+  | ModelRuleDefinition<any, any>
   | FieldRuleDefinition<any, any>;
 export type RuleInstance = ModelRuleInstance | FieldRuleInstance;

@@ -6,6 +6,12 @@ export type ModelViolation = {
   fix?: never;
 };
 
+export type FixableModelViolation = {
+  model: Model;
+  message: string;
+  fix: () => void;
+};
+
 export type FieldViolation = {
   model: Model;
   field: Field;
@@ -22,6 +28,7 @@ export type FixableFieldViolation = {
 
 export type NodeViolation =
   | ModelViolation
+  | FixableModelViolation
   | FieldViolation
   | FixableFieldViolation;
 

@@ -442,7 +442,7 @@ application-level types in cases where a single
 domain object is persisted in multiple tables,
 and the application type differs from the table
 structure.
-This rule does not support auto-fixing.
+This rule supports auto-fixing.
 
 ### Configuration
 

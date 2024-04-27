@@ -1,5 +1,5 @@
 import type { RuleConfig } from '#src/common/config.js';
-import { testLintPrismaSource } from '#src/common/test.js';
+import { getExpectSchemaFix, testLintPrismaSource } from '#src/common/test.js';
 import modelNamePrefix from '#src/rules/model-name-prefix.js';
 
 describe('model-name-prefix', () => {
@@ -41,6 +41,7 @@ describe('model-name-prefix', () => {
 
   describe('expecting Db', () => {
     const run = getRunner({ prefix: 'Db' });
+    const expectSchemaFix = getExpectSchemaFix(run);
 
     describe('with prefix', () => {
       it('returns no violations', async () => {
@@ -61,6 +62,20 @@ describe('model-name-prefix', () => {
       }
     `);
         expect(violations.length).toEqual(1);
+      });
+
+      it('fixes by adding prefix', async () => {
+        await expectSchemaFix(
+          `
+model User {
+  id String @id
+}
+---
+model DbUser {
+  id String @id
+}
+          `,
+        );
       });
     });
   });

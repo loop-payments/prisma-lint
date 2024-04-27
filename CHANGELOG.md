@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Add preliminary support for automatic fixing of violations, starting with `require-default-empty-arrays`.
+- Add preliminary support for automatic fixing of violations, starting with `require-default-empty-arrays` and `model-name-prefix`.
 
 ## 0.3.0 (2024-04-03)
 
