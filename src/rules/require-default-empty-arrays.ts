@@ -3,6 +3,7 @@ import type { Attribute, Field } from '@mrleebo/prisma-ast';
 import { z } from 'zod';
 
 import type { FieldRuleDefinition } from '#src/common/rule.js';
+import type { FixableFieldViolation } from '#src/common/violation.js';
 
 const RULE_NAME = 'require-default-empty-arrays';
 
@@ -47,7 +48,7 @@ export default {
       },
     };
   },
-} satisfies FieldRuleDefinition<z.infer<typeof Config>>;
+} satisfies FieldRuleDefinition<z.infer<typeof Config>, FixableFieldViolation>;
 
 const DEFAULT_EMPTY_ARRAY_ATTRIBUTE: Attribute = {
   type: 'attribute',

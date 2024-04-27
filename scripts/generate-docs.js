@@ -69,6 +69,7 @@ function extractRulesFromSourceCode(filePath) {
   const ruleNameMatch = fileContent.match(/const RULE_NAME = '(.*)';/);
   const descriptionMatch = fileContent.match(/\/\*\*\n([\s\S]*?)\n\s*\*\//);
   const configMatch = fileContent.match(/const Config =([\s\S]*?;)/);
+  const fixableMatch = fileContent.match(/ Fixable.*Violation/);
 
   if (ruleNameMatch && descriptionMatch) {
     const ruleName = ruleNameMatch[1];
@@ -89,6 +90,7 @@ function extractRulesFromSourceCode(filePath) {
       description,
       examples,
       configSchema,
+      isFixable: fixableMatch != null,
     };
   }
 
@@ -110,7 +112,11 @@ function buildRulesMarkdownFile(rules) {
 
   rules.forEach((rule) => {
     markdownContent += `## ${rule.ruleName}\n\n`;
-    markdownContent += `${rule.description}\n\n`;
+    markdownContent += `${rule.description} ${
+      rule.isFixable
+        ? 'This rule supports auto-fixing.'
+        : 'This rule does not support auto-fixing.'
+    }\n\n`;
     if (rule.configSchema !== EMPTY_CONFIG_SCHEMA) {
       markdownContent += '### Configuration\n\n';
       markdownContent += '```ts\n';
