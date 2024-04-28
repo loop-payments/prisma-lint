@@ -1,5 +1,6 @@
 {
   "rules": {
+    "model-name-prefix": ["error", { "prefix": "Db" }],
     "require-default-empty-arrays": ["error"]
   }
 }
