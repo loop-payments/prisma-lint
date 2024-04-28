@@ -163,13 +163,15 @@ Outputs a serialized JSON object with list of violations. Useful for editor plug
 
 ## Automatically fixing violations
 
-There is limited support for automatically fixing violations.
+There is limited beta support for automatically fixing violations.
 Rules that that support auto-fixing are indicated as such in [RULES.md](./RULES.md).
 To run the linter with auto-fixing:
 
 ```
 yarn prisma-lint --fix
 ```
+
+Please report bugs and feature requests for this feature as its quite new.
 
 ## Contributing
 
