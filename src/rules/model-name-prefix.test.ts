@@ -67,11 +67,19 @@ describe('model-name-prefix', () => {
       it('fixes by adding prefix', async () => {
         await expectSchemaFix(
           `
+// A comment on the model.
+/// A three-slash comment on the model.
 model User {
+  // An inline comment on the field.
+  /// A three-slash comment on the field.
   id String @id
 }
 ---
+// A comment on the model.
+/// A three-slash comment on the model.
 model DbUser {
+  // An inline comment on the field.
+  /// A three-slash comment on the field.
   id String @id
 }
           `,
