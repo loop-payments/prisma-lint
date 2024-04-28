@@ -74,6 +74,8 @@ model User {
   /// A three-slash comment on the field.
   id String @id
 }
+
+// A comment below the model.
 ---
 // A comment on the model.
 /// A three-slash comment on the model.
@@ -82,7 +84,9 @@ model DbUser {
   /// A three-slash comment on the field.
   id String @id
 }
-          `,
+
+// A comment below the model.
+`,
         );
       });
     });

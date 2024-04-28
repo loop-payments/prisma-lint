@@ -41,7 +41,7 @@ export function getExpectSchemaFix(
   }>,
 ) {
   return async (input: string) => {
-    const [original, fixed] = input.split('---');
+    const [original, fixed] = input.split('---\n');
     const { violations, prismaSchema } = await run(original);
     expect(violations.length).toEqual(1);
     expectViolationFix(violations[0], prismaSchema, fixed);
@@ -59,5 +59,5 @@ export function expectViolationFix(
   }
   fix();
   const fixed = printPrismaSchema(prismaSchema);
-  expect(fixed.trim()).toEqual(result.trim());
+  expect(fixed).toEqual(result);
 }
