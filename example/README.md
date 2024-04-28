@@ -9,5 +9,5 @@
 
 > yarn build && node ./dist/cli.js -c example/.invalidprismalintrcwithoutrules.json example/valid.prisma
 
-> yarn build && node ./dist/cli.js -c example/.prismalintrc.json example/invalid-fixable.prisma
+> yarn build && node ./dist/cli.js -c example/.fixableprismalintrc.json example/invalid-fixable.prisma
 ```
