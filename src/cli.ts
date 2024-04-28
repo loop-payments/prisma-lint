@@ -8,6 +8,7 @@ import { program } from 'commander';
 import { cosmiconfig } from 'cosmiconfig';
 import { glob } from 'glob';
 
+import pluralize from 'pluralize';
 import { readPackageUp } from 'read-package-up';
 
 import { getTruncatedFileName } from '#src/common/file.js';
@@ -19,7 +20,6 @@ import { parseRules } from '#src/common/parse-rules.js';
 import { lintPrismaFiles } from '#src/lint-prisma-files.js';
 import { outputToConsole } from '#src/output/console.js';
 import ruleDefinitions from '#src/rule-definitions.js';
-import pluralize from 'pluralize';
 
 const DEFAULT_PRISMA_FILE_PATH = 'prisma/schema.prisma';
 
