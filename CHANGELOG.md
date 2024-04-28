@@ -4,6 +4,10 @@
 
 - Add preliminary support for automatic fixing of violations, starting with `require-default-empty-arrays` and `model-name-prefix`.
 
+## 0.4.0 (2024-04-23)
+
+- [#363](https://github.com/loop-payments/prisma-lint/issues/363) Require enum and custom type fields to use snake case in `field-name-mapping-snake-case`.
+
 ## 0.3.0 (2024-04-03)
 
 - [#330](https://github.com/loop-payments/prisma-lint/issues/330) Remove `requirePrefix` option and add `requireUnderscorePrefixForIds` to `field-name-mapping-snake-case` to actually support MongoDB naming conventions. 

@@ -26,8 +26,10 @@ const Config = z
  *   }
  *
  *   model UserRole {
- *     // No mapping needed.
+ *     // No mapping needed for single-word field name.
  *     id String
+ *     // No mapping needed for association field.
+ *     grantedByUser User
  *   }
  *
  *   // bad
@@ -38,7 +40,6 @@ const Config = z
  *   model UserRole {
  *     userId String @map(name: "user_i_d")
  *   }
- *
  *
  * @example { compoundWords: ["GraphQL"] }
  *   // good
@@ -64,6 +65,37 @@ const Config = z
  *     otherField String @map(name: "other_field")
  *   }
  *
+ * @example enum
+ *   // good
+ *   enum RoleType {
+ *     ADMIN
+ *     MEMBER
+ *   }
+ *
+ *   model UserRole {
+ *     roleType RoleType @map(name: "role_type")
+ *   }
+ *
+ *   // bad
+ *   model UserRole {
+ *     roleType RoleType
+ *   }
+ *
+ * @example custom types
+ *   // good
+ *   type UserInfo {
+ *     institution String
+ *   }
+ *
+ *   model User {
+ *     userInfo UserInfo @map(name: "user_info")
+ *   }
+ *
+ *   // bad
+ *   model User {
+ *     userInfo UserInfo
+ *   }
+ *
  */
 export default {
   ruleName: RULE_NAME,
@@ -72,7 +104,12 @@ export default {
     const { compoundWords, requireUnderscorePrefixForIds } = config ?? {};
     return {
       Field: (model, field) => {
-        if (isAssociation(field.fieldType)) {
+        const { fieldType } = field;
+        if (
+          !isEnumField(context.enumNames, fieldType) &&
+          !isCustomTypeField(context.customTypeNames, fieldType) &&
+          looksLikeAssociation(fieldType)
+        ) {
           return;
         }
 
@@ -132,7 +169,7 @@ function findMapAttribute(attributes: Attribute[]): Attribute | undefined {
   return filtered[0];
 }
 
-function isAssociation(fieldType: any) {
+function looksLikeAssociation(fieldType: any) {
   if (typeof fieldType != 'string') {
     return false;
   }
@@ -144,4 +181,18 @@ function isAssociation(fieldType: any) {
 
 function isAllLowerCase(s: string) {
   return s.toLowerCase() == s;
+}
+
+function isEnumField(enumNames: Set<string>, fieldType: any) {
+  if (typeof fieldType != 'string') {
+    return false;
+  }
+  return enumNames.has(fieldType);
+}
+
+function isCustomTypeField(customTypeNames: Set<string>, fieldType: any) {
+  if (typeof fieldType != 'string') {
+    return false;
+  }
+  return customTypeNames.has(fieldType);
 }
