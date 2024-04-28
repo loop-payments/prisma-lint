@@ -200,7 +200,7 @@ describe('field-name-mapping-snake-case', () => {
 
     describe('valid with mapping', () => {
       it('returns no violations', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       enum RoleType {
         ADMIN
         USER
@@ -216,7 +216,7 @@ describe('field-name-mapping-snake-case', () => {
 
     describe('valid without mapping', () => {
       it('returns no violations', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       enum RoleType {
         ADMIN
         USER
@@ -232,7 +232,7 @@ describe('field-name-mapping-snake-case', () => {
 
     describe('multiple words without mapping', () => {
       it('returns violation', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       enum RoleType {
         ADMIN
         USER
@@ -252,7 +252,7 @@ describe('field-name-mapping-snake-case', () => {
 
     describe('valid with mapping', () => {
       it('returns no violations', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model User {
         userInfo UserInfo @map(name: "user_info")
       }
@@ -267,7 +267,7 @@ describe('field-name-mapping-snake-case', () => {
 
     describe('valid without mapping', () => {
       it('returns no violations', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model User {
         info UserInfo
       }
@@ -282,7 +282,7 @@ describe('field-name-mapping-snake-case', () => {
 
     describe('multiple words without mapping', () => {
       it('returns violation', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model User {
         userInfo UserInfo
       }
@@ -297,7 +297,7 @@ describe('field-name-mapping-snake-case', () => {
 
     describe('wrong mapping', () => {
       it('returns violation', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model User {
         userInfo UserInfo @map(name: "something_wrong")
       }
