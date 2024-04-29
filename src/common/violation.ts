@@ -28,8 +28,8 @@ export type FixableFieldViolation = {
 
 export type NodeViolation =
   | ModelViolation
-  | FixableModelViolation
   | FieldViolation
+  | FixableModelViolation
   | FixableFieldViolation;
 
 export type Violation = {
