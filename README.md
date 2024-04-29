@@ -171,7 +171,7 @@ To run the linter with auto-fixing:
 yarn prisma-lint --fix
 ```
 
-Please report bugs and feature requests for this feature as its quite new.
+Please report bugs and feature requests for this feature as it is quite new.
 
 ## Contributing
 
