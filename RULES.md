@@ -21,6 +21,15 @@ Configuration option schemas are written with [Zod](https://github.com/colinhack
 Checks that the mapped name of a field is the expected snake case.
 This rule does not support auto-fixing.
 
+This rule support selectively ignoring fields via the
+`prisma-lint-ignore-model` comment, like so:
+
+/// prisma-lint-ignore-model field-name-mapping-snake-case tenantId
+
+That will ignore only `tenantId` field violations for the model. Other
+fields will still be enforced. A comma-separated list of fields can be
+provided to ignore multiple fields.
+
 ### Configuration
 
 ```ts

@@ -2,6 +2,7 @@ import type { Attribute } from '@mrleebo/prisma-ast';
 
 import { z } from 'zod';
 
+import { getRuleIgnoreParams } from '#src/common/ignore.js';
 import { PRISMA_SCALAR_TYPES, getMappedName } from '#src/common/prisma.js';
 import type { FieldRuleDefinition } from '#src/common/rule.js';
 import { toSnakeCase } from '#src/common/snake-case.js';
@@ -18,6 +19,15 @@ const Config = z
 
 /**
  * Checks that the mapped name of a field is the expected snake case.
+ *
+ * This rule support selectively ignoring fields via the
+ * `prisma-lint-ignore-model` comment, like so:
+ *
+ *    /// prisma-lint-ignore-model field-name-mapping-snake-case tenantId
+ *
+ * That will ignore only `tenantId` field violations for the model. Other
+ * fields will still be enforced. A comma-separated list of fields can be
+ * provided to ignore multiple fields.
  *
  * @example
  *   // good
@@ -104,6 +114,8 @@ export default {
     const { compoundWords, requireUnderscorePrefixForIds } = config ?? {};
     return {
       Field: (model, field) => {
+        if (getRuleIgnoreParams(model, RULE_NAME).includes(field.name)) return;
+
         const { fieldType } = field;
         if (
           !isEnumField(context.enumNames, fieldType) &&
