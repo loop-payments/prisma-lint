@@ -112,7 +112,9 @@ function buildRulesMarkdownFile(rules) {
 
   rules.forEach((rule) => {
     markdownContent += `## ${rule.ruleName}\n\n`;
-    markdownContent += `${rule.description} ${
+    markdownContent += `${rule.description}${
+      rule.description.includes('\n\n') ? '\n\n' : ' '
+    }${
       rule.isFixable
         ? 'This rule supports auto-fixing.'
         : 'This rule does not support auto-fixing.'
