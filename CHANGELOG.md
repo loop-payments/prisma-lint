@@ -2,9 +2,9 @@
 
 ## Unreleased
 
-- Add preliminary support for automatic fixing of violations, starting with `require-default-empty-arrays` and `model-name-prefix`.
+- [#281](https://github.com/loop-payments/prisma-lint/issues/281) Add preliminary support for automatic fixing of violations, starting with `require-default-empty-arrays` and `model-name-prefix`.
 
-## 0.5.0 (2024-04-30)
+## 0.5.0 (2024-05-01)
 
 - [#388](https://github.com/loop-payments/prisma-lint/issues/388) Teach `field-name-mapping-snake-case` ignore comments about individual fields.
 
