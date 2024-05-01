@@ -310,4 +310,41 @@ describe('field-name-mapping-snake-case', () => {
       });
     });
   });
+
+  describe('ignore comments', () => {
+    const run = getRunner();
+
+    it('respects rule-specific ignore comments', async () => {
+      const violations = await run(`
+        model User {
+          /// prisma-lint-ignore-model field-name-mapping-snake-case
+          emailAddress String
+        }
+      `);
+      expect(violations.length).toEqual(0);
+    });
+
+    it('respects field-specific ignore comments with comma', async () => {
+      const violations = await run(`
+        model User {
+          /// prisma-lint-ignore-model field-name-mapping-snake-case emailAddress,updatedAt
+          emailAddress String
+          createdAt DateTime
+          updatedAt DateTime
+        }
+      `);
+      expect(violations.length).toEqual(1);
+      expect(violations[0]?.field?.name).toBe('createdAt');
+    });
+
+    it('respects model-wide ignore comments', async () => {
+      const violations = await run(`
+        model User {
+          /// prisma-lint-ignore-model field-name-mapping-snake-case
+          emailAddress String
+        }
+      `);
+      expect(violations.length).toEqual(0);
+    });
+  });
 });

@@ -2,13 +2,15 @@
 
 ## Unreleased
 
+- [#388](https://github.com/loop-payments/prisma-lint/issues/388) Teach `field-name-mapping-snake-case` ignore comments about individual fields.
+
 ## 0.4.0 (2024-04-23)
 
 - [#363](https://github.com/loop-payments/prisma-lint/issues/363) Require enum and custom type fields to use snake case in `field-name-mapping-snake-case`.
 
 ## 0.3.0 (2024-04-03)
 
-- [#330](https://github.com/loop-payments/prisma-lint/issues/330) Remove `requirePrefix` option and add `requireUnderscorePrefixForIds` to `field-name-mapping-snake-case` to actually support MongoDB naming conventions. 
+- [#330](https://github.com/loop-payments/prisma-lint/issues/330) Remove `requirePrefix` option and add `requireUnderscorePrefixForIds` to `field-name-mapping-snake-case` to actually support MongoDB naming conventions.
 
 ## 0.2.0 (2024-03-29)
 
