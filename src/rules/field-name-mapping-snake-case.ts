@@ -20,10 +20,7 @@ const Config = z
 /**
  * Checks that the mapped name of a field is the expected snake case.
  *
- * This rule support selectively ignoring fields via the
- * `prisma-lint-ignore-model` comment, like so:
- *
- *    /// prisma-lint-ignore-model field-name-mapping-snake-case tenantId
+ * This rule support selectively ignoring fields with parameterized comments.
  *
  * That will ignore only `tenantId` field violations for the model. Other
  * fields will still be enforced. A comma-separated list of fields can be
@@ -104,6 +101,21 @@ const Config = z
  *   // bad
  *   model User {
  *     userInfo UserInfo
+ *   }
+ *
+ * @example parameterized
+ *   // good
+ *   type Post {
+ *     /// prisma-lint-ignore-model field-name-mapping-snake-case tenantId
+ *     tenantId String
+ *     userId String @map(name: "user_id")
+ *   }
+ *
+ *   // bad
+ *   type Post {
+ *     /// prisma-lint-ignore-model field-name-mapping-snake-case tenantId
+ *     tenantId String
+ *     userId String
  *   }
  *
  */
