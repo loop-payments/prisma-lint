@@ -49,7 +49,7 @@
     "@types/pluralize": "^0.0.33",
     "@typescript-eslint/eslint-plugin": "^7.0.2",
     "@typescript-eslint/parser": "^7.0.2",
-    "eslint": "^8.41.0",
+    "eslint": "^9.2.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-import-resolver-typescript": "^3.5.5",
     "eslint-plugin-canonical": "^4.2.2",
