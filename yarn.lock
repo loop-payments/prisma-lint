@@ -2733,8 +2733,8 @@ __metadata:
   linkType: hard
 
 "eslint-plugin-canonical@npm:^4.2.2":
-  version: 4.18.0
-  resolution: "eslint-plugin-canonical@npm:4.18.0"
+  version: 4.18.1
+  resolution: "eslint-plugin-canonical@npm:4.18.1"
   dependencies:
     "@typescript-eslint/utils": "npm:^6.1.0"
     chance: "npm:^1.1.11"
@@ -2751,7 +2751,7 @@ __metadata:
     roarr: "npm:^7.14.2"
     ts-unused-exports: "npm:^9.0.3"
     xregexp: "npm:^5.1.1"
-  checksum: 10/96869cc37de3c492eef0e57af6812d264429827c778b76c6a98003acd7c6637a6aad5cff43447b429e7ce361b35c94bece74a982d866ca840d958e68f766367f
+  checksum: 10/8458df5d0a2e386a6b7c241ef8bd360ab23cd7f5ce9fc2aac7255f642ff6b1f8d013ea7e6cc4c442c54e5914f4b0d07175e837b39d1a6267aa57b26ae350d47f
   languageName: node
   linkType: hard
 
