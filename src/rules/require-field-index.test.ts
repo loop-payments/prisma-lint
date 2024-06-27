@@ -21,7 +21,7 @@ describe('require-field-index', () => {
     });
 
     it('respects rule-specific ignore comments', async () => {
-      const violations = await run(`
+      const { violations } = await run(`
         model Products {
           /// prisma-lint-ignore-model require-field-index
           tenantQid String
@@ -31,7 +31,7 @@ describe('require-field-index', () => {
     });
 
     it('respects field-specific ignore comments with comma', async () => {
-      const violations = await run(`
+      const { violations } = await run(`
         model Products {
           /// prisma-lint-ignore-model require-field-index tenantQid,createdAt
           tenantQid String
@@ -46,7 +46,7 @@ describe('require-field-index', () => {
     });
 
     it('respects model-wide ignore comments', async () => {
-      const violations = await run(`
+      const { violations } = await run(`
         model Products {
           /// prisma-lint-ignore-model
           id String @id
@@ -62,7 +62,7 @@ describe('require-field-index', () => {
     });
 
     it('returns no violations for indexed relation fields', async () => {
-      const violations = await run(`
+      const { violations } = await run(`
         model Foo {
           qid String @id
           barRef String
@@ -74,7 +74,7 @@ describe('require-field-index', () => {
     });
 
     it('returns no violations for indexed relation fields with key', async () => {
-      const violations = await run(`
+      const { violations } = await run(`
         model Foo {
           qid String @id
           barRef String
@@ -86,7 +86,7 @@ describe('require-field-index', () => {
     });
 
     it('returns violations for non-indexed relation fields', async () => {
-      const violations = await run(`
+      const { violations } = await run(`
         model Foo {
           qid String @id
           barRef String
@@ -104,7 +104,7 @@ describe('require-field-index', () => {
 
     describe('with @unique tag', () => {
       it('returns no violations', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model User {
         tenantQid String @unique
       }
@@ -115,7 +115,7 @@ describe('require-field-index', () => {
 
     describe('with @@index', () => {
       it('returns no violations', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model User {
         tenantQid String
         @@index(tenantQid)
@@ -127,7 +127,7 @@ describe('require-field-index', () => {
 
     describe('with first in compound @@index', () => {
       it('returns no violations', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model User {
         tenantQid String
         createdAt DateTime
@@ -140,7 +140,7 @@ describe('require-field-index', () => {
 
     describe('with second in compound @@index', () => {
       it('returns violation', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model Users {
         tenantQid String
         createdAt DateTime
@@ -153,7 +153,7 @@ describe('require-field-index', () => {
 
     describe('with no index', () => {
       it('returns violation', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model Users {
         tenantQid String
       }
@@ -170,7 +170,7 @@ describe('require-field-index', () => {
 
     describe('with @id tag', () => {
       it('returns no violations', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model User {
         qid String @id
       }
@@ -181,7 +181,7 @@ describe('require-field-index', () => {
 
     describe('with @unique tag', () => {
       it('returns no violations', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model User {
         tenantQid String @unique
       }
@@ -192,7 +192,7 @@ describe('require-field-index', () => {
 
     describe('with @@index', () => {
       it('returns no violations', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model User {
         tenantQid String
         @@index(tenantQid)
@@ -204,7 +204,7 @@ describe('require-field-index', () => {
 
     describe('with @@index with key', () => {
       it('returns no violations', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model User {
         tenantQid String
         @@index(fields: [tenantQid])
@@ -216,7 +216,7 @@ describe('require-field-index', () => {
 
     describe('with first in compound @@index', () => {
       it('returns no violations', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model User {
         tenantQid String
         createdAt DateTime
@@ -229,7 +229,7 @@ describe('require-field-index', () => {
 
     describe('with second in compound @@index', () => {
       it('returns violation', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model Users {
         tenantQid String
         createdAt DateTime
@@ -242,7 +242,7 @@ describe('require-field-index', () => {
 
     describe('with no index', () => {
       it('returns violation', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model Users {
         tenantQid String
       }

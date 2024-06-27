@@ -24,6 +24,7 @@
     "setup:precommit-hooks": "husky install",
     "style:eslint": "eslint src --fix --max-warnings=0 --cache",
     "style:eslint:check": "eslint src --max-warnings=0 --cache",
+    "style:eslint:fix-diff": "git diff --diff-filter=d --name-only --merge-base origin/main | grep '\\.ts$' | xargs yarn eslint --fix",
     "style:prettier": "prettier --write src",
     "style:prettier:check": "prettier --check src",
     "test": "NODE_OPTIONS=--experimental-vm-modules node ./node_modules/jest/bin/jest.js",

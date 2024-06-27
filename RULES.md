@@ -26,6 +26,8 @@ That will ignore only `tenantId` field violations for the model. Other
 fields will still be enforced. A comma-separated list of fields can be
 provided to ignore multiple fields.
 
+This rule does not support auto-fixing.
+
 ### Configuration
 
 ```ts
@@ -165,6 +167,8 @@ number of fields can appear in the model at that point. This can
 be used at the end of the `order` list to indicate that remaining
 fields can appear in any order at the end of the model.
 
+This rule does not support auto-fixing.
+
 ### Configuration
 
 ```ts
@@ -230,6 +234,7 @@ model User {
 ## forbid-field
 
 Forbids fields with certain names.
+This rule does not support auto-fixing.
 
 ### Configuration
 
@@ -282,6 +287,8 @@ For more protection against breaking changes, consider using:
 
 <https://github.com/loop-payments/prisma-safety>
 
+This rule does not support auto-fixing.
+
 ### Examples
 
 #### Default
@@ -311,6 +318,8 @@ type Product {
 Checks that each model name matches the plural or singlar enforced style.
 
 <https://en.wikipedia.org/wiki/Grammatical_number>
+
+This rule does not support auto-fixing.
 
 ### Configuration
 
@@ -402,6 +411,7 @@ model Users {
 ## model-name-mapping-snake-case
 
 Checks that the mapped name of a model is the expected snake case.
+This rule does not support auto-fixing.
 
 ### Configuration
 
@@ -500,6 +510,8 @@ domain object is persisted in multiple tables,
 and the application type differs from the table
 structure.
 
+This rule supports auto-fixing.
+
 ### Configuration
 
 ```ts
@@ -531,6 +543,8 @@ Requires default empty arrays for array fields.
 Motivation:
 <https://github.com/loop-payments/prisma-lint/issues/275>
 
+This rule supports auto-fixing.
+
 ### Examples
 
 #### Default
@@ -538,7 +552,7 @@ Motivation:
 ```prisma
 // good
 model Post {
- tags String[] @default([])
+  tags String[] @default([])
 }
 
 // bad
@@ -559,6 +573,8 @@ This rule supports selectively ignoring fields via the
 That will ignore only `tenantId` violations for the model. Other
 required indices will still be enforced. A comma-separated list of fields
 can be provided to ignore multiple fields.
+
+This rule does not support auto-fixing.
 
 ### Configuration
 
@@ -639,6 +655,7 @@ type Bar {
 ## require-field-type
 
 Checks that certain fields have a specific type.
+This rule does not support auto-fixing.
 
 ### Configuration
 
@@ -697,6 +714,8 @@ This rule supports selectively ignoring fields via the
 That will ignore only `tenantId` field violations for the model. Other
 required fields will still be enforced. A comma-separated list of fields
 can be provided to ignore multiple required fields.
+
+This rule does not support auto-fixing.
 
 ### Configuration
 

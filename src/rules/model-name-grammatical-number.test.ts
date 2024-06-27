@@ -19,7 +19,7 @@ describe('model-name-grammatical-number', () => {
     const run = getRunner({ style: 'singular' });
 
     it('respects rule-specific ignore comments', async () => {
-      const violations = await run(`
+      const { violations } = await run(`
     model Users {
       /// prisma-lint-ignore-model model-name-grammatical-number
       id String @id
@@ -29,7 +29,7 @@ describe('model-name-grammatical-number', () => {
     });
 
     it('respects model-wide ignore comments', async () => {
-      const violations = await run(`
+      const { violations } = await run(`
     model Users {
       /// prisma-lint-ignore-model
       id String @id
@@ -44,7 +44,7 @@ describe('model-name-grammatical-number', () => {
 
     describe('singular', () => {
       it('returns no violations', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model User {
         id String @id
       }
@@ -55,7 +55,7 @@ describe('model-name-grammatical-number', () => {
 
     describe('plural', () => {
       it('returns violation', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model Users {
         id String @id
       }
@@ -69,7 +69,7 @@ describe('model-name-grammatical-number', () => {
     const run = getRunner({ style: 'plural' });
     describe('singular', () => {
       it('returns violation', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model User {
         id String @id
       }
@@ -80,7 +80,7 @@ describe('model-name-grammatical-number', () => {
 
     describe('plural', () => {
       it('returns no violations', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model Users {
         id String @id
       }
@@ -95,7 +95,7 @@ describe('model-name-grammatical-number', () => {
       const run = getRunner({ style: 'singular' });
 
       it('returns violation', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model UserData {
         id String @id
       }
@@ -108,7 +108,7 @@ describe('model-name-grammatical-number', () => {
       const run = getRunner({ style: 'singular', allowlist: ['UserData'] });
 
       it('returns no violations', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model UserData {
         id String @id
       }
@@ -122,7 +122,7 @@ describe('model-name-grammatical-number', () => {
 
       describe('with matching suffix', () => {
         it('returns no violations', async () => {
-          const violations = await run(`
+          const { violations } = await run(`
       model UserData {
         id String @id
       }
@@ -136,7 +136,7 @@ describe('model-name-grammatical-number', () => {
 
       describe('without matching suffix', () => {
         it('returns violation', async () => {
-          const violations = await run(`
+          const { violations } = await run(`
       model DataRecords {
         id String @id
       }

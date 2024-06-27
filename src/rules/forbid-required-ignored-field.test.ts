@@ -19,7 +19,7 @@ describe('forbid-required-ignored-field', () => {
 
     describe('with optional ignored field', () => {
       it('returns no violations', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model User {
         id String
         toBeRemoved String? @ignore
@@ -31,7 +31,7 @@ describe('forbid-required-ignored-field', () => {
 
     describe('with required ignored field with default', () => {
       it('returns no violations', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model Users {
         id String
         deleted String @ignore @default(false)
@@ -43,7 +43,7 @@ describe('forbid-required-ignored-field', () => {
 
     describe('with required ignored field', () => {
       it('returns violation', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model Users {
         id String
         toBeRemoved String @ignore

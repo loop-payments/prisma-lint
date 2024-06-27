@@ -1,4 +1,7 @@
-import { getPrismaSchema } from '#src/common/get-prisma-schema.js';
+import {
+  getPrismaSchema,
+  type PrismaSchema,
+} from '#src/common/get-prisma-schema.js';
 import {
   isModelEntirelyIgnored,
   isRuleEntirelyIgnored,
@@ -24,7 +27,10 @@ export function lintPrismaSourceCode({
   rules: Rule[];
   fileName: string;
   sourceCode: string;
-}): Violation[] {
+}): {
+  prismaSchema: PrismaSchema;
+  violations: Violation[];
+} {
   // Parse source code into AST.
   const prismaSchema = getPrismaSchema(sourceCode);
 
@@ -76,5 +82,5 @@ export function lintPrismaSourceCode({
       });
   });
 
-  return violations;
+  return { prismaSchema, violations };
 }

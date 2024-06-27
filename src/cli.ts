@@ -12,6 +12,7 @@ import { readPackageUp } from 'read-package-up';
 
 import { getTruncatedFileName } from '#src/common/file.js';
 import { parseRules } from '#src/common/parse-rules.js';
+import { fixFilesUntilStable as fixPrismaFilesUntilStable } from '#src/fix/fix.js';
 import { lintPrismaFiles } from '#src/lint-prisma-files.js';
 import { outputToConsole } from '#src/output/console.js';
 import ruleDefinitions from '#src/rule-definitions.js';
@@ -31,6 +32,7 @@ program
     'Output format. Options: simple, contextual, json, filepath, none.',
     'simple',
   )
+  .option('-f, --fix', 'Apply automatic fixes where possible.')
   .option('--no-color', 'Disable color output.')
   .option('--quiet', 'Suppress all output except for errors.')
   .argument(
@@ -128,17 +130,16 @@ const run = async () => {
   }
 
   const fileNames = await resolvePrismaFiles(args);
-  const fileViolationList = await lintPrismaFiles({
-    rules,
-    fileNames,
-  });
+  const input = { rules, fileNames };
+  const fileResults = options.fix
+    ? await fixPrismaFilesUntilStable(input)
+    : await lintPrismaFiles(input);
 
-  outputToConsole(fileViolationList, outputFormat, quiet);
-
-  const hasViolations = fileViolationList.some(
+  const hasViolations = fileResults.some(
     ({ violations }) => violations.length > 0,
   );
   if (hasViolations) {
+    outputToConsole(fileResults, outputFormat, quiet);
     process.exit(1);
   }
 };
