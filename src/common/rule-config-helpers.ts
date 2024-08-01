@@ -1,16 +1,20 @@
-import { z } from 'zod';
+/**
+ * Zod schema to be used for allowList config option
+ */
+// export const configAllowList = z
+//   .array(z.union([z.string(), z.instanceof(RegExp)]))
+//   .optional();
 
-export const configAllowList = z
-  .array(z.union([z.string(), z.instanceof(RegExp)]))
-  .optional();
-
-export const configTrimPrefix = z
-  .union([
-    z.string(),
-    z.instanceof(RegExp),
-    z.array(z.union([z.string(), z.instanceof(RegExp)])),
-  ])
-  .optional();
+/**
+ * Zod schema to be used for trimPrefix config option
+ */
+// export const configTrimPrefix = z
+//   .union([
+//     z.string(),
+//     z.instanceof(RegExp),
+//     z.array(z.union([z.string(), z.instanceof(RegExp)])),
+//   ])
+//   .optional();
 
 export function matchesAllowList(
   value: string,

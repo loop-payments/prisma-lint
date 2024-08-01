@@ -1,8 +1,6 @@
 import { z } from 'zod';
 
 import {
-  configAllowList,
-  configTrimPrefix,
   matchesAllowList,
   trimPrefix,
 } from '#src/common/rule-config-helpers.js';
@@ -12,8 +10,14 @@ const RULE_NAME = 'field-name-camel-case';
 
 const Config = z
   .object({
-    allowList: configAllowList,
-    trimPrefix: configTrimPrefix,
+    allowList: z.array(z.union([z.string(), z.instanceof(RegExp)])).optional(),
+    trimPrefix: z
+      .union([
+        z.string(),
+        z.instanceof(RegExp),
+        z.array(z.union([z.string(), z.instanceof(RegExp)])),
+      ])
+      .optional(),
   })
   .strict();
 
