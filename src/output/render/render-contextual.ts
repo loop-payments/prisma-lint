@@ -11,7 +11,8 @@ export const renderViolationsContextual = (
   const lines = pairs.flatMap(([key, violations]) => {
     const first = violations[0];
     const { fileName } = first;
-    const rawLocation = first.field?.location ?? first.model.location;
+    const rawLocation =
+      first.field?.location ?? first.model?.location ?? first.enum?.location;
     if (!rawLocation) {
       throw new Error('No location');
     }

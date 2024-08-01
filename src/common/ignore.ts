@@ -1,8 +1,9 @@
-import type { Model } from '@mrleebo/prisma-ast';
+import type { Enum, Model } from '@mrleebo/prisma-ast';
 
 import { PrismaPropertyType } from '#src/common/prisma.js';
 
 const IGNORE_MODEL = '/// prisma-lint-ignore-model';
+const IGNORE_ENUM = '/// prisma-lint-ignore-enum';
 
 export function listIgnoreModelComments(node: Model) {
   const commentFields = node.properties.filter(
@@ -13,21 +14,39 @@ export function listIgnoreModelComments(node: Model) {
     .filter((t) => t.startsWith(IGNORE_MODEL));
 }
 
-export function isModelEntirelyIgnored(ignoreModelComments: string[]) {
-  return ignoreModelComments.includes(IGNORE_MODEL);
+export function listIgnoreEnumComments(node: Enum) {
+  const commentFields = node.enumerators.filter(
+    (enumerator) => enumerator.type === 'comment',
+  );
+  return commentFields
+    .map((f) => f.text.trim())
+    .filter((t) => t.startsWith(IGNORE_ENUM));
+}
+
+export function isModelEntirelyIgnored(ignoreComments: string[]) {
+  return ignoreComments.includes(IGNORE_MODEL);
+}
+
+export function isEnumEntirelyIgnored(ignoreComments: string[]) {
+  return ignoreComments.includes(IGNORE_ENUM);
 }
 
 export function isRuleEntirelyIgnored(
   ruleName: string,
   ignoreModelComments: string[],
 ) {
-  return ignoreModelComments.includes(`${IGNORE_MODEL} ${ruleName}`);
+  return (
+    ignoreModelComments.includes(`${IGNORE_MODEL} ${ruleName}`) ||
+    ignoreModelComments.includes(`${IGNORE_ENUM} ${ruleName}`)
+  );
 }
 
 export function getRuleIgnoreParams(model: Model, ruleName: string) {
   const ignoreModelComments = listIgnoreModelComments(model);
-  const ruleIgnoreComment = ignoreModelComments.find((c) =>
-    c.startsWith(`${IGNORE_MODEL} ${ruleName} `),
+  const ruleIgnoreComment = ignoreModelComments.find(
+    (c) =>
+      c.startsWith(`${IGNORE_MODEL} ${ruleName} `) ||
+      c.startsWith(`${IGNORE_ENUM} ${ruleName} `),
   );
   if (ruleIgnoreComment == null) {
     return [];
