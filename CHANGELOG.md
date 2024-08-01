@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add new rule `ban-unbounded-string-type`
+
 ## 0.5.0 (2024-05-01)
 
 - [#388](https://github.com/loop-payments/prisma-lint/issues/388) Teach `field-name-mapping-snake-case` ignore comments about individual fields.
