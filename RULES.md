@@ -4,6 +4,7 @@
 
 Configuration option schemas are written with [Zod](https://github.com/colinhacks/zod).
 
+- [ban-unbounded-string-type](#ban-unbounded-string-type)
 - [field-name-mapping-snake-case](#field-name-mapping-snake-case)
 - [field-order](#field-order)
 - [forbid-field](#forbid-field)
@@ -15,6 +16,51 @@ Configuration option schemas are written with [Zod](https://github.com/colinhack
 - [require-field-index](#require-field-index)
 - [require-field-type](#require-field-type)
 - [require-field](#require-field)
+
+## ban-unbounded-string-type
+
+Checks that String fields are defined with a database native type to
+limit the length, e.g. `@db.VarChar(x)`.
+Motivation inspired by https://brandur.org/text - to avoid unintentionally
+building public APIs that support unlimited-length strings.
+
+### Configuration
+
+```ts
+z.object({
+  allowNativeTextType: z.boolean().optional(),
+}).strict();
+```
+
+### Examples
+
+#### Default
+
+```prisma
+// good
+model User {
+  id String @db.VarChar(36)
+}
+
+// bad
+model User {
+  id String
+}
+
+// bad
+model User {
+ id String @db.Text
+}
+```
+
+#### With `{ allowNativeTextType: true }`
+
+```prisma
+// good
+model User {
+  id String @db.Text
+}
+```
 
 ## field-name-mapping-snake-case
 
