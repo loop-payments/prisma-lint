@@ -4,17 +4,59 @@
 
 Configuration option schemas are written with [Zod](https://github.com/colinhacks/zod).
 
+- [field-name-camel-case](#field-name-camel-case)
 - [field-name-mapping-snake-case](#field-name-mapping-snake-case)
 - [field-order](#field-order)
 - [forbid-field](#forbid-field)
 - [forbid-required-ignored-field](#forbid-required-ignored-field)
 - [model-name-grammatical-number](#model-name-grammatical-number)
 - [model-name-mapping-snake-case](#model-name-mapping-snake-case)
+- [model-name-pascal-case](#model-name-pascal-case)
 - [model-name-prefix](#model-name-prefix)
 - [require-default-empty-arrays](#require-default-empty-arrays)
 - [require-field-index](#require-field-index)
 - [require-field-type](#require-field-type)
 - [require-field](#require-field)
+
+## field-name-camel-case
+
+Checks that field names are in camelCase.
+
+### Configuration
+
+```ts
+z.object({
+  allowList: z.array(z.union([z.string(), z.instanceof(RegExp)])).optional(),
+  trimPrefix: z
+    .union([
+      z.string(),
+      z.instanceof(RegExp),
+      z.array(z.union([z.string(), z.instanceof(RegExp)])),
+    ])
+    .optional(),
+}).strict();
+```
+
+### Examples
+
+#### Default
+
+```prisma
+// good
+model User {
+  rowId String @id
+}
+
+// bad
+model User {
+  RowId String @id
+}
+
+// bad
+model User {
+ row_id String @id
+}
+```
 
 ## field-name-mapping-snake-case
 
@@ -487,6 +529,46 @@ model UserRole {
 model UserRole {
   id String @id
   @@map(name: "user_role")
+}
+```
+
+## model-name-pascal-case
+
+Checks that model names are in PascalCase.
+
+### Configuration
+
+```ts
+z.object({
+  allowList: z.array(z.union([z.string(), z.instanceof(RegExp)])).optional(),
+  trimPrefix: z
+    .union([
+      z.string(),
+      z.instanceof(RegExp),
+      z.array(z.union([z.string(), z.instanceof(RegExp)])),
+    ])
+    .optional(),
+}).strict();
+```
+
+### Examples
+
+#### Default
+
+```prisma
+// good
+model DbUser {
+  id String @id
+}
+
+// bad
+model dbUser {
+  id String @id
+}
+
+// bad
+model db_user {
+ id String @id
 }
 ```
 
