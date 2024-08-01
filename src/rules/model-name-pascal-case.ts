@@ -1,19 +1,19 @@
 import { z } from 'zod';
 
+import {
+  configAllowList,
+  configTrimPrefix,
+  matchesAllowList,
+  trimPrefix,
+} from '#src/common/rule-config-helpers.js';
 import type { ModelRuleDefinition } from '#src/common/rule.js';
 
 const RULE_NAME = 'model-name-pascal-case';
 
 const Config = z
   .object({
-    allowList: z.array(z.union([z.string(), z.instanceof(RegExp)])).optional(),
-    trimPrefix: z
-      .union([
-        z.string(),
-        z.instanceof(RegExp),
-        z.array(z.union([z.string(), z.instanceof(RegExp)])),
-      ])
-      .optional(),
+    allowList: configAllowList,
+    trimPrefix: configTrimPrefix,
   })
   .strict();
 
@@ -41,37 +41,13 @@ export default {
   ruleName: RULE_NAME,
   configSchema: Config,
   create: (config, context) => {
-    const { allowList, trimPrefix } = config;
+    const { allowList, trimPrefix: trimPrefixConfig } = config;
     return {
       Model: (model) => {
-        if (
-          allowList?.some((pattern) =>
-            pattern instanceof RegExp
-              ? model.name.match(pattern)
-              : model.name === pattern,
-          )
-        ) {
+        if (matchesAllowList(model.name, allowList)) {
           return;
         }
-        let nameWithoutPrefix = model.name;
-        for (const prefix of Array.isArray(trimPrefix)
-          ? trimPrefix
-          : [trimPrefix]) {
-          if (prefix === undefined) {
-            continue;
-          }
-          if (prefix instanceof RegExp) {
-            if (model.name.match(prefix)) {
-              nameWithoutPrefix = model.name.replace(prefix, '');
-              break;
-            }
-            continue;
-          }
-          if (model.name.startsWith(prefix)) {
-            nameWithoutPrefix = model.name.slice(prefix.length);
-            break;
-          }
-        }
+        const nameWithoutPrefix = trimPrefix(model.name, trimPrefixConfig);
         if (!nameWithoutPrefix.match(/^[A-Z][a-zA-Z0-9]*$/)) {
           const message = 'Model name should be in PascalCase.';
           context.report({ model, message });
