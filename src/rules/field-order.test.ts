@@ -22,7 +22,7 @@ describe('field-order', () => {
 
     describe('with tenant qid as first field', () => {
       it('returns no violations', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model User {
         tenantQid String
         qid String
@@ -35,7 +35,7 @@ describe('field-order', () => {
 
     describe('with no tenant qid', () => {
       it('returns no violations', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model User {
         qid String
         email String
@@ -47,7 +47,7 @@ describe('field-order', () => {
 
     describe('with tenant qid out of order', () => {
       it('returns violation', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model Users {
         qid String
         tenantQid String
@@ -65,7 +65,7 @@ describe('field-order', () => {
 
     describe('with tenant qid as last field', () => {
       it('returns no violations', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model User {
         qid String
         email String
@@ -78,7 +78,7 @@ describe('field-order', () => {
 
     describe('with no tenant qid', () => {
       it('returns no violations', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model User {
         qid String
         email String
@@ -90,7 +90,7 @@ describe('field-order', () => {
 
     describe('with tenant qid out of order', () => {
       it('returns violation', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model Users {
         qid String
         tenantQid String

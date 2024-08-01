@@ -20,7 +20,7 @@ describe('field-name-mapping-snake-case', () => {
 
     describe('valid with mapping', () => {
       it('returns no violations', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model User {
         id String @id @map(name: "_id")
         otherField String @map(name: "other_field")
@@ -32,7 +32,7 @@ describe('field-name-mapping-snake-case', () => {
 
     describe('missing @map', () => {
       it('returns violation', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model User {
         idFoo String @id
       }
@@ -43,7 +43,7 @@ describe('field-name-mapping-snake-case', () => {
 
     describe('without prefix', () => {
       it('returns violation', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model user {
         id String @id @map(name: "id")
       }
@@ -56,7 +56,7 @@ describe('field-name-mapping-snake-case', () => {
 
     describe('with wrong mapping', () => {
       it('returns violation', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model user {
         idTwo String @id @map(name: "_id_one")
       }
@@ -71,7 +71,7 @@ describe('field-name-mapping-snake-case', () => {
 
     describe('valid with mapping', () => {
       it('returns no violations', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model User {
         graphQLId String @map(name: "graphql_id")
       }
@@ -82,7 +82,7 @@ describe('field-name-mapping-snake-case', () => {
 
     describe('valid with mapping with no key', () => {
       it('returns no violations', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model User {
         graphQLId String @map("graphql_id")
       }
@@ -93,7 +93,7 @@ describe('field-name-mapping-snake-case', () => {
 
     describe('valid without mapping', () => {
       it('returns no violations', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model User {
         id String
       }
@@ -104,7 +104,7 @@ describe('field-name-mapping-snake-case', () => {
 
     describe('missing @map', () => {
       it('returns violation', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model User {
         graphQLId String
       }
@@ -115,7 +115,7 @@ describe('field-name-mapping-snake-case', () => {
 
     describe('@@map with wrong name', () => {
       it('returns violation', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model User {
         graphQLId String @map(name: "graph_q_l_id")
       }
@@ -130,7 +130,7 @@ describe('field-name-mapping-snake-case', () => {
 
     describe('valid with mapping', () => {
       it('returns no violations', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model User {
         emailAddress String @map(name: "email_address")
       }
@@ -141,7 +141,7 @@ describe('field-name-mapping-snake-case', () => {
 
     describe('valid without mapping', () => {
       it('returns no violations', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model User {
         email String
       }
@@ -152,7 +152,7 @@ describe('field-name-mapping-snake-case', () => {
 
     describe('single word with incorrect mapping', () => {
       it('returns violation', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model User {
         email String @map(name: "email_address")
       }
@@ -163,7 +163,7 @@ describe('field-name-mapping-snake-case', () => {
 
     describe('association without mapping', () => {
       it('returns no violations', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model User {
         associatedModel AssociatedModel?
       }
@@ -174,7 +174,7 @@ describe('field-name-mapping-snake-case', () => {
 
     describe('missing @map', () => {
       it('returns violation', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model User {
         emailAddress String
       }
@@ -185,7 +185,7 @@ describe('field-name-mapping-snake-case', () => {
 
     describe('@@map with wrong name', () => {
       it('returns violation', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model User {
         emailAddress String @map(name: "emailaddress")
       }
@@ -200,7 +200,7 @@ describe('field-name-mapping-snake-case', () => {
 
     describe('valid with mapping', () => {
       it('returns no violations', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       enum RoleType {
         ADMIN
         USER
@@ -216,7 +216,7 @@ describe('field-name-mapping-snake-case', () => {
 
     describe('valid without mapping', () => {
       it('returns no violations', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       enum RoleType {
         ADMIN
         USER
@@ -232,7 +232,7 @@ describe('field-name-mapping-snake-case', () => {
 
     describe('multiple words without mapping', () => {
       it('returns violation', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       enum RoleType {
         ADMIN
         USER
@@ -252,7 +252,7 @@ describe('field-name-mapping-snake-case', () => {
 
     describe('valid with mapping', () => {
       it('returns no violations', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model User {
         userInfo UserInfo @map(name: "user_info")
       }
@@ -267,7 +267,7 @@ describe('field-name-mapping-snake-case', () => {
 
     describe('valid without mapping', () => {
       it('returns no violations', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model User {
         info UserInfo
       }
@@ -282,7 +282,7 @@ describe('field-name-mapping-snake-case', () => {
 
     describe('multiple words without mapping', () => {
       it('returns violation', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model User {
         userInfo UserInfo
       }
@@ -297,7 +297,7 @@ describe('field-name-mapping-snake-case', () => {
 
     describe('wrong mapping', () => {
       it('returns violation', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
       model User {
         userInfo UserInfo @map(name: "something_wrong")
       }
@@ -315,7 +315,7 @@ describe('field-name-mapping-snake-case', () => {
     const run = getRunner();
 
     it('respects rule-specific ignore comments', async () => {
-      const violations = await run(`
+      const { violations } = await run(`
         model User {
           /// prisma-lint-ignore-model field-name-mapping-snake-case
           emailAddress String
@@ -325,7 +325,7 @@ describe('field-name-mapping-snake-case', () => {
     });
 
     it('respects field-specific ignore comments with comma', async () => {
-      const violations = await run(`
+      const { violations } = await run(`
         model User {
           /// prisma-lint-ignore-model field-name-mapping-snake-case emailAddress,updatedAt
           emailAddress String
@@ -338,7 +338,7 @@ describe('field-name-mapping-snake-case', () => {
     });
 
     it('respects model-wide ignore comments', async () => {
-      const violations = await run(`
+      const { violations } = await run(`
         model User {
           /// prisma-lint-ignore-model field-name-mapping-snake-case
           emailAddress String

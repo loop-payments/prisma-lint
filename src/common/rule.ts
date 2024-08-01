@@ -5,6 +5,8 @@ import type { z } from 'zod';
 import type { RuleConfig } from '#src/common/config.js';
 import type {
   FieldViolation,
+  FixableFieldViolation,
+  FixableModelViolation,
   ModelViolation,
   NodeViolation,
 } from '#src/common/violation.js';
@@ -14,34 +16,34 @@ export type Rule = { ruleConfig: RuleConfig; ruleDefinition: RuleDefinition };
 /**
  * Context passed to rules.
  */
-export type RuleContext<T extends NodeViolation> = {
+export type RuleContext<V extends NodeViolation> = {
   enumNames: Set<string>;
   customTypeNames: Set<string>;
   fileName: string;
   sourceCode: string;
-  report: (nodeViolation: T) => void;
+  report: (nodeViolation: V) => void;
 };
 
-export type ModelRuleDefinition<T> = {
+export type ModelRuleDefinition<
+  C,
+  V extends ModelViolation | FixableModelViolation = ModelViolation,
+> = {
   ruleName: string;
-  configSchema: z.ZodSchema<T>;
-  create: (
-    config: T,
-    context: RuleContext<ModelViolation>,
-  ) => ModelRuleInstance;
+  configSchema: z.ZodSchema<C>;
+  create: (config: C, context: RuleContext<V>) => ModelRuleInstance;
 };
 
 export type ModelRuleInstance = {
   Model: (model: Model) => void;
 };
 
-export type FieldRuleDefinition<T> = {
+export type FieldRuleDefinition<
+  C,
+  V extends FieldViolation | FixableFieldViolation = FieldViolation,
+> = {
   ruleName: string;
-  configSchema: z.ZodSchema<T>;
-  create: (
-    config: T,
-    context: RuleContext<FieldViolation>,
-  ) => FieldRuleInstance;
+  configSchema: z.ZodSchema<C>;
+  create: (config: C, context: RuleContext<V>) => FieldRuleInstance;
 };
 
 export type FieldRuleInstance = {
@@ -49,6 +51,6 @@ export type FieldRuleInstance = {
 };
 
 export type RuleDefinition =
-  | ModelRuleDefinition<any>
-  | FieldRuleDefinition<any>;
+  | ModelRuleDefinition<any, any>
+  | FieldRuleDefinition<any, any>;
 export type RuleInstance = ModelRuleInstance | FieldRuleInstance;

@@ -21,7 +21,7 @@ describe('require-field', () => {
     });
 
     it('respects rule-specific ignore comments', async () => {
-      const violations = await run(`
+      const { violations } = await run(`
         model Products {
           /// prisma-lint-ignore-model require-field
           id String @id
@@ -31,7 +31,7 @@ describe('require-field', () => {
     });
 
     it('respects field-specific ignore comments with comma', async () => {
-      const violations = await run(`
+      const { violations } = await run(`
         model Products {
           /// prisma-lint-ignore-model require-field tenantId,createdAt
           id String @id
@@ -44,7 +44,7 @@ describe('require-field', () => {
     });
 
     it('respects model-wide ignore comments', async () => {
-      const violations = await run(`
+      const { violations } = await run(`
         model Products {
           /// prisma-lint-ignore-model
           id String @id
@@ -59,7 +59,7 @@ describe('require-field', () => {
 
     describe('with field', () => {
       it('returns no violations', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
           model Product {
             id String
             tenantId String
@@ -71,7 +71,7 @@ describe('require-field', () => {
 
     describe('without field', () => {
       it('returns violation', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
           model Product {
             id String @id
           }
@@ -93,7 +93,7 @@ describe('require-field', () => {
 
     describe('with field', () => {
       it('returns no violations', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
           model Product {
             id String
             amountD6 Int
@@ -107,7 +107,7 @@ describe('require-field', () => {
     describe('without field', () => {
       describe('with ifSibling', () => {
         it('returns violation', async () => {
-          const violations = await run(`
+          const { violations } = await run(`
             model Product {
               id String
               amountD6 Int
@@ -119,7 +119,7 @@ describe('require-field', () => {
 
       describe('without ifSibling', () => {
         it('returns no violations', async () => {
-          const violations = await run(`
+          const { violations } = await run(`
             model Product {
               id String
             }
@@ -142,7 +142,7 @@ describe('require-field', () => {
 
     describe('with field', () => {
       it('returns no violations', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
           model Product {
             id String
             amountD6 Int
@@ -156,7 +156,7 @@ describe('require-field', () => {
     describe('without field', () => {
       describe('with ifSibling', () => {
         it('returns violation', async () => {
-          const violations = await run(`
+          const { violations } = await run(`
             model Product {
               id String
               amountD6 Int
@@ -168,7 +168,7 @@ describe('require-field', () => {
 
       describe('without ifSibling', () => {
         it('returns no violations', async () => {
-          const violations = await run(`
+          const { violations } = await run(`
             model Product {
              id String
             }
@@ -191,7 +191,7 @@ describe('require-field', () => {
 
     describe('with field', () => {
       it('returns no violations', async () => {
-        const violations = await run(`
+        const { violations } = await run(`
           model Product {
             id String
             amountD6 Int
@@ -205,7 +205,7 @@ describe('require-field', () => {
     describe('without field', () => {
       describe('with ifSibling', () => {
         it('returns violation', async () => {
-          const violations = await run(`
+          const { violations } = await run(`
             model Product {
               id String
               amountD6 Int
@@ -217,7 +217,7 @@ describe('require-field', () => {
 
       describe('without ifSibling', () => {
         it('returns no violations', async () => {
-          const violations = await run(`
+          const { violations } = await run(`
             model Product {
              id String
             }
