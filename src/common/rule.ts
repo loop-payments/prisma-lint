@@ -1,9 +1,10 @@
-import type { Field, Model } from '@mrleebo/prisma-ast';
+import type { Enum, Field, Model } from '@mrleebo/prisma-ast';
 
 import type { z } from 'zod';
 
 import type { RuleConfig } from '#src/common/config.js';
 import type {
+  EnumViolation,
   FieldViolation,
   ModelViolation,
   NodeViolation,
@@ -48,7 +49,21 @@ export type FieldRuleInstance = {
   Field: (model: Model, field: Field) => void;
 };
 
+export type EnumRuleDefinition<T> = {
+  ruleName: string;
+  configSchema: z.ZodSchema<T>;
+  create: (config: T, context: RuleContext<EnumViolation>) => EnumRuleInstance;
+};
+
+export type EnumRuleInstance = {
+  Enum: (enumObj: Enum) => void;
+};
+
 export type RuleDefinition =
   | ModelRuleDefinition<any>
-  | FieldRuleDefinition<any>;
-export type RuleInstance = ModelRuleInstance | FieldRuleInstance;
+  | FieldRuleDefinition<any>
+  | EnumRuleDefinition<any>;
+export type RuleInstance =
+  | ModelRuleInstance
+  | FieldRuleInstance
+  | EnumRuleInstance;
