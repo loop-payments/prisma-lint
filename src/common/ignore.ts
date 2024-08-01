@@ -41,12 +41,15 @@ export function isRuleEntirelyIgnored(
   );
 }
 
-export function getRuleIgnoreParams(model: Model, ruleName: string) {
-  const ignoreModelComments = listIgnoreModelComments(model);
-  const ruleIgnoreComment = ignoreModelComments.find(
-    (c) =>
-      c.startsWith(`${IGNORE_MODEL} ${ruleName} `) ||
-      c.startsWith(`${IGNORE_ENUM} ${ruleName} `),
+export function getRuleIgnoreParams(node: Model | Enum, ruleName: string) {
+  const ignoreComments =
+    node.type === 'model'
+      ? listIgnoreModelComments(node)
+      : listIgnoreEnumComments(node);
+  const ruleIgnoreComment = ignoreComments.find((c) =>
+    c.startsWith(
+      `${node.type === 'model' ? IGNORE_MODEL : IGNORE_ENUM} ${ruleName} `,
+    ),
   );
   if (ruleIgnoreComment == null) {
     return [];

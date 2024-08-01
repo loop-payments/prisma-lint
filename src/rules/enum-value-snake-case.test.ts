@@ -37,6 +37,20 @@ describe('enum-value-snake-case', () => {
         `);
       expect(violations.length).toEqual(0);
     });
+
+    it('respects parametised field ignore comments', async () => {
+      const violations = await run(`
+          enum Example {
+            /// prisma-lint-ignore-enum enum-value-snake-case InvalidTwo,InvalidThree
+            valid_one
+            InvalidTwo
+            InvalidThree
+            InvalidFour
+            InvalidFive
+          }
+          `);
+      expect(violations.length).toEqual(2);
+    });
   });
 
   describe('without config', () => {
