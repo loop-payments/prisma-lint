@@ -22,7 +22,7 @@ The default schema path is `prisma/schema.prisma`. If a custom schema path is sp
 
 Alternatively, you can provide one or more explicit paths as CLI arguments. These can be globs, directories, or file paths. 
 
-Run `yarn prisma-lint --help` for all options.
+Run `yarn prisma-lint --help` for more.
 
 ## Rules
 
