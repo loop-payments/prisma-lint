@@ -6,107 +6,20 @@ Configuration option schemas are written with [Zod](https://github.com/colinhack
 
 - [enum-name-pascal-case](#enum-name-pascal-case)
 - [enum-value-snake-case](#enum-value-snake-case)
+- [ban-unbounded-string-type](#ban-unbounded-string-type)
+- [field-name-camel-case](#field-name-camel-case)
 - [field-name-mapping-snake-case](#field-name-mapping-snake-case)
 - [field-order](#field-order)
 - [forbid-field](#forbid-field)
 - [forbid-required-ignored-field](#forbid-required-ignored-field)
 - [model-name-grammatical-number](#model-name-grammatical-number)
 - [model-name-mapping-snake-case](#model-name-mapping-snake-case)
+- [model-name-pascal-case](#model-name-pascal-case)
 - [model-name-prefix](#model-name-prefix)
 - [require-default-empty-arrays](#require-default-empty-arrays)
 - [require-field-index](#require-field-index)
 - [require-field-type](#require-field-type)
 - [require-field](#require-field)
-
-## enum-name-pascal-case
-
-Checks that enum names are in PascalCase.
-
-### Configuration
-
-```ts
-z.object({
-  allowList: z.array(z.union([z.string(), z.instanceof(RegExp)])).optional(),
-  trimPrefix: z
-    .union([
-      z.string(),
-      z.instanceof(RegExp),
-      z.array(z.union([z.string(), z.instanceof(RegExp)])),
-    ])
-    .optional(),
-}).strict();
-```
-
-### Examples
-
-#### Default
-
-```prisma
-// good
-enum ExampleOptions {
-  value1
-}
-
-// bad
-enum exampleOptions {
-  value1
-}
-
-// bad
-enum example_options {
- value1
-}
-```
-
-## enum-value-snake-case
-
-Checks that enum values are in snake_case.
-
-### Configuration
-
-```ts
-z.object({
-  allowList: z.array(z.union([z.string(), z.instanceof(RegExp)])).optional(),
-  trimPrefix: z
-    .union([
-      z.string(),
-      z.instanceof(RegExp),
-      z.array(z.union([z.string(), z.instanceof(RegExp)])),
-    ])
-    .optional(),
-}).strict();
-```
-
-### Examples
-
-#### Default
-
-```prisma
-// good
-enum Example {
-  value
-}
-
-// good
-enum Example {
-  value_1
-}
-
-// bad
-enum Example {
-  Value
-}
-
-// bad
-enum Example {
-  VALUE
-}
-
-// bad
-enum Example {
-  camelCase
-}
-```
 
 ## field-name-mapping-snake-case
 
@@ -579,6 +492,46 @@ model UserRole {
 model UserRole {
   id String @id
   @@map(name: "user_role")
+}
+```
+
+## model-name-pascal-case
+
+Checks that model names are in PascalCase.
+
+### Configuration
+
+```ts
+z.object({
+  allowList: z.array(z.union([z.string(), z.instanceof(RegExp)])).optional(),
+  trimPrefix: z
+    .union([
+      z.string(),
+      z.instanceof(RegExp),
+      z.array(z.union([z.string(), z.instanceof(RegExp)])),
+    ])
+    .optional(),
+}).strict();
+```
+
+### Examples
+
+#### Default
+
+```prisma
+// good
+model DbUser {
+  id String @id
+}
+
+// bad
+model dbUser {
+  id String @id
+}
+
+// bad
+model db_user {
+ id String @id
 }
 ```
 
