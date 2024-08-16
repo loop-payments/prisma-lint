@@ -7,7 +7,8 @@ export const renderViolationsSimple = (violations: Violation[]): string[] => {
   const pairs = keyViolationListPairs(violations);
   return pairs.flatMap(([key, violations]) => {
     const first = violations[0];
-    const location = first.field?.location ?? first.model.location;
+    const location =
+      first.field?.location ?? first.model?.location ?? first.enum?.location;
     if (!location) {
       throw new Error('No location');
     }
