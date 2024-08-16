@@ -3,6 +3,8 @@ import {
   isModelEntirelyIgnored,
   isRuleEntirelyIgnored,
   listIgnoreModelComments,
+  listIgnoreEnumComments,
+  isEnumEntirelyIgnored,
 } from '#src/common/ignore.js';
 import {
   listModelBlocks,
@@ -72,6 +74,20 @@ export function lintPrismaSourceCode({
           fields.forEach((field) => {
             ruleInstance.Field(model, field);
           });
+        }
+      });
+  });
+
+  enums.forEach((enumObj) => {
+    const comments = listIgnoreEnumComments(enumObj);
+    if (isEnumEntirelyIgnored(comments)) {
+      return;
+    }
+    namedRuleInstances
+      .filter(({ ruleName }) => !isRuleEntirelyIgnored(ruleName, comments))
+      .forEach(({ ruleInstance }) => {
+        if ('Enum' in ruleInstance) {
+          ruleInstance.Enum(enumObj);
         }
       });
   });

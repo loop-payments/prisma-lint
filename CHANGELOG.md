@@ -2,8 +2,9 @@
 
 ## Unreleased
 
-- Add new rule `ban-unbounded-string-type`
-- Add new rules `model-name-pascal-case` and `field-name-camel-case`
+- Add new rules `enum-name-pascal-case` and `enum-value-snake-case`.
+- Add new rule `ban-unbounded-string-type`.
+- Add new rules `model-name-pascal-case` and `field-name-camel-case`.
 
 ## 0.5.0 (2024-05-01)
 
