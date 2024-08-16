@@ -4,9 +4,9 @@
 
 Configuration option schemas are written with [Zod](https://github.com/colinhacks/zod).
 
+- [ban-unbounded-string-type](#ban-unbounded-string-type)
 - [enum-name-pascal-case](#enum-name-pascal-case)
 - [enum-value-snake-case](#enum-value-snake-case)
-- [ban-unbounded-string-type](#ban-unbounded-string-type)
 - [field-name-camel-case](#field-name-camel-case)
 - [field-name-mapping-snake-case](#field-name-mapping-snake-case)
 - [field-order](#field-order)
@@ -20,6 +20,190 @@ Configuration option schemas are written with [Zod](https://github.com/colinhack
 - [require-field-index](#require-field-index)
 - [require-field-type](#require-field-type)
 - [require-field](#require-field)
+
+## ban-unbounded-string-type
+
+Checks that String fields are defined with a database native type to
+limit the length, e.g. `@db.VarChar(x)`.
+Motivation inspired by https://brandur.org/text - to avoid unintentionally
+building public APIs that support unlimited-length strings.
+
+### Configuration
+
+```ts
+z.object({
+  allowNativeTextType: z.boolean().optional(),
+}).strict();
+```
+
+### Examples
+
+#### Default
+
+```prisma
+// good
+model User {
+  id String @db.VarChar(36)
+}
+
+// bad
+model User {
+  id String
+}
+
+// bad
+model User {
+ id String @db.Text
+}
+```
+
+#### With `{ allowNativeTextType: true }`
+
+```prisma
+// good
+model User {
+  id String @db.Text
+}
+```
+
+## enum-name-pascal-case
+
+Checks that enum names are in PascalCase.
+
+### Configuration
+
+```ts
+z.object({
+  allowList: z.array(z.union([z.string(), z.instanceof(RegExp)])).optional(),
+  trimPrefix: z
+    .union([
+      z.string(),
+      z.instanceof(RegExp),
+      z.array(z.union([z.string(), z.instanceof(RegExp)])),
+    ])
+    .optional(),
+}).strict();
+```
+
+### Examples
+
+#### Default
+
+```prisma
+// good
+enum ExampleOptions {
+  value1
+}
+
+// bad
+enum exampleOptions {
+  value1
+}
+
+// bad
+enum example_options {
+ value1
+}
+```
+
+## enum-value-snake-case
+
+Checks that enum values are in snake_case.
+
+This rule supports selectively ignoring enum values via the
+`prisma-lint-ignore-enum` comment, like so:
+
+    /// prisma-lint-ignore-enum enum-value-snake-case SCREAMING_SNAKE
+
+That will permit an enum value of `SCREAMING_SNAKE`. Other
+values for the enum must still be in snake_case. A comma-separated list of values
+can be provided to ignore multiple enum values.
+
+### Configuration
+
+```ts
+z.object({
+  allowList: z.array(z.union([z.string(), z.instanceof(RegExp)])).optional(),
+  trimPrefix: z
+    .union([
+      z.string(),
+      z.instanceof(RegExp),
+      z.array(z.union([z.string(), z.instanceof(RegExp)])),
+    ])
+    .optional(),
+}).strict();
+```
+
+### Examples
+
+#### Default
+
+```prisma
+// good
+enum Example {
+  value
+}
+
+// good
+enum Example {
+  value_1
+}
+
+// bad
+enum Example {
+  Value
+}
+
+// bad
+enum Example {
+  VALUE
+}
+
+// bad
+enum Example {
+  camelCase
+}
+```
+
+## field-name-camel-case
+
+Checks that field names are in camelCase.
+
+### Configuration
+
+```ts
+z.object({
+  allowList: z.array(z.union([z.string(), z.instanceof(RegExp)])).optional(),
+  trimPrefix: z
+    .union([
+      z.string(),
+      z.instanceof(RegExp),
+      z.array(z.union([z.string(), z.instanceof(RegExp)])),
+    ])
+    .optional(),
+}).strict();
+```
+
+### Examples
+
+#### Default
+
+```prisma
+// good
+model User {
+  rowId String @id
+}
+
+// bad
+model User {
+  RowId String @id
+}
+
+// bad
+model User {
+ row_id String @id
+}
+```
 
 ## field-name-mapping-snake-case
 
