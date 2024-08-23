@@ -41,6 +41,26 @@ describe('forbid-required-ignored-field', () => {
       });
     });
 
+    describe('with required ignored relation without default', () => {
+      it('returns no violations', async () => {
+        const violations = await run(`
+      model Users {
+        id String
+        deleted String
+        
+        tenantId String 
+        tenant  Tenant  @relation(fields: [tenantId], references: [id])
+      }
+      
+      model Tenant {
+        id String
+        users Users[] @ignore 
+      }
+    `);
+        expect(violations.length).toEqual(0);
+      });
+    });
+
     describe('with required ignored field', () => {
       it('returns violation', async () => {
         const violations = await run(`

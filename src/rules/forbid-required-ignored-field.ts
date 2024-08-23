@@ -47,7 +47,10 @@ export default {
         const hasDefault = field?.attributes?.some(
           (attr) => attr.name === 'default',
         );
-        if (!isIgnored || hasDefault) return;
+        const isRelation = field?.attributes?.some(
+          (attr) => attr.name === 'relation',
+        );
+        if (!isIgnored || hasDefault || isRelation) return;
         const isRequired = !field.optional;
         if (!isRequired) return;
         const message =
