@@ -52,7 +52,7 @@
     "eslint": "^8.41.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-import-resolver-typescript": "^3.5.5",
-    "eslint-plugin-canonical": "^4.2.2",
+    "eslint-plugin-canonical": "^5.0.0",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-jest": "^28.2.0",
     "husky": "^9.0.7",
