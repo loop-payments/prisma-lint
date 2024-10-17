@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import fs from 'fs';
-import path from 'path';
+import { join as joinPath } from 'path';
 
 import chalk from 'chalk';
 import { program } from 'commander';
@@ -67,29 +67,32 @@ const getRootConfigResult = async () => {
   return result;
 };
 
-const resolvePrismaFiles = async (args: string[]) => {
-  if (args.length == 0) {
-    const schemaFromPackageJson = await getSchemaFromPackageJson(process.cwd());
-    if (schemaFromPackageJson != null) {
-      return [schemaFromPackageJson];
-    }
-    return [DEFAULT_PRISMA_FILE_PATH];
+const getPathsFromArgsOrPackageJson = async (args: string[]) => {
+  if (args.length > 0) {
+    return args;
   }
+  const schemaFromPackageJson = await getSchemaFromPackageJson(process.cwd());
+  if (schemaFromPackageJson != null) {
+    return [schemaFromPackageJson];
+  }
+  return [DEFAULT_PRISMA_FILE_PATH];
+};
 
+const resolvePrismaFileNames = (paths: string[]) => {
   const resolvedFiles = [];
 
-  for (const file of args) {
-    const isDirectory = fs.existsSync(file) && fs.lstatSync(file).isDirectory();
-    const isGlob = file.includes('*');
+  for (const path of paths) {
+    const isDirectory = fs.existsSync(path) && fs.lstatSync(path).isDirectory();
+    const isGlob = path.includes('*');
 
     if (isDirectory) {
-      const filesInDirectory = glob.sync(path.join(file, '**/*.prisma'));
+      const filesInDirectory = glob.sync(joinPath(path, '**/*.prisma'));
       resolvedFiles.push(...filesInDirectory);
     } else if (isGlob) {
-      const filesMatchingGlob = glob.sync(file);
+      const filesMatchingGlob = glob.sync(path);
       resolvedFiles.push(...filesMatchingGlob);
     } else {
-      resolvedFiles.push(file);
+      resolvedFiles.push(path);
     }
   }
 
@@ -127,7 +130,8 @@ const run = async () => {
     outputParseIssues(rootConfig.filepath, parseIssues);
   }
 
-  const fileNames = await resolvePrismaFiles(args);
+  const paths = await getPathsFromArgsOrPackageJson(args);
+  const fileNames = resolvePrismaFileNames(paths);
   const fileViolationList = await lintPrismaFiles({
     rules,
     fileNames,

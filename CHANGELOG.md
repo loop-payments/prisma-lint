@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.7.0 (2024-10-17)
+
+- Add support for parsing Prisma schema directory names and globs specified in `package.json`.
+
 ## 0.6.0 (2024-08-16)
 
 - Add new rules `enum-name-pascal-case` and `enum-value-snake-case`.
