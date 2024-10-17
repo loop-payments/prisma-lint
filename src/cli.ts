@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import fs from 'fs';
-import path from 'path';
+import { join as joinPath } from 'path';
 
 import chalk from 'chalk';
 import { program } from 'commander';
@@ -81,18 +81,18 @@ const getPathsFromArgsOrPackageJson = async (args: string[]) => {
 const resolvePrismaFileNames = (paths: string[]) => {
   const resolvedFiles = [];
 
-  for (const file of paths) {
-    const isDirectory = fs.existsSync(file) && fs.lstatSync(file).isDirectory();
-    const isGlob = file.includes('*');
+  for (const path of paths) {
+    const isDirectory = fs.existsSync(path) && fs.lstatSync(path).isDirectory();
+    const isGlob = path.includes('*');
 
     if (isDirectory) {
-      const filesInDirectory = glob.sync(path.join(file, '**/*.prisma'));
+      const filesInDirectory = glob.sync(joinPath(path, '**/*.prisma'));
       resolvedFiles.push(...filesInDirectory);
     } else if (isGlob) {
-      const filesMatchingGlob = glob.sync(file);
+      const filesMatchingGlob = glob.sync(path);
       resolvedFiles.push(...filesMatchingGlob);
     } else {
-      resolvedFiles.push(file);
+      resolvedFiles.push(path);
     }
   }
 
