@@ -67,18 +67,21 @@ const getRootConfigResult = async () => {
   return result;
 };
 
-const resolvePrismaFiles = async (args: string[]) => {
-  if (args.length == 0) {
-    const schemaFromPackageJson = await getSchemaFromPackageJson(process.cwd());
-    if (schemaFromPackageJson != null) {
-      return [schemaFromPackageJson];
-    }
-    return [DEFAULT_PRISMA_FILE_PATH];
+const getPathsFromArgsOrPackageJson = async (args: string[]) => {
+  if (args.length > 1) {
+    return args;
   }
+  const schemaFromPackageJson = await getSchemaFromPackageJson(process.cwd());
+  if (schemaFromPackageJson != null) {
+    return [schemaFromPackageJson];
+  }
+  return [DEFAULT_PRISMA_FILE_PATH];
+};
 
+const resolvePrismaFiles = async (fileNames: string[]) => {
   const resolvedFiles = [];
 
-  for (const file of args) {
+  for (const file of fileNames) {
     const isDirectory = fs.existsSync(file) && fs.lstatSync(file).isDirectory();
     const isGlob = file.includes('*');
 
@@ -127,7 +130,8 @@ const run = async () => {
     outputParseIssues(rootConfig.filepath, parseIssues);
   }
 
-  const fileNames = await resolvePrismaFiles(args);
+  const paths = await getPathsFromArgsOrPackageJson(args);
+  const fileNames = await resolvePrismaFiles(paths);
   const fileViolationList = await lintPrismaFiles({
     rules,
     fileNames,
