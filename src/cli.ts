@@ -68,7 +68,7 @@ const getRootConfigResult = async () => {
 };
 
 const getPathsFromArgsOrPackageJson = async (args: string[]) => {
-  if (args.length > 1) {
+  if (args.length > 0) {
     return args;
   }
   const schemaFromPackageJson = await getSchemaFromPackageJson(process.cwd());
