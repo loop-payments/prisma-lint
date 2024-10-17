@@ -78,7 +78,7 @@ const getPathsFromArgsOrPackageJson = async (args: string[]) => {
   return [DEFAULT_PRISMA_FILE_PATH];
 };
 
-const resolvePrismaFileNames = async (paths: string[]) => {
+const resolvePrismaFileNames = (paths: string[]) => {
   const resolvedFiles = [];
 
   for (const file of paths) {
@@ -131,7 +131,7 @@ const run = async () => {
   }
 
   const paths = await getPathsFromArgsOrPackageJson(args);
-  const fileNames = await resolvePrismaFileNames(paths);
+  const fileNames = resolvePrismaFileNames(paths);
   const fileViolationList = await lintPrismaFiles({
     rules,
     fileNames,
