@@ -12,6 +12,7 @@ Configuration option schemas are written with [Zod](https://github.com/colinhack
 - [field-order](#field-order)
 - [forbid-field](#forbid-field)
 - [forbid-required-ignored-field](#forbid-required-ignored-field)
+- [list-field-name-grammatical-number](#list-field-name-grammatical-number)
 - [model-name-grammatical-number](#model-name-grammatical-number)
 - [model-name-mapping-snake-case](#model-name-mapping-snake-case)
 - [model-name-pascal-case](#model-name-pascal-case)
@@ -492,6 +493,65 @@ type Product {
 type Product {
   uuid String
   toBeRemoved String @ignore
+}
+```
+
+## list-field-name-grammatical-number
+
+Checks that each list field name matches the plural or singular enforced style.
+Only applies to fields that are arrays (list types).
+
+### Configuration
+
+```ts
+z.object({
+  style: z.enum(['singular', 'plural']),
+  allowlist: z.array(z.union([z.string(), z.instanceof(RegExp)])).optional(),
+}).strict();
+```
+
+### Examples
+
+#### With `{ style: "singular" }`
+
+```prisma
+// good
+model User {
+  email String[]
+}
+
+// bad
+model User {
+  emails String[]
+}
+```
+
+#### With `{ style: "plural" }`
+
+```prisma
+// good
+model User {
+  emails String[]
+}
+
+// bad
+model User {
+  email String[]
+}
+```
+
+#### With `{ style: "singular", allowlist: ["data"] }`
+
+```prisma
+// good
+model User {
+  data String[]
+  email String[]
+}
+
+// bad
+model User {
+  emails String[]
 }
 ```
 
