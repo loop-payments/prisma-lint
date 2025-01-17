@@ -3,6 +3,7 @@ import banUnboundedStringType from '#src/rules/ban-unbounded-string-type.js';
 import enumNamePascalCase from '#src/rules/enum-name-pascal-case.js';
 import enumValueSnakeCase from '#src/rules/enum-value-snake-case.js';
 import fieldNameCamelCase from '#src/rules/field-name-camel-case.js';
+import fieldNameGrammaticalNumber from '#src/rules/field-name-grammatical-number.js';
 import fieldNameMappingSnakeCase from '#src/rules/field-name-mapping-snake-case.js';
 import fieldOrder from '#src/rules/field-order.js';
 import forbidField from '#src/rules/forbid-field.js';
@@ -21,6 +22,7 @@ export default [
   enumNamePascalCase,
   enumValueSnakeCase,
   fieldNameCamelCase,
+  fieldNameGrammaticalNumber,
   fieldNameMappingSnakeCase,
   fieldOrder,
   forbidField,

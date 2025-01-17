@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add new rule `field-name-grammatical-number`.
+
 ## 0.7.0 (2024-10-17)
 
 - Add support for parsing Prisma schema directory names and globs specified in `package.json`.
