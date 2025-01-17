@@ -5,12 +5,14 @@ import { z } from 'zod';
 
 import type { FieldRuleDefinition } from '#src/common/rule.js';
 
-const RULE_NAME = 'list-field-name-grammatical-number';
+const RULE_NAME = 'field-name-grammatical-number';
 
 const Config = z
   .object({
-    style: z.enum(['singular', 'plural']),
-    allowlist: z.array(z.union([z.string(), z.instanceof(RegExp)])).optional(),
+    ifList: z.enum(['singular', 'plural']),
+    ifListAllow: z
+      .array(z.union([z.string(), z.instanceof(RegExp)]))
+      .optional(),
   })
   .strict();
 
@@ -18,7 +20,7 @@ const Config = z
  * Checks that each list field name matches the plural or singular enforced style.
  * Only applies to fields that are arrays (list types).
  *
- * @example { style: "singular" }
+ * @example { ifList: "singular" }
  *   // good
  *   model User {
  *     email String[]
@@ -29,7 +31,7 @@ const Config = z
  *     emails String[]
  *   }
  *
- * @example { style: "plural" }
+ * @example { ifList: "plural" }
  *   // good
  *   model User {
  *     emails String[]
@@ -40,7 +42,7 @@ const Config = z
  *     email String[]
  *   }
  *
- * @example { style: "singular", allowlist: ["data"] }
+ * @example { ifList: "singular", ifListAllow: ["data"] }
  *   // good
  *   model User {
  *     data String[]
@@ -56,8 +58,8 @@ export default {
   ruleName: RULE_NAME,
   configSchema: Config,
   create: (config, context) => {
-    const { style } = config;
-    const allowlist = config.allowlist ?? [];
+    const { ifListAllow, ifList } = config;
+    const allowlist = ifListAllow ?? [];
     return {
       Field: (model: Model, field: Field) => {
         if (!field.array) {
@@ -65,19 +67,24 @@ export default {
         }
 
         const fieldName = field.name;
-        if (allowlist.includes(fieldName)) {
+        if (
+          allowlist.includes(fieldName) ||
+          allowlist.some(
+            (item) => item instanceof RegExp && item.test(fieldName),
+          )
+        ) {
           return;
         }
 
         const isPlural = pluralize.isPlural(fieldName);
-        if (isPlural && style === 'singular') {
+        if (isPlural && ifList === 'singular') {
           context.report({
             model,
             field,
             message: 'Expected singular name for list field.',
           });
         }
-        if (!isPlural && style === 'plural') {
+        if (!isPlural && ifList === 'plural') {
           context.report({
             model,
             field,

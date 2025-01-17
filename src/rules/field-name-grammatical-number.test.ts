@@ -1,22 +1,22 @@
 import type { RuleConfig } from '#src/common/config.js';
 import { testLintPrismaSource } from '#src/common/test.js';
-import listFieldNameGrammaticalNumber from '#src/rules/list-field-name-grammatical-number.js';
+import listFieldNameGrammaticalNumber from '#src/rules/field-name-grammatical-number.js';
 
-describe('list-field-name-grammatical-number', () => {
+describe('field-name-grammatical-number', () => {
   const getRunner = (config: RuleConfig) => async (sourceCode: string) =>
     await testLintPrismaSource({
       fileName: 'fake.ts',
       sourceCode,
       rootConfig: {
         rules: {
-          'list-field-name-grammatical-number': ['error', config],
+          'field-name-grammatical-number': ['error', config],
         },
       },
       ruleDefinitions: [listFieldNameGrammaticalNumber],
     });
 
   describe('expecting singular', () => {
-    const run = getRunner({ style: 'singular' });
+    const run = getRunner({ ifList: 'singular' });
 
     describe('singular', () => {
       it('returns no violations for singular list field', async () => {
@@ -54,7 +54,7 @@ describe('list-field-name-grammatical-number', () => {
   });
 
   describe('expecting plural', () => {
-    const run = getRunner({ style: 'plural' });
+    const run = getRunner({ ifList: 'plural' });
 
     describe('singular', () => {
       it('returns violation for singular list field', async () => {
@@ -91,9 +91,9 @@ describe('list-field-name-grammatical-number', () => {
     });
   });
 
-  describe('allowlist', () => {
-    describe('without allowlist', () => {
-      const run = getRunner({ style: 'singular' });
+  describe('ifListAllow', () => {
+    describe('without ifListAllow', () => {
+      const run = getRunner({ ifList: 'singular' });
 
       it('returns violation for plural list field', async () => {
         const violations = await run(`
@@ -105,8 +105,8 @@ describe('list-field-name-grammatical-number', () => {
       });
     });
 
-    describe('with string allowlist', () => {
-      const run = getRunner({ style: 'singular', allowlist: ['data'] });
+    describe('with string ifListAllow', () => {
+      const run = getRunner({ ifList: 'singular', ifListAllow: ['data'] });
 
       it('returns no violations for allowlisted field', async () => {
         const violations = await run(`
@@ -128,6 +128,28 @@ describe('list-field-name-grammatical-number', () => {
         expect(violations[0].message).toEqual(
           'Expected singular name for list field.',
         );
+      });
+    });
+
+    describe('with regex ifListAllow', () => {
+      const run = getRunner({ ifList: 'singular', ifListAllow: [/data/] });
+
+      it('returns no violations for allowlisted field', async () => {
+        const violations = await run(`
+      model User {
+        data String[]
+      }
+    `);
+        expect(violations.length).toEqual(0);
+      });
+
+      it('returns violation for non-allowlisted field', async () => {
+        const violations = await run(`
+      model User {
+        emails String[]
+      }
+    `);
+        expect(violations.length).toEqual(1);
       });
     });
   });

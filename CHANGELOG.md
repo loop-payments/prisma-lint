@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-- Add new rule `list-field-name-grammatical-number`.
+- Add new rule `field-name-grammatical-number`.
 
 ## 0.7.0 (2024-10-17)
 

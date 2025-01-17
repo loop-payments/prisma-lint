@@ -8,11 +8,11 @@ Configuration option schemas are written with [Zod](https://github.com/colinhack
 - [enum-name-pascal-case](#enum-name-pascal-case)
 - [enum-value-snake-case](#enum-value-snake-case)
 - [field-name-camel-case](#field-name-camel-case)
+- [field-name-grammatical-number](#field-name-grammatical-number)
 - [field-name-mapping-snake-case](#field-name-mapping-snake-case)
 - [field-order](#field-order)
 - [forbid-field](#forbid-field)
 - [forbid-required-ignored-field](#forbid-required-ignored-field)
-- [list-field-name-grammatical-number](#list-field-name-grammatical-number)
 - [model-name-grammatical-number](#model-name-grammatical-number)
 - [model-name-mapping-snake-case](#model-name-mapping-snake-case)
 - [model-name-pascal-case](#model-name-pascal-case)
@@ -203,6 +203,65 @@ model User {
 // bad
 model User {
  row_id String @id
+}
+```
+
+## field-name-grammatical-number
+
+Checks that each list field name matches the plural or singular enforced style.
+Only applies to fields that are arrays (list types).
+
+### Configuration
+
+```ts
+z.object({
+  ifList: z.enum(['singular', 'plural']),
+  ifListAllow: z.array(z.union([z.string(), z.instanceof(RegExp)])).optional(),
+}).strict();
+```
+
+### Examples
+
+#### With `{ ifList: "singular" }`
+
+```prisma
+// good
+model User {
+  email String[]
+}
+
+// bad
+model User {
+  emails String[]
+}
+```
+
+#### With `{ ifList: "plural" }`
+
+```prisma
+// good
+model User {
+  emails String[]
+}
+
+// bad
+model User {
+  email String[]
+}
+```
+
+#### With `{ ifList: "singular", ifListAllow: ["data"] }`
+
+```prisma
+// good
+model User {
+  data String[]
+  email String[]
+}
+
+// bad
+model User {
+  emails String[]
 }
 ```
 
@@ -493,65 +552,6 @@ type Product {
 type Product {
   uuid String
   toBeRemoved String @ignore
-}
-```
-
-## list-field-name-grammatical-number
-
-Checks that each list field name matches the plural or singular enforced style.
-Only applies to fields that are arrays (list types).
-
-### Configuration
-
-```ts
-z.object({
-  style: z.enum(['singular', 'plural']),
-  allowlist: z.array(z.union([z.string(), z.instanceof(RegExp)])).optional(),
-}).strict();
-```
-
-### Examples
-
-#### With `{ style: "singular" }`
-
-```prisma
-// good
-model User {
-  email String[]
-}
-
-// bad
-model User {
-  emails String[]
-}
-```
-
-#### With `{ style: "plural" }`
-
-```prisma
-// good
-model User {
-  emails String[]
-}
-
-// bad
-model User {
-  email String[]
-}
-```
-
-#### With `{ style: "singular", allowlist: ["data"] }`
-
-```prisma
-// good
-model User {
-  data String[]
-  email String[]
-}
-
-// bad
-model User {
-  emails String[]
 }
 ```
 
