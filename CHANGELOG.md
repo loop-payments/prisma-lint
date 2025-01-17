@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.8.0 (2025-01-17)
+
 - Add new rule `field-name-grammatical-number`.
 
 ## 0.7.0 (2024-10-17)
