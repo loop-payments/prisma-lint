@@ -937,6 +937,7 @@ z.object({
     z.object({
       ifName: z.union([z.string(), z.instanceof(RegExp)]),
       type: z.string(),
+      nativeType: z.string().optional(),
     }),
   ),
 }).strict();
@@ -971,6 +972,30 @@ model User {
 model User {
   createdAt String
   updatedAt String
+}
+```
+
+#### With `{ require: [{ ifName: "id", type: "String", nativeType: "Uuid" }] }`
+
+```prisma
+// good
+model User {
+  id String @db.Uuid
+}
+
+// bad
+model User {
+  id Int
+}
+
+// bad
+model User {
+  id String
+}
+
+// bad
+model User {
+  id String @db.Oid
 }
 ```
 
