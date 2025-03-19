@@ -2088,13 +2088,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"commander@npm:^12.0.0":
-  version: 12.1.0
-  resolution: "commander@npm:12.1.0"
-  checksum: 10/cdaeb672d979816853a4eed7f1310a9319e8b976172485c2a6b437ed0db0a389a44cfb222bfbde772781efa9f215bdd1b936f80d6b249485b465c6cb906e1f93
-  languageName: node
-  linkType: hard
-
 "commander@npm:^13.1.0":
   version: 13.1.0
   resolution: "commander@npm:13.1.0"
@@ -5399,7 +5392,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": "npm:^8.1.0"
     "@typescript-eslint/parser": "npm:^8.1.0"
     chalk: "npm:^5.2.0"
-    commander: "npm:^12.0.0"
+    commander: "npm:^13.1.0"
     cosmiconfig: "npm:^9.0.0"
     eslint: "npm:^8.41.0"
     eslint-config-prettier: "npm:^10.1.1"
