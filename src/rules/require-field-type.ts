@@ -11,6 +11,7 @@ const Config = z
       z.object({
         ifName: z.union([z.string(), z.instanceof(RegExp)]),
         type: z.string(),
+        nativeType: z.string().optional(),
       }),
     ),
   })
@@ -42,6 +43,27 @@ const Config = z
  *     createdAt String
  *     updatedAt String
  *   }
+ *
+ * @example { require: [{ ifName: "id", type: "String", nativeType: "Uuid" }] }
+ *   // good
+ *   model User {
+ *     id String @db.Uuid
+ *   }
+ *
+ *   // bad
+ *   model User {
+ *     id Int
+ *   }
+ *
+ *   // bad
+ *   model User {
+ *     id String
+ *   }
+ *
+ *   // bad
+ *   model User {
+ *     id String @db.Oid
+ *   }
  */
 export default {
   ruleName: RULE_NAME,
@@ -60,21 +82,50 @@ export default {
           return;
         }
         const areMatchesConflicting =
-          new Set(matches.map((m) => m.type)).size > 1;
+          new Set(matches.map(({ type }) => type)).size > 1 ||
+          new Set(matches.map(({ nativeType }) => nativeType).filter(Boolean))
+            .size > 1;
         if (areMatchesConflicting) {
           const message = `Field has conflicting type require: ${JSON.stringify(
-            matches.map(({ ifName, type }) => ({
+            matches.map(({ ifName, type, nativeType }) => ({
               ifName,
               type,
+              nativeType,
             })),
           )}.`;
 
           context.report({ model, field, message });
         }
+
+        const messages = [];
+
         const actualType = field.fieldType;
         const expectedType = matches[0].type;
         if (actualType !== expectedType) {
-          const message = `Field type "${actualType}" does not match expected type "${expectedType}".`;
+          messages.push(
+            `Field type "${actualType}" does not match expected type "${expectedType}".`,
+          );
+        }
+
+        const expectedNativeType = matches[0].nativeType;
+        const actualNativeType = field.attributes?.find(
+          (attr) => attr.group === 'db',
+        )?.name;
+        if (expectedNativeType && !actualNativeType) {
+          messages.push(
+            `Field native type is not specified, but expected native type "${expectedNativeType}".`,
+          );
+        } else if (
+          expectedNativeType &&
+          actualNativeType !== expectedNativeType
+        ) {
+          messages.push(
+            `Field native type "${actualNativeType}" does not match expected native type "${expectedNativeType}".`,
+          );
+        }
+
+        if (messages.length > 0) {
+          const message = messages.join('\n');
           context.report({ model, field, message });
         }
       },
