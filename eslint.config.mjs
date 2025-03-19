@@ -56,7 +56,7 @@ export default defineConfig([globalIgnores([
 
         parserOptions: {
             project: "tsconfig.json",
-            tsconfigRootDir: "/Users/max/loop/prisma-lint",
+            tsconfigRootDir: ".",
         },
     },
 
