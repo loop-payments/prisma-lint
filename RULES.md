@@ -109,14 +109,15 @@ enum example_options {
 
 ## enum-value-snake-case
 
-Checks that enum values are in snake_case.
+Checks that enum values are in the usual snake_case
+(optionally `SCREAMING_SNAKE_CASE` via configuration).
 
 This rule supports selectively ignoring enum values via the
 `prisma-lint-ignore-enum` comment, like so:
 
-    /// prisma-lint-ignore-enum enum-value-snake-case SCREAMING_SNAKE
+    /// prisma-lint-ignore-enum enum-value-snake-case NotIn_Snake_Case
 
-That will permit an enum value of `SCREAMING_SNAKE`. Other
+That will permit an enum value of `Not_In_Snake_Case`. Other
 values for the enum must still be in snake_case. A comma-separated list of values
 can be provided to ignore multiple enum values.
 
@@ -124,6 +125,7 @@ can be provided to ignore multiple enum values.
 
 ```ts
 z.object({
+  screaming: z.boolean().optional(),
   allowList: z.array(z.union([z.string(), z.instanceof(RegExp)])).optional(),
   trimPrefix: z
     .union([
@@ -148,6 +150,12 @@ enum Example {
 // good
 enum Example {
   value_1
+}
+
+// good
+enum Example {
+  /// prisma-lint-ignore-enum enum-value-snake-case NotIn_Snake_Case
+  NotIn_Snake_Case
 }
 
 // bad
