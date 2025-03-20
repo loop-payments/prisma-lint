@@ -25,7 +25,8 @@ const Config = z
   .strict();
 
 /**
- * Checks that enum values are in the usual snake_case (optionally `SCREAMING_SNAKE_CASE` via configuration).
+ * Checks that enum values are in the usual snake_case
+ * (optionally `SCREAMING_SNAKE_CASE` via configuration).
  *
  * This rule supports selectively ignoring enum values via the
  * `prisma-lint-ignore-enum` comment, like so:
@@ -46,7 +47,7 @@ const Config = z
  *   enum Example {
  *     value_1
  *   }
- * 
+ *
  *   // good
  *   enum Example {
  *     /// prisma-lint-ignore-enum enum-value-snake-case NotIn_Snake_Case
@@ -87,8 +88,13 @@ export default {
             if (matchesAllowList(enumValue.name, allowList)) {
               return;
             }
-            const valueWithoutPrefix = trimPrefix( enumValue.name, trimPrefixConfig );
-            let snakeCasedValue = toSnakeCase(valueWithoutPrefix, { screaming: config.screaming } );
+            const valueWithoutPrefix = trimPrefix(
+              enumValue.name,
+              trimPrefixConfig,
+            );
+            const snakeCasedValue = toSnakeCase(valueWithoutPrefix, {
+              screaming: config.screaming,
+            });
             if (valueWithoutPrefix !== snakeCasedValue) {
               const message = `Enum value should be in ${config.screaming ? 'SCREAMING_SNAKE_CASE' : 'snake_case'}: '${valueWithoutPrefix}' (expected '${snakeCasedValue}').`;
               context.report({ enum: enumObj, message });

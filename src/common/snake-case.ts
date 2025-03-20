@@ -1,4 +1,3 @@
-import { Option } from 'commander';
 import pluralize from 'pluralize';
 
 export interface toSnakeCaseOptions {
@@ -35,10 +34,10 @@ export interface toSnakeCaseOptions {
    */
   irregularPlurals?: Record<string, string>;
 
-  /** 
-  * Whether or not each segment of the snake_case term should be upper case.
-  * Example: SCREAMING_SNAKE_CASE (as opposed to screaming_snake_case)
-  */
+  /**
+   * Whether or not each segment of the snake_case term should be upper case.
+   * Example: SCREAMING_SNAKE_CASE (as opposed to screaming_snake_case)
+   */
   screaming?: boolean;
 }
 
@@ -54,21 +53,29 @@ export function toSnakeCase(
   const inputWithoutPrefix = input.startsWith(trimPrefix)
     ? input.slice(trimPrefix.length)
     : input;
-  const compoundWordsAsSnakeCase = [...new Set(compoundWords.map((compoundWord) =>
-    toSnakeCase(compoundWord),
-  ))];
+  const compoundWordsAsSnakeCase = [
+    ...new Set(compoundWords.map((compoundWord) => toSnakeCase(compoundWord))),
+  ];
   const snakeCase = inputWithoutPrefix
     .replace(/[\W]+/g, '_')
     // split on percieved word boundaries: aWord
-    .replace(/([^A-Z][A-Z])/g, (_, lowerUpper: string) => `${lowerUpper[0]}_${lowerUpper[1]}`)
+    .replace(
+      /([^A-Z][A-Z])/g,
+      (_, lowerUpper: string) => `${lowerUpper[0]}_${lowerUpper[1]}`,
+    )
     // split after detecting the start of a new word AAAAWord
-    .replace(/([A-Z][a-z])/g, (_, wordStart: string) => `_${wordStart.toLowerCase()}`)
+    .replace(
+      /([A-Z][a-z])/g,
+      (_, wordStart: string) => `_${wordStart.toLowerCase()}`,
+    )
     .replace(/\d+/g, '_$&_')
     .replace(/^_/, '')
     .replace(/_$/, '')
-    .replace(/_+/g, '_').toLowerCase();
+    .replace(/_+/g, '_')
+    .toLowerCase();
   const snakeCaseWithCompoundWords = compoundWordsAsSnakeCase.reduce(
-    (acc, compoundWord) => acc.replace(compoundWord, compoundWord.replaceAll('_', '')),
+    (acc, compoundWord) =>
+      acc.replace(compoundWord, compoundWord.replaceAll('_', '')),
     snakeCase,
   );
   let result = snakeCaseWithCompoundWords;
