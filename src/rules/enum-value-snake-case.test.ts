@@ -242,8 +242,8 @@ describe('enum-value-snake-case', () => {
     });
   });
 
-  describe('with screaming set to true', () => {
-    const run = getRunner({ screaming: true });
+  describe('with case set to upper', () => {
+    const run = getRunner({ case: 'upper' });
     it('single upper-case term returns no violations', async () => {
       const violations = await run(`
         enum Example {

@@ -110,7 +110,7 @@ enum example_options {
 ## enum-value-snake-case
 
 Checks that enum values are in the usual snake_case
-(optionally `SCREAMING_SNAKE_CASE` via configuration).
+(optionally `SCREAMING_SNAKE_CASE` via configuration case: 'upper').
 
 This rule supports selectively ignoring enum values via the
 `prisma-lint-ignore-enum` comment, like so:
@@ -125,7 +125,7 @@ can be provided to ignore multiple enum values.
 
 ```ts
 z.object({
-  screaming: z.boolean().optional(),
+  case: z.enum(['lower', 'upper']).default('lower'),
   allowList: z.array(z.union([z.string(), z.instanceof(RegExp)])).optional(),
   trimPrefix: z
     .union([
