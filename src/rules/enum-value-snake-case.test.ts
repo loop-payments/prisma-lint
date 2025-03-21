@@ -241,4 +241,32 @@ describe('enum-value-snake-case', () => {
       expect(violations.length).toEqual(1);
     });
   });
+
+  describe('with case set to upper', () => {
+    const run = getRunner({ case: 'upper' });
+    it('single upper-case term returns no violations', async () => {
+      const violations = await run(`
+        enum Example {
+          UPPER
+        }
+        `);
+      expect(violations.length).toEqual(0);
+    });
+    it('proper SCREAMING_SNAKE_CASE term returns no violations', async () => {
+      const violations = await run(`
+        enum Example {
+          UPPER_CASE
+        }
+        `);
+      expect(violations.length).toEqual(0);
+    });
+    it('usual snake_case results in a violation', async () => {
+      const violations = await run(`
+        enum Example {
+          snake_case
+        }
+        `);
+      expect(violations.length).toEqual(1);
+    });
+  });
 });

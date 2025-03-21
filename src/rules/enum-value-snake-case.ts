@@ -12,6 +12,7 @@ const RULE_NAME = 'enum-value-snake-case';
 
 const Config = z
   .object({
+    case: z.enum(['lower', 'upper']).default('lower').optional(),
     allowList: z.array(z.union([z.string(), z.instanceof(RegExp)])).optional(),
     trimPrefix: z
       .union([
@@ -24,14 +25,15 @@ const Config = z
   .strict();
 
 /**
- * Checks that enum values are in snake_case.
+ * Checks that enum values are in the usual snake_case
+ * (optionally `SCREAMING_SNAKE_CASE` via configuration case: 'upper').
  *
  * This rule supports selectively ignoring enum values via the
  * `prisma-lint-ignore-enum` comment, like so:
  *
- *     /// prisma-lint-ignore-enum enum-value-snake-case SCREAMING_SNAKE
+ *     /// prisma-lint-ignore-enum enum-value-snake-case NotIn_Snake_Case
  *
- * That will permit an enum value of `SCREAMING_SNAKE`. Other
+ * That will permit an enum value of `Not_In_Snake_Case`. Other
  * values for the enum must still be in snake_case. A comma-separated list of values
  * can be provided to ignore multiple enum values.
  *
@@ -44,6 +46,12 @@ const Config = z
  *   // good
  *   enum Example {
  *     value_1
+ *   }
+ *
+ *   // good
+ *   enum Example {
+ *     /// prisma-lint-ignore-enum enum-value-snake-case NotIn_Snake_Case
+ *     NotIn_Snake_Case
  *   }
  *
  *   // bad
@@ -81,12 +89,13 @@ export default {
               return;
             }
             const valueWithoutPrefix = trimPrefix(
-                enumValue.name,
-                trimPrefixConfig,
-              ),
-              snakeCasedValue = toSnakeCase(valueWithoutPrefix);
+              enumValue.name,
+              trimPrefixConfig,
+            );
+            const screaming = config.case ? config.case === 'upper' : false;
+            const snakeCasedValue = toSnakeCase(valueWithoutPrefix, { screaming });
             if (valueWithoutPrefix !== snakeCasedValue) {
-              const message = `Enum value should be in snake_case: '${valueWithoutPrefix}' (expected '${snakeCasedValue}').`;
+              const message = `Enum value should be in ${screaming ? 'SCREAMING_SNAKE_CASE' : 'snake_case'}: '${valueWithoutPrefix}' (expected '${snakeCasedValue}').`;
               context.report({ enum: enumObj, message });
             }
           });
