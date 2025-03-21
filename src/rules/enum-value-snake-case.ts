@@ -12,7 +12,7 @@ const RULE_NAME = 'enum-value-snake-case';
 
 const Config = z
   .object({
-    case: z.enum(['lower', 'upper']).default('lower'),
+    case: z.enum(['lower', 'upper']).default('lower').optional(),
     allowList: z.array(z.union([z.string(), z.instanceof(RegExp)])).optional(),
     trimPrefix: z
       .union([
@@ -92,7 +92,7 @@ export default {
               enumValue.name,
               trimPrefixConfig,
             );
-            const screaming = config.case === 'upper';
+            const screaming = config.case ? config.case === 'upper' : false;
             const snakeCasedValue = toSnakeCase(valueWithoutPrefix, { screaming });
             if (valueWithoutPrefix !== snakeCasedValue) {
               const message = `Enum value should be in ${screaming ? 'SCREAMING_SNAKE_CASE' : 'snake_case'}: '${valueWithoutPrefix}' (expected '${snakeCasedValue}').`;

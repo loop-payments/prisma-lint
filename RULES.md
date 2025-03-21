@@ -125,7 +125,7 @@ can be provided to ignore multiple enum values.
 
 ```ts
 z.object({
-  case: z.enum(['lower', 'upper']).default('lower'),
+  case: z.enum(['lower', 'upper']).default('lower').optional(),
   allowList: z.array(z.union([z.string(), z.instanceof(RegExp)])).optional(),
   trimPrefix: z
     .union([
