@@ -123,6 +123,53 @@ describe('enum-value-snake-case', () => {
     });
   });
 
+  describe('with upper case config', () => {
+    const run = getRunner({ case: 'upper' });
+
+    it('returns violation', async () => {
+      const violations = await run(`
+        enum Example {
+          value_one
+        }
+        `);
+      expect(violations.length).toEqual(1);
+    });
+
+    it('returns no violations', async () => {
+      const violations = await run(`
+        enum Example {
+          VALUE_ONE
+        }
+        `);
+      expect(violations.length).toEqual(0);
+    });
+  });
+
+  describe('with compound words config', () => {
+    const run = getRunner({ compoundWords: ['api'] });
+
+    it('returns no violations', async () => {
+      const violations = await run(`
+        enum Example {
+          an_api_key
+        }
+        `);
+      expect(violations.length).toEqual(0);
+    });
+
+    it('allowList string requires full match', async () => {
+      const violations = await run(`
+        enum Example {
+          ForAPIKey
+        }
+        `);
+      expect(violations.length).toEqual(1);
+      expect(violations[0].message).toEqual(
+        "Enum value should be in snake_case: 'ForAPIKey' (expected 'for_api_key').",
+      );
+    });
+  });
+
   describe('with allowlist string', () => {
     const run = getRunner({ allowList: ['exampleOptions'] });
 

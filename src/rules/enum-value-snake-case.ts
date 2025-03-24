@@ -12,6 +12,8 @@ const RULE_NAME = 'enum-value-snake-case';
 
 const Config = z
   .object({
+    case: z.enum(['lower', 'upper']).optional(),
+    compoundWords: z.array(z.string()).optional(),
     allowList: z.array(z.union([z.string(), z.instanceof(RegExp)])).optional(),
     trimPrefix: z
       .union([
@@ -29,9 +31,9 @@ const Config = z
  * This rule supports selectively ignoring enum values via the
  * `prisma-lint-ignore-enum` comment, like so:
  *
- *     /// prisma-lint-ignore-enum enum-value-snake-case SCREAMING_SNAKE
+ *     /// prisma-lint-ignore-enum enum-value-snake-case NotSnakeCase
  *
- * That will permit an enum value of `SCREAMING_SNAKE`. Other
+ * That will permit an enum value of `NotSnakeCase`. Other
  * values for the enum must still be in snake_case. A comma-separated list of values
  * can be provided to ignore multiple enum values.
  *
@@ -66,7 +68,12 @@ export default {
   ruleName: RULE_NAME,
   configSchema: Config,
   create: (config, context) => {
-    const { allowList, trimPrefix: trimPrefixConfig } = config;
+    const {
+      allowList,
+      trimPrefix: trimPrefixConfig,
+      compoundWords,
+      case: caseConfig,
+    } = config;
     return {
       Enum: (enumObj) => {
         enumObj.enumerators
@@ -81,11 +88,19 @@ export default {
               return;
             }
             const valueWithoutPrefix = trimPrefix(
-                enumValue.name,
-                trimPrefixConfig,
-              ),
-              snakeCasedValue = toSnakeCase(valueWithoutPrefix);
-            if (valueWithoutPrefix !== snakeCasedValue) {
+              enumValue.name,
+              trimPrefixConfig,
+            );
+            const snakeCasedValue = toSnakeCase(valueWithoutPrefix, {
+              compoundWords,
+              case: caseConfig,
+            });
+            const expectedCase = caseConfig ?? 'lower';
+            const expectedCaseValue =
+              expectedCase === 'upper'
+                ? snakeCasedValue.toUpperCase()
+                : snakeCasedValue;
+            if (valueWithoutPrefix !== expectedCaseValue) {
               const message = `Enum value should be in snake_case: '${valueWithoutPrefix}' (expected '${snakeCasedValue}').`;
               context.report({ enum: enumObj, message });
             }

@@ -114,11 +114,11 @@ Checks that enum values are in snake_case.
 This rule supports selectively ignoring enum values via the
 `prisma-lint-ignore-enum` comment, like so:
 
-    /// prisma-lint-ignore-enum enum-value-snake-case SCREAMING_SNAKE
+    /// prisma-lint-ignore-enum enum-value-snake-case NotSnakeCASE
 
-That will permit an enum value of `SCREAMING_SNAKE`. Other
-values for the enum must still be in snake_case. A comma-separated list of values
-can be provided to ignore multiple enum values.
+That will permit an enum value of `NotSnakeCASE`. Other
+values for the enum must still be in `snake_case`. A comma-separated list 
+of values can be provided to ignore multiple enum values.
 
 ### Configuration
 
