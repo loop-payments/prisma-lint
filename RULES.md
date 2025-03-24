@@ -109,7 +109,9 @@ enum example_options {
 
 ## enum-value-snake-case
 
-Checks that enum values are in snake_case.
+Checks that enum values are in either upper or lower snake case.
+
+Defaults to lower snake case. Use the `case` option to enforce upper snake case.
 
 This rule supports selectively ignoring enum values via the
 `prisma-lint-ignore-enum` comment, like so:
@@ -160,6 +162,35 @@ enum Example {
 // bad
 enum Example {
   VALUE
+}
+
+// bad
+enum Example {
+  camelCase
+}
+```
+
+#### With `{ case: ["upper"] }`
+
+```prisma
+// good
+enum Example {
+  VALUE
+}
+
+// good
+enum Example {
+  VALUE_1
+}
+
+// bad
+enum Example {
+  Value
+}
+
+// bad
+enum Example {
+  value
 }
 
 // bad

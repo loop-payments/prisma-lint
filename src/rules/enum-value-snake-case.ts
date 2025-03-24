@@ -26,7 +26,9 @@ const Config = z
   .strict();
 
 /**
- * Checks that enum values are in snake_case.
+ * Checks that enum values are in either upper or lower snake case.
+ *
+ * Defaults to lower snake case. Use the `case` option to enforce upper snake case.
  *
  * This rule supports selectively ignoring enum values via the
  * `prisma-lint-ignore-enum` comment, like so:
@@ -63,6 +65,31 @@ const Config = z
  *     camelCase
  *   }
  *
+ * @example { case: ["upper"] }
+ *   // good
+ *   enum Example {
+ *     VALUE
+ *   }
+ *
+ *   // good
+ *   enum Example {
+ *     VALUE_1
+ *   }
+ *
+ *   // bad
+ *   enum Example {
+ *     Value
+ *   }
+ *
+ *   // bad
+ *   enum Example {
+ *     value
+ *   }
+ *
+ *   // bad
+ *   enum Example {
+ *     camelCase
+ *   }
  */
 export default {
   ruleName: RULE_NAME,
