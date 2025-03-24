@@ -96,15 +96,14 @@ export function toSnakeCase(
     const char = processedInput[i];
     if (i > 0) {
       const prevChar = processedInput[i - 1];
-      // Add underscore before capitals
       if (/[A-Z]/.test(char)) {
+        // Add underscore before capitals
         result += `_${char.toLowerCase()}`;
-      }
-      // Add underscore between letter and number
-      else if (
+      } else if (
         (/[a-zA-Z]/.test(prevChar) && /\d/.test(char)) ||
         (/\d/.test(prevChar) && /[a-zA-Z]/.test(char))
       ) {
+        // Add underscore between letter and number
         result += `_${char.toLowerCase()}`;
       } else {
         result += char.toLowerCase();
