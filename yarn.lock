@@ -1232,18 +1232,18 @@ __metadata:
   linkType: hard
 
 "@typescript-eslint/parser@npm:^8.1.0":
-  version: 8.26.1
-  resolution: "@typescript-eslint/parser@npm:8.26.1"
+  version: 8.28.0
+  resolution: "@typescript-eslint/parser@npm:8.28.0"
   dependencies:
-    "@typescript-eslint/scope-manager": "npm:8.26.1"
-    "@typescript-eslint/types": "npm:8.26.1"
-    "@typescript-eslint/typescript-estree": "npm:8.26.1"
-    "@typescript-eslint/visitor-keys": "npm:8.26.1"
+    "@typescript-eslint/scope-manager": "npm:8.28.0"
+    "@typescript-eslint/types": "npm:8.28.0"
+    "@typescript-eslint/typescript-estree": "npm:8.28.0"
+    "@typescript-eslint/visitor-keys": "npm:8.28.0"
     debug: "npm:^4.3.4"
   peerDependencies:
     eslint: ^8.57.0 || ^9.0.0
     typescript: ">=4.8.4 <5.9.0"
-  checksum: 10/3e7567592cc900ef867878c5623d1b6836078311610d8672c950347a8cc9613d38e0660aced3c4d32f6628d5d472e0da1bf9d1d5d0aecfda34517df5cd569476
+  checksum: 10/34d6144748384fb0900cefb07a763455bf977678be7d25ed7da783fbc4238e6800b0f9dab002736ee644cb7b0aeee023ca1f156f9885e01189e210cccf0be83f
   languageName: node
   linkType: hard
 
