@@ -12,6 +12,8 @@ const RULE_NAME = 'enum-value-snake-case';
 
 const Config = z
   .object({
+    case: z.enum(['lower', 'upper']).optional(),
+    compoundWords: z.array(z.string()).optional(),
     allowList: z.array(z.union([z.string(), z.instanceof(RegExp)])).optional(),
     trimPrefix: z
       .union([
@@ -24,14 +26,16 @@ const Config = z
   .strict();
 
 /**
- * Checks that enum values are in snake_case.
+ * Checks that enum values are in either upper or lower snake case.
+ *
+ * Defaults to lower snake case. Use the `case` option to enforce upper snake case.
  *
  * This rule supports selectively ignoring enum values via the
  * `prisma-lint-ignore-enum` comment, like so:
  *
- *     /// prisma-lint-ignore-enum enum-value-snake-case SCREAMING_SNAKE
+ *     /// prisma-lint-ignore-enum enum-value-snake-case NotSnakeCase
  *
- * That will permit an enum value of `SCREAMING_SNAKE`. Other
+ * That will permit an enum value of `NotSnakeCase`. Other
  * values for the enum must still be in snake_case. A comma-separated list of values
  * can be provided to ignore multiple enum values.
  *
@@ -61,12 +65,42 @@ const Config = z
  *     camelCase
  *   }
  *
+ * @example { case: ["upper"] }
+ *   // good
+ *   enum Example {
+ *     VALUE
+ *   }
+ *
+ *   // good
+ *   enum Example {
+ *     VALUE_1
+ *   }
+ *
+ *   // bad
+ *   enum Example {
+ *     Value
+ *   }
+ *
+ *   // bad
+ *   enum Example {
+ *     value
+ *   }
+ *
+ *   // bad
+ *   enum Example {
+ *     camelCase
+ *   }
  */
 export default {
   ruleName: RULE_NAME,
   configSchema: Config,
   create: (config, context) => {
-    const { allowList, trimPrefix: trimPrefixConfig } = config;
+    const {
+      allowList,
+      trimPrefix: trimPrefixConfig,
+      compoundWords,
+      case: caseConfig,
+    } = config;
     return {
       Enum: (enumObj) => {
         enumObj.enumerators
@@ -81,12 +115,15 @@ export default {
               return;
             }
             const valueWithoutPrefix = trimPrefix(
-                enumValue.name,
-                trimPrefixConfig,
-              ),
-              snakeCasedValue = toSnakeCase(valueWithoutPrefix);
-            if (valueWithoutPrefix !== snakeCasedValue) {
-              const message = `Enum value should be in snake_case: '${valueWithoutPrefix}' (expected '${snakeCasedValue}').`;
+              enumValue.name,
+              trimPrefixConfig,
+            );
+            const expectedValue = toSnakeCase(valueWithoutPrefix, {
+              compoundWords,
+              case: caseConfig,
+            });
+            if (valueWithoutPrefix !== expectedValue) {
+              const message = `Enum value should be in snake_case: '${valueWithoutPrefix}' (expected '${expectedValue}').`;
               context.report({ enum: enumObj, message });
             }
           });

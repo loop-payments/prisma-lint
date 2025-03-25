@@ -1,7 +1,7 @@
 import { toSnakeCase } from '#src/common/snake-case.js';
 
 describe('toSnakeCase', () => {
-  describe('cases', () => {
+  describe('various input cases', () => {
     it('converts single-word string to snake case', () => {
       const input = 'hello';
       const result = toSnakeCase(input);
@@ -31,6 +31,12 @@ describe('toSnakeCase', () => {
       const result = toSnakeCase(input);
       expect(result).toEqual('snake_case_string');
     });
+
+    it('converts upper snake case string to snake case', () => {
+      const input = 'SNAKE_CASE_STRING';
+      const result = toSnakeCase(input);
+      expect(result).toEqual('snake_case_string');
+    });
   });
 
   describe('compound words', () => {
@@ -40,6 +46,60 @@ describe('toSnakeCase', () => {
         compoundWords: ['GraphQL'],
       });
       expect(result).toEqual('hello_world_graphql');
+    });
+
+    it('respects multiple compound words', () => {
+      const input = 'APIHelloWorldGraphQL';
+      const result = toSnakeCase(input, {
+        compoundWords: ['api', 'GraphQL'],
+      });
+      expect(result).toEqual('api_hello_world_graphql');
+    });
+  });
+
+  describe('upper case', () => {
+    it('converts to upper case', () => {
+      const input = 'helloWorld';
+      const result = toSnakeCase(input, { case: 'upper' });
+      expect(result).toEqual('HELLO_WORLD');
+    });
+
+    describe('compound words', () => {
+      it('respects compound words', () => {
+        const input = 'HelloWorldGraphQL';
+        const result = toSnakeCase(input, {
+          case: 'upper',
+          compoundWords: ['GraphQL'],
+        });
+        expect(result).toEqual('HELLO_WORLD_GRAPHQL');
+      });
+
+      it('respects compound words like API', () => {
+        const input = 'HelloWorldAPI';
+        const result = toSnakeCase(input, {
+          case: 'upper',
+          compoundWords: ['API'],
+        });
+        expect(result).toEqual('HELLO_WORLD_API');
+      });
+
+      it('respects repeat compound words', () => {
+        const input = 'APIHelloWorldAPI';
+        const result = toSnakeCase(input, {
+          case: 'upper',
+          compoundWords: ['API'],
+        });
+        expect(result).toEqual('API_HELLO_WORLD_API');
+      });
+
+      it('respects multiple compound words', () => {
+        const input = 'APIHelloWorldGraphQL';
+        const result = toSnakeCase(input, {
+          case: 'upper',
+          compoundWords: ['api', 'graphql'],
+        });
+        expect(result).toEqual('API_HELLO_WORLD_GRAPHQL');
+      });
     });
   });
 

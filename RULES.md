@@ -109,14 +109,16 @@ enum example_options {
 
 ## enum-value-snake-case
 
-Checks that enum values are in snake_case.
+Checks that enum values are in either upper or lower snake case.
+
+Defaults to lower snake case. Use the `case` option to enforce upper snake case.
 
 This rule supports selectively ignoring enum values via the
 `prisma-lint-ignore-enum` comment, like so:
 
-    /// prisma-lint-ignore-enum enum-value-snake-case SCREAMING_SNAKE
+    /// prisma-lint-ignore-enum enum-value-snake-case NotSnakeCase
 
-That will permit an enum value of `SCREAMING_SNAKE`. Other
+That will permit an enum value of `NotSnakeCase`. Other
 values for the enum must still be in snake_case. A comma-separated list of values
 can be provided to ignore multiple enum values.
 
@@ -124,6 +126,8 @@ can be provided to ignore multiple enum values.
 
 ```ts
 z.object({
+  case: z.enum(['lower', 'upper']).optional(),
+  compoundWords: z.array(z.string()).optional(),
   allowList: z.array(z.union([z.string(), z.instanceof(RegExp)])).optional(),
   trimPrefix: z
     .union([
@@ -158,6 +162,35 @@ enum Example {
 // bad
 enum Example {
   VALUE
+}
+
+// bad
+enum Example {
+  camelCase
+}
+```
+
+#### With `{ case: ["upper"] }`
+
+```prisma
+// good
+enum Example {
+  VALUE
+}
+
+// good
+enum Example {
+  VALUE_1
+}
+
+// bad
+enum Example {
+  Value
+}
+
+// bad
+enum Example {
+  value
 }
 
 // bad
