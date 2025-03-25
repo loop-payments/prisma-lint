@@ -220,7 +220,7 @@ function extractPrimaryFieldNameFromRelationListAttribute(
 
         return false;
       })?.value as KeyValue
-    ).value;
+    )?.value;
 
     if (fieldsValue == null) {
       throw new Error(
