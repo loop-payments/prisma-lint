@@ -118,17 +118,12 @@ export default {
               enumValue.name,
               trimPrefixConfig,
             );
-            const snakeCasedValue = toSnakeCase(valueWithoutPrefix, {
+            const expectedValue = toSnakeCase(valueWithoutPrefix, {
               compoundWords,
               case: caseConfig,
             });
-            const expectedCase = caseConfig ?? 'lower';
-            const expectedCaseValue =
-              expectedCase === 'upper'
-                ? snakeCasedValue.toUpperCase()
-                : snakeCasedValue;
-            if (valueWithoutPrefix !== expectedCaseValue) {
-              const message = `Enum value should be in snake_case: '${valueWithoutPrefix}' (expected '${snakeCasedValue}').`;
+            if (valueWithoutPrefix !== expectedValue) {
+              const message = `Enum value should be in snake_case: '${valueWithoutPrefix}' (expected '${expectedValue}').`;
               context.report({ enum: enumObj, message });
             }
           });
