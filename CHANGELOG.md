@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.10.0 (2025-03-25)
+
 - Add support for `case: 'upper'` option in `enum-value-snake-case` rule.
 - Improve handling of `compoundWords` for snake case rules.
 
