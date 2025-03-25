@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## 0.10.0 (2025-03-25)
+
+- Add support for `case: 'upper'` option in `enum-value-snake-case` rule.
+- Improve handling of `compoundWords` for snake case rules.
+
 ## 0.9.0 (2025-03-19)
 
 - [#611](https://github.com/loop-payments/prisma-lint/issues/611) Add `nativeType` option to `require-field-type` rule to additionally enforce native DB types if needed.
