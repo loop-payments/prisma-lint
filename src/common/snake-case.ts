@@ -63,7 +63,7 @@ export function toSnakeCase(
   const compoundPositions: Array<{ start: number; end: number; word: string }> =
     [];
   compoundWords.forEach((word) => {
-    const regex = new RegExp(word, 'gi');
+    const regex = new RegExp(word, 'g');
     let match;
     while ((match = regex.exec(processedInput)) !== null) {
       compoundPositions.push({

@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.10.1 (2025-04-30)
+
+- [#622](https://github.com/loop-payments/prisma-lint/issues/662) Require case-sensitive compound word match for snake case conversion. Fixes bug introduced in `0.10.0`.
+
 ## 0.10.0 (2025-03-25)
 
 - Add support for `case: 'upper'` option in `enum-value-snake-case` rule.

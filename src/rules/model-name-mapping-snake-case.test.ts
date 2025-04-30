@@ -89,6 +89,22 @@ describe('model-name-mapping-snake-case', () => {
     });
   });
 
+  describe('with compound words', () => {
+    const run = getRunner({
+      compoundWords: ['Q6', 'QU', 'QX', 'BR', 'LT', 'QP', 'L5', 'TK', 'QT'],
+    });
+
+    it('returns violation', async () => {
+      const violations = await run(`
+      model GameBRTicketLostSequence {
+        id String @id
+        @@map(name: "game_br_ticket_lost_sequence")
+      }
+    `);
+      expect(violations).toMatchObject([]);
+    });
+  });
+
   describe('expecting plural names', () => {
     const run = getRunner({ pluralize: true });
 
