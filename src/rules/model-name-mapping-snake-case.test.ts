@@ -91,7 +91,7 @@ describe('model-name-mapping-snake-case', () => {
 
   describe('with compound words', () => {
     const run = getRunner({
-      compoundWords: ['S3', 'BGS1', 'BGS2', 'UIF', 'MD5', 'BR'],
+      compoundWords: ['Q6', 'QU', 'QX', 'BR', 'LT', 'QP', 'L5', 'TK', 'QT'],
     });
 
     it('returns violation', async () => {

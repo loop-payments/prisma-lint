@@ -48,10 +48,18 @@ describe('toSnakeCase', () => {
       expect(result).toEqual('hello_world_graphql');
     });
 
+    it('respects compound words', () => {
+      const input = 'GameBRTicketLostSequence';
+      const result = toSnakeCase(input, {
+        compoundWords: ['Q6', 'QU', 'QX', 'BR', 'LT', 'QP', 'L5', 'TK', 'QT'],
+      });
+      expect(result).toEqual('game_br_ticket_lost_sequence');
+    });
+
     it('respects multiple compound words', () => {
       const input = 'APIHelloWorldGraphQL';
       const result = toSnakeCase(input, {
-        compoundWords: ['api', 'GraphQL'],
+        compoundWords: ['API', 'GraphQL'],
       });
       expect(result).toEqual('api_hello_world_graphql');
     });
@@ -96,7 +104,7 @@ describe('toSnakeCase', () => {
         const input = 'APIHelloWorldGraphQL';
         const result = toSnakeCase(input, {
           case: 'upper',
-          compoundWords: ['api', 'graphql'],
+          compoundWords: ['API', 'GraphQL'],
         });
         expect(result).toEqual('API_HELLO_WORLD_GRAPHQL');
       });
