@@ -146,7 +146,7 @@ describe('enum-value-snake-case', () => {
   });
 
   describe('with compound words config', () => {
-    const run = getRunner({ compoundWords: ['api'] });
+    const run = getRunner({ compoundWords: ['API'] });
 
     it('returns no violations', async () => {
       const violations = await run(`
