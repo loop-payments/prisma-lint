@@ -48,7 +48,7 @@ describe('toSnakeCase', () => {
       expect(result).toEqual('hello_world_graphql');
     });
 
-    it('respects compound words', () => {
+    it('respects compound words with many two-word compound words', () => {
       const input = 'GameBRTicketLostSequence';
       const result = toSnakeCase(input, {
         compoundWords: ['Q6', 'QU', 'QX', 'BR', 'LT', 'QP', 'L5', 'TK', 'QT'],
