@@ -7213,8 +7213,8 @@ __metadata:
   linkType: hard
 
 "zod@npm:^3.21.4, zod@npm:^3.23.8, zod@npm:^3.24.2":
-  version: 3.24.4
-  resolution: "zod@npm:3.24.4"
-  checksum: 10/3d545792fa54bb27ee5dbc34a5709e81f603185fcc94c8204b5d95c20dc4c81d870ff9c51f3884a30ef05cdc601449f4c4df254ac4783f0827b1faed7c1cdb48
+  version: 3.25.3
+  resolution: "zod@npm:3.25.3"
+  checksum: 10/161ff4ef84e2041639366e4dce10ea40888d59e2c23c71669161bfe6ece28e48fbb0865e75640ac5050cd6f2ea1785aece9d54f3b1d1d7555374157008ca3de4
   languageName: node
   linkType: hard
