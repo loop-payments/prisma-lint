@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.10.2 (2025-05-24)
+
 - [683](https://github.com/loop-payments/prisma-lint/issues/683) Fix ignored relation fields are marked as default required.
 
 ## 0.10.1 (2025-04-30)
