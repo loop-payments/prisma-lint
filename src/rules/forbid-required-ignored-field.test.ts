@@ -17,6 +17,26 @@ describe('forbid-required-ignored-field', () => {
   describe('forbidding', () => {
     const run = getRunner();
 
+    describe('with ignored relation-only field', () => {
+      it('returns no violations', async () => {
+        const violations = await run(`
+      model User {
+        id    Int    @id @default(autoincrement())
+        posts Post[] @ignore
+      }
+      
+      model Post {
+        id       Int  @id @default(autoincrement())
+        author   User @relation(fields: [authorId], references: [id])
+        authorId Int 
+        title String
+        @@ignore 
+      }
+    `);
+        expect(violations.length).toEqual(0);
+      });
+    });
+
     describe('with optional ignored field', () => {
       it('returns no violations', async () => {
         const violations = await run(`
