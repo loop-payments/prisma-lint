@@ -1,5 +1,6 @@
 import { z } from 'zod';
 
+import { looksLikeAssociationFieldType } from '#src/common/prisma.js';
 import type { FieldRuleDefinition } from '#src/common/rule.js';
 
 const RULE_NAME = 'forbid-required-ignored-field';
@@ -50,6 +51,9 @@ export default {
         if (!isIgnored || hasDefault) return;
         const isRequired = !field.optional;
         if (!isRequired) return;
+        if (looksLikeAssociationFieldType(field.fieldType)) {
+          return;
+        }
         const message =
           'Do not ignore a required field without a default value.';
         context.report({ model, field, message });

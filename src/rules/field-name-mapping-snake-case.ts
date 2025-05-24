@@ -3,7 +3,10 @@ import type { Attribute } from '@mrleebo/prisma-ast';
 import { z } from 'zod';
 
 import { getRuleIgnoreParams } from '#src/common/ignore.js';
-import { PRISMA_SCALAR_TYPES, getMappedName } from '#src/common/prisma.js';
+import {
+  getMappedName,
+  looksLikeAssociationFieldType,
+} from '#src/common/prisma.js';
 import type { FieldRuleDefinition } from '#src/common/rule.js';
 import { toSnakeCase } from '#src/common/snake-case.js';
 
@@ -132,7 +135,7 @@ export default {
         if (
           !isEnumField(context.enumNames, fieldType) &&
           !isCustomTypeField(context.customTypeNames, fieldType) &&
-          looksLikeAssociation(fieldType)
+          looksLikeAssociationFieldType(fieldType)
         ) {
           return;
         }
@@ -191,16 +194,6 @@ function findMapAttribute(attributes: Attribute[]): Attribute | undefined {
     );
   }
   return filtered[0];
-}
-
-function looksLikeAssociation(fieldType: any) {
-  if (typeof fieldType != 'string') {
-    return false;
-  }
-  if (PRISMA_SCALAR_TYPES.has(fieldType)) {
-    return false;
-  }
-  return true;
 }
 
 function isAllLowerCase(s: string) {
