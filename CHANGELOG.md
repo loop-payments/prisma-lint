@@ -4,7 +4,7 @@
 
 ## 0.10.2 (2025-05-24)
 
-- [683](https://github.com/loop-payments/prisma-lint/issues/683) Stop requiring defaults for `@ignored` relation fields.
+- [#683](https://github.com/loop-payments/prisma-lint/issues/683) Stop requiring defaults for `@ignored` relation fields.
 
 ## 0.10.1 (2025-04-30)
 
