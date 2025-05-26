@@ -2222,6 +2222,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"commander@npm:^14.0.0":
+  version: 14.0.0
+  resolution: "commander@npm:14.0.0"
+  checksum: 10/c05418bfc35a3e8b5c67bd9f75f5b773f386f9b85f83e70e7c926047f270929cb06cf13cd68f387dd6e7e23c6157de8171b28ba606abd3e6256028f1f789becf
+  languageName: node
+  linkType: hard
+
 "concat-map@npm:0.0.1":
   version: 0.0.1
   resolution: "concat-map@npm:0.0.1"
@@ -5518,7 +5525,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": "npm:^8.1.0"
     "@typescript-eslint/parser": "npm:^8.1.0"
     chalk: "npm:^5.2.0"
-    commander: "npm:^13.1.0"
+    commander: "npm:^14.0.0"
     cosmiconfig: "npm:^9.0.0"
     eslint: "npm:^9.22.0"
     eslint-config-prettier: "npm:^10.1.1"
