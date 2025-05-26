@@ -121,3 +121,13 @@ export function assertValueIsStringArray(value: Value): Array<string> {
 
   throw new Error(`value is not a string array ${JSON.stringify(value)}`);
 }
+
+export function looksLikeAssociationFieldType(fieldType: any) {
+  if (typeof fieldType != 'string') {
+    return false;
+  }
+  if (PRISMA_SCALAR_TYPES.has(fieldType)) {
+    return false;
+  }
+  return true;
+}

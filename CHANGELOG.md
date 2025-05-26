@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.10.2 (2025-05-24)
+
+- [#683](https://github.com/loop-payments/prisma-lint/issues/683) Stop requiring defaults for `@ignored` relation fields.
+
 ## 0.10.1 (2025-04-30)
 
 - [#622](https://github.com/loop-payments/prisma-lint/issues/662) Require case-sensitive compound word match for snake case conversion. Fixes bug introduced in `0.10.0`.
