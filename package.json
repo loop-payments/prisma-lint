@@ -48,7 +48,7 @@
     "@tsconfig/node20": "^20.1.2",
     "@tsconfig/strictest": "^2.0.1",
     "@types/jest": "^30.0.0",
-    "@types/node": "^22.2.0",
+    "@types/node": "^24.0.7",
     "@types/pluralize": "^0.0.33",
     "@typescript-eslint/eslint-plugin": "^8.1.0",
     "@typescript-eslint/parser": "^8.1.0",
