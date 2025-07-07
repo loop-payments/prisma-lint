@@ -743,9 +743,9 @@ __metadata:
   linkType: hard
 
 "@eslint/js@npm:^9.22.0":
-  version: 9.29.0
-  resolution: "@eslint/js@npm:9.29.0"
-  checksum: 10/7f7fd586b35bd08537dd65a9bda764f474350c36b4ccbdd342462d1a26be28f7ee0ebd0611dd4762b69829674336ba04c281b9658aeccb3e6ab1d0fec7e6d08c
+  version: 9.30.1
+  resolution: "@eslint/js@npm:9.30.1"
+  checksum: 10/f32c8a42b1343b03613b92a4a7c4745d19a93e66ffb8fac18ccd066deaa200b2fc55f476bf0407d7748f663bc947ca78c0518f13f60cd9ed08d0ba8b7bb74370
   languageName: node
   linkType: hard
 
