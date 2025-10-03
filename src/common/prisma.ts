@@ -4,6 +4,7 @@ import type {
   BlockAttribute,
   Enum as PrismaEnum,
   Field,
+  Func,
   KeyValue,
   Model,
   Schema,
@@ -108,9 +109,15 @@ export function isKeyValue(value: Value | KeyValue): value is KeyValue {
   return false;
 }
 
-export function assertValueIsStringArray(value: Value): Array<string> {
+export function isFunc(value: Value): value is Func {
+  return (
+    typeof value === 'object' && 'type' in value && value.type === 'function'
+  );
+}
+
+export function assertValueIsArray(value: Value): Array<Value> {
   if (Array.isArray(value)) {
-    return value as Array<string>;
+    return value as Array<Value>;
   }
 
   if (typeof value === 'object') {
@@ -119,7 +126,7 @@ export function assertValueIsStringArray(value: Value): Array<string> {
     }
   }
 
-  throw new Error(`value is not a string array ${JSON.stringify(value)}`);
+  throw new Error(`value is not an array ${JSON.stringify(value)}`);
 }
 
 export function looksLikeAssociationFieldType(fieldType: any) {

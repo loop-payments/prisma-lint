@@ -9,7 +9,8 @@ import { z } from 'zod';
 
 import { getRuleIgnoreParams as listRuleIgnoreParams } from '#src/common/ignore.js';
 import {
-  assertValueIsStringArray,
+  assertValueIsArray,
+  isFunc,
   isKeyValue,
   isValue,
   listAttributes,
@@ -240,11 +241,20 @@ function extractPrimaryFieldNameFromRelationListAttribute(
     return value;
   }
 
+  // @@index(value(sort: Desc))
+  if (isFunc(value)) {
+    return value.name;
+  }
+
   // @@index([value]) or @@unique([value])
-  const [firstFieldValue] = assertValueIsStringArray(value);
+  const [firstFieldValue] = assertValueIsArray(value);
   if (typeof firstFieldValue === 'string') {
-    // it should always be a string
     return firstFieldValue;
+  }
+
+  // @@index([value(sort: Desc)])
+  if (isFunc(firstFieldValue)) {
+    return firstFieldValue.name;
   }
 
   throw new Error('Failed to parse attribute, first value is not a string');
@@ -267,5 +277,5 @@ function extractRelationFieldNames(field: Field): Array<string> {
   }
 
   const fieldsArgValue = (fieldsArg.value as KeyValue).value;
-  return assertValueIsStringArray(fieldsArgValue);
+  return assertValueIsArray(fieldsArgValue) as string[];
 }

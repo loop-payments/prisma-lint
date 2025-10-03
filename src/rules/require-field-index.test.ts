@@ -151,6 +151,32 @@ describe('require-field-index', () => {
       });
     });
 
+    describe('with function in @@index', () => {
+      it('returns violation', async () => {
+        const violations = await run(`
+      model Users {
+        tenantQid String
+        createdAt DateTime
+        @@index(tenantQid(sort: Desc))
+      }
+    `);
+        expect(violations.length).toEqual(0);
+      });
+    });
+
+    describe('with function in compound @@index', () => {
+      it('returns violation', async () => {
+        const violations = await run(`
+      model Users {
+        tenantQid String
+        createdAt DateTime
+        @@index([tenantQid(sort: Desc), createdAt])
+      }
+    `);
+        expect(violations.length).toEqual(0);
+      });
+    });
+
     describe('with no index', () => {
       it('returns violation', async () => {
         const violations = await run(`
