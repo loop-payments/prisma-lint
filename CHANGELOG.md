@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.10.3
+
 - Add support for index functions (e.g. `@@index(createdAt(sort: Desc))`) in `require-field-index` rule.
 
 ## 0.10.2 (2025-05-24)
