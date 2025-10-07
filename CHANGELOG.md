@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Add support for index functions (e.g. `@@index(createdAt(sort: Desc))`) in `require-field-index` rule.
+
 ## 0.10.2 (2025-05-24)
 
 - [#683](https://github.com/loop-payments/prisma-lint/issues/683) Stop requiring defaults for `@ignored` relation fields.
