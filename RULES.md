@@ -6,6 +6,7 @@ Configuration option schemas are written with [Zod](https://github.com/colinhack
 
 - [ban-unbounded-string-type](#ban-unbounded-string-type)
 - [enum-name-pascal-case](#enum-name-pascal-case)
+- [enum-value-case](#enum-value-case)
 - [enum-value-snake-case](#enum-value-snake-case)
 - [field-name-camel-case](#field-name-camel-case)
 - [field-name-grammatical-number](#field-name-grammatical-number)
@@ -104,6 +105,160 @@ enum exampleOptions {
 // bad
 enum example_options {
  value1
+}
+```
+
+## enum-value-case
+
+Checks that enum values are in the specified case style: snake_case, camelCase, or PascalCase.
+
+Defaults to lower snake_case.
+
+Use the `style` option to specify the case style, and the optional `case` option to enforce
+upper or lower case for snake_case style.
+
+This rule supports selectively ignoring enum values via the
+`prisma-lint-ignore-enum` comment, like so:
+
+    /// prisma-lint-ignore-enum enum-value-case NotValidCase
+
+That will permit an enum value of `NotValidCase`. Other
+values for the enum must still be in the specified case style. A comma-separated list of values
+can be provided to ignore multiple enum values.
+
+### Configuration
+
+```ts
+z.object({
+  style: z.enum(['snake', 'camel', 'pascal']),
+  case: z.enum(['lower', 'upper']).optional(),
+  compoundWords: z.array(z.string()).optional(),
+  allowList: z.array(z.union([z.string(), z.instanceof(RegExp)])).optional(),
+  trimPrefix: z
+    .union([
+      z.string(),
+      z.instanceof(RegExp),
+      z.array(z.union([z.string(), z.instanceof(RegExp)])),
+    ])
+    .optional(),
+}).strict();
+```
+
+### Examples
+
+#### With `{ style: "snake" }` (default)
+
+```prisma
+// good
+enum Example {
+  value
+}
+
+// good
+enum Example {
+  value_1
+}
+
+// bad
+enum Example {
+  Value
+}
+
+// bad
+enum Example {
+  VALUE
+}
+
+// bad
+enum Example {
+  camelCase
+}
+```
+
+#### With `{ style: "snake", case: "upper" }`
+
+```prisma
+// good
+enum Example {
+  VALUE
+}
+
+// good
+enum Example {
+  VALUE_1
+}
+
+// bad
+enum Example {
+  Value
+}
+
+// bad
+enum Example {
+  value
+}
+
+// bad
+enum Example {
+  camelCase
+}
+```
+
+#### With `{ style: "camel" }`
+
+```prisma
+// good
+enum Example {
+  exampleValue
+}
+
+// good
+enum Example {
+  exampleValue1
+}
+
+// bad
+enum Example {
+  example_value
+}
+
+// bad
+enum Example {
+  EXAMPLE_VALUE
+}
+
+// bad
+enum Example {
+  ExampleValue
+}
+```
+
+#### With `{ style: "pascal" }`
+
+```prisma
+// good
+enum Example {
+  ExampleValue
+}
+
+// good
+enum Example {
+  ExampleValue1
+}
+
+// bad
+enum Example {
+  example_value
+}
+
+// bad
+enum Example {
+  EXAMPLE_VALUE
+}
+
+// bad
+enum Example {
+  exampleValue
 }
 ```
 
