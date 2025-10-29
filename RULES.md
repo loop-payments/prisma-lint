@@ -146,7 +146,7 @@ z.object({
 
 ### Examples
 
-#### With `{ style: "snake" }` (default)
+#### With `{ style: "snake" }`
 
 ```prisma
 // good
