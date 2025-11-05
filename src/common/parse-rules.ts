@@ -18,7 +18,11 @@ export const parseRules = (
   const deprecationWarnings: string[] = [];
   const rawRuleValues = rootConfig.rules;
   if (rawRuleValues == null) {
-    return { rules, parseIssues: ['Expected "rules" key in config.'], deprecationWarnings };
+    return {
+      rules,
+      parseIssues: ['Expected "rules" key in config.'],
+      deprecationWarnings,
+    };
   }
   const ruleDefinitionMap = new Map(
     ruleDefinitions.map((d) => [d.ruleName, d]),
