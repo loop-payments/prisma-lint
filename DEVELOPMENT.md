@@ -28,6 +28,32 @@ A few options:
 "prisma-lint": "portal:/Users/max/loop/prisma-lint",
 ```
 
+## Deprecating rules
+
+To deprecate a rule, add a `deprecated` field to the rule definition:
+
+```typescript
+export default {
+  ruleName: 'my-old-rule',
+  configSchema: Config,
+  create: (config, context) => {
+    // rule implementation
+  },
+  deprecated: {
+    message: 'This rule is no longer maintained.',
+    replacedBy: 'my-new-rule', // optional
+  },
+} satisfies ModelRuleDefinition<z.infer<typeof Config>>;
+```
+
+When users configure a deprecated rule in their `.prismalintrc.json`, they will see a warning message like:
+
+```
+Warning: Rule 'my-old-rule' is deprecated. This rule is no longer maintained. Use 'my-new-rule' instead.
+```
+
+The rule will still function normally, but users are encouraged to migrate to the replacement rule.
+
 ## Review
 
 To prepare a pull request for review:

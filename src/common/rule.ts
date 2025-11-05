@@ -23,6 +23,16 @@ export type RuleContext<T extends NodeViolation> = {
   report: (nodeViolation: T) => void;
 };
 
+/**
+ * Deprecation info for a rule.
+ */
+export type RuleDeprecation = {
+  /** The deprecation message to display when the rule is used. */
+  message: string;
+  /** Optional replacement rule name to suggest. */
+  replacedBy?: string;
+};
+
 export type ModelRuleDefinition<T> = {
   ruleName: string;
   configSchema: z.ZodSchema<T>;
@@ -30,6 +40,8 @@ export type ModelRuleDefinition<T> = {
     config: T,
     context: RuleContext<ModelViolation>,
   ) => ModelRuleInstance;
+  /** Deprecation info. If set, a warning will be shown when this rule is used. */
+  deprecated?: RuleDeprecation;
 };
 
 export type ModelRuleInstance = {
@@ -43,6 +55,8 @@ export type FieldRuleDefinition<T> = {
     config: T,
     context: RuleContext<FieldViolation>,
   ) => FieldRuleInstance;
+  /** Deprecation info. If set, a warning will be shown when this rule is used. */
+  deprecated?: RuleDeprecation;
 };
 
 export type FieldRuleInstance = {
@@ -53,6 +67,8 @@ export type EnumRuleDefinition<T> = {
   ruleName: string;
   configSchema: z.ZodSchema<T>;
   create: (config: T, context: RuleContext<EnumViolation>) => EnumRuleInstance;
+  /** Deprecation info. If set, a warning will be shown when this rule is used. */
+  deprecated?: RuleDeprecation;
 };
 
 export type EnumRuleInstance = {
