@@ -3,9 +3,8 @@
 ## Set up
 
 ```sh
-asdf install
+mise install
 corepack enable
-asdf reshim
 yarn
 ```
 
