@@ -8,12 +8,21 @@ import type { Rule, RuleDefinition } from '#src/common/rule.js';
 export const parseRules = (
   ruleDefinitions: RuleDefinition[],
   rootConfig: RootConfig,
-): { rules: Rule[]; parseIssues: string[] } => {
+): {
+  rules: Rule[];
+  parseIssues: string[];
+  deprecationWarnings: string[];
+} => {
   const rules: Rule[] = [];
   const parseIssues: string[] = [];
+  const deprecationWarnings: string[] = [];
   const rawRuleValues = rootConfig.rules;
   if (rawRuleValues == null) {
-    return { rules, parseIssues: ['Expected "rules" key in config.'] };
+    return {
+      rules,
+      parseIssues: ['Expected "rules" key in config.'],
+      deprecationWarnings,
+    };
   }
   const ruleDefinitionMap = new Map(
     ruleDefinitions.map((d) => [d.ruleName, d]),
@@ -36,6 +45,15 @@ export const parseRules = (
         ruleConfig: parsed.data,
         ruleDefinition,
       });
+      // Check if the rule is deprecated
+      if (ruleDefinition.deprecated != null) {
+        const { message, replacedBy } = ruleDefinition.deprecated;
+        let warning = `Rule '${ruleName}' is deprecated. ${message}`;
+        if (replacedBy != null) {
+          warning += ` Use '${replacedBy}' instead.`;
+        }
+        deprecationWarnings.push(warning);
+      }
     } else {
       const issues = parsed.error.issues.map((issue) => issue.message);
       if (issues.length > 1 && issues[0] === 'Required') {
@@ -48,5 +66,5 @@ export const parseRules = (
       parseIssues.push(parseIssue);
     }
   }
-  return { rules, parseIssues };
+  return { rules, parseIssues, deprecationWarnings };
 };
