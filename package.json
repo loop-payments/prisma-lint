@@ -1,6 +1,6 @@
 {
   "name": "prisma-lint",
-  "version": "0.10.3",
+  "version": "0.10.4",
   "description": "A linter for Prisma schema files.",
   "repository": {
     "type": "git",
