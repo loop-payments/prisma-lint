@@ -130,4 +130,8 @@ export default {
       },
     };
   },
+  deprecated: {
+    message: 'This rule has been replaced by a new rule.',
+    replacedBy: 'enum-value-case',
+  },
 } satisfies EnumRuleDefinition<z.infer<typeof Config>>;
