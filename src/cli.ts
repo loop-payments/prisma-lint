@@ -125,9 +125,20 @@ const run = async () => {
     );
     process.exit(1);
   }
-  const { rules, parseIssues } = parseRules(ruleDefinitions, rootConfig.config);
+  const { rules, parseIssues, deprecationWarnings } = parseRules(
+    ruleDefinitions,
+    rootConfig.config,
+  );
   if (parseIssues.length > 0) {
     outputParseIssues(rootConfig.filepath, parseIssues);
+  }
+
+  // Output deprecation warnings
+  if (deprecationWarnings.length > 0 && !quiet) {
+    for (const warning of deprecationWarnings) {
+      // eslint-disable-next-line no-console
+      console.error(chalk.yellow(`Warning: ${warning}`));
+    }
   }
 
   const paths = await getPathsFromArgsOrPackageJson(args);
