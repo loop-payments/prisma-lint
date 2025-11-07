@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-## 0.10.4 (2025-11-07)
+## 0.11.0 (2025-11-07)
 
 - Add new rule `enum-value-case`.
 - Deprecate `enum-value-snake-case` rule in favor of new `enum-value-case` rule.
