@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Add new rule `enum-value-case`.
+- Deprecate `enum-value-snake-case` rule in favor of new `enum-value-case` rule.
+
 ## 0.10.3
 
 - Add support for index functions (e.g. `@@index(createdAt(sort: Desc))`) in `require-field-index` rule.
