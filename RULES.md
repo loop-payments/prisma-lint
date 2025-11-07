@@ -7,7 +7,7 @@ Configuration option schemas are written with [Zod](https://github.com/colinhack
 - [ban-unbounded-string-type](#ban-unbounded-string-type)
 - [enum-name-pascal-case](#enum-name-pascal-case)
 - [enum-value-case](#enum-value-case)
-- [enum-value-snake-case](#enum-value-snake-case)
+- [enum-value-snake-case](#enum-value-snake-case) ⚠️ _deprecated_
 - [field-name-camel-case](#field-name-camel-case)
 - [field-name-grammatical-number](#field-name-grammatical-number)
 - [field-name-mapping-snake-case](#field-name-mapping-snake-case)
@@ -263,6 +263,8 @@ enum Example {
 ```
 
 ## enum-value-snake-case
+
+> **⚠️ Deprecated:** This rule has been replaced by a new rule. Use [`enum-value-case`](#enum-value-case) instead.
 
 Checks that enum values are in either upper or lower snake case.
 

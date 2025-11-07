@@ -69,6 +69,22 @@ function extractRulesFromSourceCode(filePath) {
   const ruleNameMatch = fileContent.match(/const RULE_NAME = '(.*)';/);
   const descriptionMatch = fileContent.match(/\/\*\*\n([\s\S]*?)\n\s*\*\//);
   const configMatch = fileContent.match(/const Config =([\s\S]*?;)/);
+  
+  // Extract deprecated field if present
+  const deprecatedMatch = fileContent.match(
+    /deprecated:\s*\{[\s\S]*?message:\s*['"`](.*?)['"`][\s\S]*?\}/
+  );
+  let deprecated = null;
+  if (deprecatedMatch) {
+    const message = deprecatedMatch[1];
+    const replacedByMatch = fileContent.match(
+      /deprecated:\s*\{[\s\S]*?replacedBy:\s*['"`](.*?)['"`][\s\S]*?\}/
+    );
+    deprecated = {
+      message,
+      replacedBy: replacedByMatch ? replacedByMatch[1] : null,
+    };
+  }
 
   if (ruleNameMatch && descriptionMatch) {
     const ruleName = ruleNameMatch[1];
@@ -89,6 +105,7 @@ function extractRulesFromSourceCode(filePath) {
       description,
       examples,
       configSchema,
+      deprecated,
     };
   }
 
@@ -101,15 +118,23 @@ function buildRulesMarkdownFile(rules) {
   let markdownContent = RULES_HEADER;
 
   rules.forEach((rule) => {
+    const deprecatedTag = rule.deprecated ? ' ⚠️ _deprecated_' : '';
     markdownContent += `- [${
       rule.ruleName
-    }](#${rule.ruleName.toLowerCase()})\n`;
+    }](#${rule.ruleName.toLowerCase()})${deprecatedTag}\n`;
   });
 
   markdownContent += '\n';
 
   rules.forEach((rule) => {
     markdownContent += `## ${rule.ruleName}\n\n`;
+    if (rule.deprecated) {
+      markdownContent += `> **⚠️ Deprecated:** ${rule.deprecated.message}`;
+      if (rule.deprecated.replacedBy) {
+        markdownContent += ` Use [\`${rule.deprecated.replacedBy}\`](#${rule.deprecated.replacedBy.toLowerCase()}) instead.`;
+      }
+      markdownContent += '\n\n';
+    }
     markdownContent += `${rule.description}\n\n`;
     if (rule.configSchema !== EMPTY_CONFIG_SCHEMA) {
       markdownContent += '### Configuration\n\n';
