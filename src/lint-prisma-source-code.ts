@@ -5,6 +5,7 @@ import {
   listIgnoreModelComments,
   listIgnoreEnumComments,
   isEnumEntirelyIgnored,
+  isLineIgnored,
 } from '#src/common/ignore.js';
 import {
   listModelBlocks,
@@ -42,8 +43,18 @@ export function lintPrismaSourceCode({
   const namedRuleInstances: NamedRuleInstance[] = rules.map(
     ({ ruleDefinition, ruleConfig }) => {
       const { ruleName } = ruleDefinition;
-      const report = (nodeViolation: NodeViolation) =>
+      const report = (nodeViolation: NodeViolation) => {
+        const { model, field, enum: enumObj } = nodeViolation as any;
+        const node = field ?? model ?? enumObj;
+        if (node?.location?.startLine) {
+          if (
+            isLineIgnored(sourceCode, node.location.startLine, ruleName)
+          ) {
+            return;
+          }
+        }
         violations.push({ ruleName, fileName, ...nodeViolation });
+      };
       const context = {
         customTypeNames,
         enumNames,
