@@ -5,7 +5,7 @@ import {
   listIgnoreModelComments,
   listIgnoreEnumComments,
   isEnumEntirelyIgnored,
-  isLineIgnored,
+  isFieldIgnored,
 } from '#src/common/ignore.js';
 import {
   listModelBlocks,
@@ -48,7 +48,7 @@ export function lintPrismaSourceCode({
         const node = field ?? model ?? enumObj;
         if (node?.location?.startLine) {
           if (
-            isLineIgnored(sourceCode, node.location.startLine, ruleName)
+            isFieldIgnored(sourceCode, node.location.startLine, ruleName)
           ) {
             return;
           }

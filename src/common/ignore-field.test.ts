@@ -21,7 +21,7 @@ describe('ignore-line', () => {
   it('respects ignore line for field rule', async () => {
     const violations = await run(`
       model User {
-        /// prisma-lint-ignore-line field-name-camel-case
+        /// prisma-lint-ignore-field field-name-camel-case
         user_name String
       }
     `);
@@ -40,7 +40,7 @@ describe('ignore-line', () => {
   it('respects bare ignore line (ignores all)', async () => {
     const violations = await run(`
       model User {
-        /// prisma-lint-ignore-line
+        /// prisma-lint-ignore-field
         user_name String
       }
     `);
@@ -50,7 +50,7 @@ describe('ignore-line', () => {
   it('respects ignore line with multiple rules', async () => {
     const violations = await run(`
       model User {
-        /// prisma-lint-ignore-line other-rule field-name-camel-case
+        /// prisma-lint-ignore-field other-rule field-name-camel-case
         user_name String
       }
     `);
@@ -60,7 +60,7 @@ describe('ignore-line', () => {
   it('respects ignore line with comma-separated rules', async () => {
     const violations = await run(`
       model User {
-        /// prisma-lint-ignore-line other-rule,field-name-camel-case
+        /// prisma-lint-ignore-field other-rule,field-name-camel-case
         user_name String
       }
     `);
@@ -70,7 +70,7 @@ describe('ignore-line', () => {
   it('respects ignore line with mixed space and comma separated rules', async () => {
     const violations = await run(`
       model User {
-        /// prisma-lint-ignore-line other-rule, field-name-camel-case
+        /// prisma-lint-ignore-field other-rule, field-name-camel-case
         user_name String
       }
     `);

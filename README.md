@@ -104,6 +104,35 @@ model User {
 
 Omitting `revisionNumber` and `revisionCreatedAt` fields from this model will not result in a violation. Other required fields remain required.
 
+To ignore specific lint rules for a single field, use `prisma-lint-ignore-field`:
+
+```prisma
+model User {
+  /// prisma-lint-ignore-field field-name-camel-case
+  user_name String
+}
+```
+
+You can ignore all rules for a field by omitting the rule names:
+
+```prisma
+model User {
+  /// prisma-lint-ignore-field
+  user_name String
+}
+```
+
+Multiple rules can be specified separated by spaces or commas:
+
+```prisma
+model User {
+  /// prisma-lint-ignore-field field-name-camel-case field-name-mapping-snake-case
+  user_name String
+  
+  /// prisma-lint-ignore-field field-name-camel-case,field-name-mapping-snake-case
+  another_field String
+}
+
 ## Output
 
 There are a few output options.

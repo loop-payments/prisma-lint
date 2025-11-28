@@ -55,7 +55,7 @@ describe('require-field', () => {
 
     it('respects line-specific ignore comments', async () => {
       const violations = await run(`
-        /// prisma-lint-ignore-line require-field
+        /// prisma-lint-ignore-field require-field
         model Products {
           id String @id
         }
@@ -65,7 +65,7 @@ describe('require-field', () => {
 
     it('respects line-specific ignore comments with multiple rules', async () => {
       const violations = await run(`
-        /// prisma-lint-ignore-line require-field other-rule
+        /// prisma-lint-ignore-field require-field other-rule
         model Products {
           id String @id
         }
@@ -76,7 +76,7 @@ describe('require-field', () => {
     it('does not ignore if ignore comment is not on the violation line', async () => {
       const violations = await run(`
         model Products {
-          /// prisma-lint-ignore-line require-field
+          /// prisma-lint-ignore-field require-field
           id String @id
           createdAt DateTime
         }
