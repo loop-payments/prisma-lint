@@ -56,4 +56,24 @@ describe('ignore-line', () => {
     `);
     expect(violations.length).toEqual(0);
   });
+
+  it('respects ignore line with comma-separated rules', async () => {
+    const violations = await run(`
+      model User {
+        /// prisma-lint-ignore-line other-rule,field-name-camel-case
+        user_name String
+      }
+    `);
+    expect(violations.length).toEqual(0);
+  });
+
+  it('respects ignore line with mixed space and comma separated rules', async () => {
+    const violations = await run(`
+      model User {
+        /// prisma-lint-ignore-line other-rule, field-name-camel-case
+        user_name String
+      }
+    `);
+    expect(violations.length).toEqual(0);
+  });
 });

@@ -78,7 +78,7 @@ export function isLineIgnored(
       if (params === '') {
         return true;
       }
-      const ignoredRules = params.split(' ').map((r) => r.trim());
+      const ignoredRules = params.split(/[\s,]+/).map((r) => r.trim());
       if (ignoredRules.includes(ruleName)) {
         return true;
       }
