@@ -1,4 +1,3 @@
-
 import type { RuleConfig } from '#src/common/config.js';
 import { testLintPrismaSource } from '#src/common/test.js';
 import fieldNameCamelCase from '#src/rules/field-name-camel-case.js';
