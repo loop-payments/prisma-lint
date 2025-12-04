@@ -54,6 +54,16 @@ describe('require-field-index', () => {
       `);
       expect(violations.length).toEqual(0);
     });
+
+    it('respects field-specific ignore comments', async () => {
+      const violations = await run(`
+        model Products {
+          /// prisma-lint-ignore-field require-field-index
+          tenantQid String
+        }
+        `);
+      expect(violations.length).toEqual(0);
+    });
   });
 
   describe('relations', () => {

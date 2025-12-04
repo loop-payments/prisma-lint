@@ -44,8 +44,15 @@ export function lintPrismaSourceCode({
     ({ ruleDefinition, ruleConfig }) => {
       const { ruleName } = ruleDefinition;
       const report = (nodeViolation: NodeViolation) => {
-        const { model, field, enum: enumObj } = nodeViolation as any;
-        const node = field ?? model ?? enumObj;
+        let node;
+        if ('field' in nodeViolation) {
+          node = nodeViolation.field;
+        } else if ('model' in nodeViolation) {
+          node = nodeViolation.model;
+        } else {
+          node = nodeViolation.enum;
+        }
+
         if (node?.location?.startLine) {
           if (isFieldIgnored(sourceCode, node.location.startLine, ruleName)) {
             return;

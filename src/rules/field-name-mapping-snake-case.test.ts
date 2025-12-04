@@ -346,5 +346,15 @@ describe('field-name-mapping-snake-case', () => {
       `);
       expect(violations.length).toEqual(0);
     });
+
+    it('respects field-specific ignore comments', async () => {
+      const violations = await run(`
+        model User {
+          /// prisma-lint-ignore-field field-name-mapping-snake-case
+          emailAddress String
+        }
+      `);
+      expect(violations.length).toEqual(0);
+    });
   });
 });

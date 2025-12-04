@@ -50,6 +50,38 @@ describe('ban-unbounded-string-type', () => {
         expect(violations.length).toEqual(1);
       });
     });
+
+    describe('ignore comments', () => {
+      it('respects rule-specific ignore comments', async () => {
+        const violations = await run(`
+        model User {
+          /// prisma-lint-ignore-model ban-unbounded-string-type
+          id String
+        }
+      `);
+        expect(violations.length).toEqual(0);
+      });
+
+      it('respects model-wide ignore comments', async () => {
+        const violations = await run(`
+        model User {
+          /// prisma-lint-ignore-model
+          id String
+        }
+      `);
+        expect(violations.length).toEqual(0);
+      });
+
+      it('respects field-specific ignore comments', async () => {
+        const violations = await run(`
+        model User {
+          /// prisma-lint-ignore-field ban-unbounded-string-type
+          id String
+        }
+      `);
+        expect(violations.length).toEqual(0);
+      });
+    });
   });
 
   describe('allow native @db.Text type', () => {

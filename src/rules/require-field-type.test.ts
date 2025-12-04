@@ -248,4 +248,40 @@ describe('require-field-type', () => {
       });
     });
   });
+
+  describe('ignore comments', () => {
+    const run = getRunner({
+      require: [{ ifName: 'id', type: 'String' }],
+    });
+
+    it('respects rule-specific ignore comments', async () => {
+      const violations = await run(`
+        model User {
+          /// prisma-lint-ignore-model require-field-type
+          id Int
+        }
+      `);
+      expect(violations.length).toEqual(0);
+    });
+
+    it('respects model-wide ignore comments', async () => {
+      const violations = await run(`
+        model User {
+          /// prisma-lint-ignore-model
+          id Int
+        }
+      `);
+      expect(violations.length).toEqual(0);
+    });
+
+    it('respects field-specific ignore comments', async () => {
+      const violations = await run(`
+        model User {
+          /// prisma-lint-ignore-field require-field-type
+          id Int
+        }
+      `);
+      expect(violations.length).toEqual(0);
+    });
+  });
 });
