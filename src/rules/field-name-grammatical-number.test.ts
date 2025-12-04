@@ -153,4 +153,38 @@ describe('field-name-grammatical-number', () => {
       });
     });
   });
+
+  describe('ignore comments', () => {
+    const run = getRunner({ ifList: 'singular' });
+
+    it('respects rule-specific ignore comments', async () => {
+      const violations = await run(`
+        model User {
+          /// prisma-lint-ignore-model field-name-grammatical-number
+          emails String[]
+        }
+      `);
+      expect(violations.length).toEqual(0);
+    });
+
+    it('respects model-wide ignore comments', async () => {
+      const violations = await run(`
+        model User {
+          /// prisma-lint-ignore-model
+          emails String[]
+        }
+      `);
+      expect(violations.length).toEqual(0);
+    });
+
+    it('respects field-specific ignore comments', async () => {
+      const violations = await run(`
+        model User {
+          /// prisma-lint-ignore-field field-name-grammatical-number
+          emails String[]
+        }
+      `);
+      expect(violations.length).toEqual(0);
+    });
+  });
 });

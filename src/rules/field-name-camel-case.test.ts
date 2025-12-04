@@ -37,6 +37,16 @@ describe('field-name-camel-case', () => {
     `);
       expect(violations.length).toEqual(0);
     });
+
+    it('respects field-specific ignore comments', async () => {
+      const violations = await run(`
+    model users {
+      /// prisma-lint-ignore-field field-name-camel-case
+      RowID String @id
+    }
+    `);
+      expect(violations.length).toEqual(0);
+    });
   });
 
   describe('without config', () => {

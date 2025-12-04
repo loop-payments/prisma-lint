@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.12.0 (2025-12-04)
+
+- [#355](https://github.com/loop-payments/prisma-lint/issues/355) Add new `/// prisma-lint-ignore-field` comment to ignore specific fields.
+
 ## 0.11.0 (2025-11-07)
 
 - Add new rule `enum-value-case`.

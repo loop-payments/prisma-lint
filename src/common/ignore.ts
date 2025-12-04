@@ -4,6 +4,7 @@ import { PrismaPropertyType } from '#src/common/prisma.js';
 
 const IGNORE_MODEL = '/// prisma-lint-ignore-model';
 const IGNORE_ENUM = '/// prisma-lint-ignore-enum';
+const IGNORE_LINE = '/// prisma-lint-ignore-field';
 
 export function listIgnoreModelComments(node: Model) {
   const commentFields = node.properties.filter(
@@ -56,4 +57,32 @@ export function getRuleIgnoreParams(node: Model | Enum, ruleName: string) {
   }
   const params = ruleIgnoreComment.split(' ').slice(-1)[0];
   return params.split(',').map((p: string) => p.trim());
+}
+
+export function isFieldIgnored(
+  sourceCode: string,
+  lineIndex: number,
+  ruleName: string,
+) {
+  const lines = sourceCode.split('\n');
+  // Check previous lines for ignore comments
+  for (let i = lineIndex - 2; i >= 0; i--) {
+    const line = lines[i].trim();
+    // If we hit a non-comment line (that isn't an ignore comment), stop looking
+    if (!line.startsWith('///')) {
+      return false;
+    }
+
+    if (line.startsWith(IGNORE_LINE)) {
+      const params = line.slice(IGNORE_LINE.length).trim();
+      if (params === '') {
+        return true;
+      }
+      const ignoredRules = params.split(/[\s,]+/).map((r) => r.trim());
+      if (ignoredRules.includes(ruleName)) {
+        return true;
+      }
+    }
+  }
+  return false;
 }

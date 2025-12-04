@@ -62,4 +62,38 @@ describe('require-default-empty-arrays', () => {
       });
     });
   });
+
+  describe('ignore comments', () => {
+    const run = getRunner();
+
+    it('respects rule-specific ignore comments', async () => {
+      const violations = await run(`
+        model Post {
+          /// prisma-lint-ignore-model require-default-empty-arrays
+          tags String[]
+        }
+      `);
+      expect(violations.length).toEqual(0);
+    });
+
+    it('respects model-wide ignore comments', async () => {
+      const violations = await run(`
+        model Post {
+          /// prisma-lint-ignore-model
+          tags String[]
+        }
+      `);
+      expect(violations.length).toEqual(0);
+    });
+
+    it('respects field-specific ignore comments', async () => {
+      const violations = await run(`
+        model Post {
+          /// prisma-lint-ignore-field require-default-empty-arrays
+          tags String[]
+        }
+      `);
+      expect(violations.length).toEqual(0);
+    });
+  });
 });

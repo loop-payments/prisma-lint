@@ -90,4 +90,40 @@ describe('forbid-field', () => {
       });
     });
   });
+
+  describe('ignore comments', () => {
+    const run = getRunner({
+      forbid: ['id'],
+    });
+
+    it('respects rule-specific ignore comments', async () => {
+      const violations = await run(`
+        model User {
+          /// prisma-lint-ignore-model forbid-field
+          id String
+        }
+      `);
+      expect(violations.length).toEqual(0);
+    });
+
+    it('respects model-wide ignore comments', async () => {
+      const violations = await run(`
+        model User {
+          /// prisma-lint-ignore-model
+          id String
+        }
+      `);
+      expect(violations.length).toEqual(0);
+    });
+
+    it('respects field-specific ignore comments', async () => {
+      const violations = await run(`
+        model User {
+          /// prisma-lint-ignore-field forbid-field
+          id String
+        }
+      `);
+      expect(violations.length).toEqual(0);
+    });
+  });
 });
