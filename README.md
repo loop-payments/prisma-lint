@@ -132,6 +132,7 @@ model User {
   /// prisma-lint-ignore-field field-name-camel-case,field-name-mapping-snake-case
   another_field String
 }
+```
 
 ## Output
 
