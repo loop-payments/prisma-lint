@@ -26,6 +26,8 @@ describe('require-field-index', () => {
           /// prisma-lint-ignore-model require-field-index
           tenantQid String
         }
+
+        @@schema("transactional")
         `);
       expect(violations.length).toEqual(0);
     });
@@ -79,6 +81,8 @@ describe('require-field-index', () => {
           bar Bar @relation(fields: [barRef], references: [ref])
           @@index([barRef])
         }
+
+        @@schema("transactional")
       `);
       expect(violations.length).toEqual(0);
     });
@@ -91,6 +95,8 @@ describe('require-field-index', () => {
           bar Bar @relation(fields: [barRef], references: [ref])
           @@index(fields: [barRef])
         }
+        
+        @@schema("transactional")
       `);
       expect(violations.length).toEqual(0);
     });
@@ -102,6 +108,8 @@ describe('require-field-index', () => {
           barRef String
           bar Bar @relation(fields: [barRef], references: [ref])
         }
+
+        @@schema("transactional")
       `);
       expect(violations.length).toEqual(1);
     });
