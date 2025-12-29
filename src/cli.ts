@@ -12,6 +12,7 @@ import { readPackageUp } from 'read-package-up';
 
 import { getTruncatedFileName } from '#src/common/file.js';
 import { parseRules } from '#src/common/parse-rules.js';
+import { getSchemaPathFromPrismaConfig } from '#src/common/prisma-config.js';
 import { lintPrismaFiles } from '#src/lint-prisma-files.js';
 import { outputToConsole } from '#src/output/console.js';
 import ruleDefinitions from '#src/rule-definitions.js';
@@ -51,6 +52,29 @@ const getSchemaFromPackageJson = async (cwd: string) => {
   return pkgJson?.packageJson?.prisma?.schema;
 };
 
+/**
+ * Gets the schema path from available configuration sources.
+ * Priority order:
+ * 1. prisma.config.ts (Prisma 7+)
+ * 2. package.json#prisma.schema (legacy, deprecated in Prisma 7)
+ * 3. null (will fall back to default)
+ */
+const getSchemaFromConfig = async (cwd: string) => {
+  // First try prisma.config.ts (Prisma 7+)
+  const schemaFromPrismaConfig = await getSchemaPathFromPrismaConfig(cwd);
+  if (schemaFromPrismaConfig != null) {
+    return schemaFromPrismaConfig;
+  }
+
+  // Fall back to package.json#prisma.schema (legacy)
+  const schemaFromPackageJson = await getSchemaFromPackageJson(cwd);
+  if (schemaFromPackageJson != null) {
+    return schemaFromPackageJson;
+  }
+
+  return null;
+};
+
 const getRootConfigResult = async () => {
   if (options.config != null) {
     const result = await explorer.load(options.config);
@@ -67,13 +91,13 @@ const getRootConfigResult = async () => {
   return result;
 };
 
-const getPathsFromArgsOrPackageJson = async (args: string[]) => {
+const getPathsFromArgsOrConfig = async (args: string[]) => {
   if (args.length > 0) {
     return args;
   }
-  const schemaFromPackageJson = await getSchemaFromPackageJson(process.cwd());
-  if (schemaFromPackageJson != null) {
-    return [schemaFromPackageJson];
+  const schemaFromConfig = await getSchemaFromConfig(process.cwd());
+  if (schemaFromConfig != null) {
+    return [schemaFromConfig];
   }
   return [DEFAULT_PRISMA_FILE_PATH];
 };
@@ -141,7 +165,7 @@ const run = async () => {
     }
   }
 
-  const paths = await getPathsFromArgsOrPackageJson(args);
+  const paths = await getPathsFromArgsOrConfig(args);
   const fileNames = resolvePrismaFileNames(paths);
   const fileViolationList = await lintPrismaFiles({
     rules,

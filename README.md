@@ -18,7 +18,10 @@ A linter for Prisma schema files.
 > yarn prisma-lint
 ```
 
-The default schema path is `prisma/schema.prisma`. If a custom schema path is specified in the field `prisma.schema` within `package.json`, that is used instead.
+The default schema path is `prisma/schema.prisma`. The schema path can also be configured in:
+
+1. **`prisma.config.ts`** or **`.config/prisma.ts`** (Prisma 7+): The `schema` field is used if present.
+2. **`package.json#prisma.schema`** (legacy): Supported for backwards compatibility.
 
 Alternatively, you can provide one or more explicit paths as CLI arguments. These can be globs, directories, or file paths. 
 
