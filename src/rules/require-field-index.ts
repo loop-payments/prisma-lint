@@ -12,7 +12,6 @@ import {
   assertValueIsArray,
   isFunc,
   isKeyValue,
-  isValue,
   listAttributes,
   listFields,
 } from '#src/common/prisma.js';
@@ -209,31 +208,31 @@ function isUniqueField(field: Field): boolean {
 function extractPrimaryFieldNameFromRelationListAttribute(
   attribute: BlockAttribute,
 ): string {
-  const [arg] = attribute.args;
-  let value: Value;
-  if (!isValue(arg.value)) {
-    // these arguments are describing a complex relation
-    const fieldsValue: Value | undefined = (
-      attribute.args.find(({ value }) => {
-        if (isKeyValue(value)) {
-          return value.key === 'fields';
-        }
+  let value: Value | undefined;
 
-        return false;
-      })?.value as KeyValue
-    ).value;
-
-    if (fieldsValue == null) {
-      throw new Error(
-        `Failed to parse attribute, could not find fields argument ${JSON.stringify(
-          attribute,
-        )}`,
-      );
+  for (const arg of attribute.args) {
+    if (isKeyValue(arg.value) && arg.value.key === 'fields') {
+      value = arg.value.value;
+      break;
     }
+  }
 
-    value = fieldsValue;
-  } else {
-    value = arg.value;
+  // if no "fields" arg, consider they may be defined in an array
+  if (value === undefined) {
+    for (const arg of attribute.args) {
+      if (!isKeyValue(arg.value)) {
+        value = arg.value as Value;
+        break;
+      }
+    }
+  }
+
+  if (value === undefined) {
+    throw new Error(
+      `Failed to parse attribute, could not find fields in ${JSON.stringify(
+        attribute,
+      )}`,
+    );
   }
 
   // @@index(value) or @@unique(value)
