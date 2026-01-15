@@ -105,6 +105,18 @@ describe('require-field-index', () => {
       `);
       expect(violations.length).toEqual(1);
     });
+
+    it('handles @@unique with name argument and positional fields', async () => {
+      const violations = await run(`
+        model Foo {
+          qid String @id
+          barRef String
+          bar Bar @relation(fields: [barRef], references: [ref])
+          @@unique(name: "unique_bars", [barRef])
+        }
+      `);
+      expect(violations.length).toEqual(0);
+    });
   });
 
   describe('string literal field name', () => {
