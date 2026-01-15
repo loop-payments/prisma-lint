@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.13.1 (2026-01-14)
+
+- [#799](https://github.com/loop-payments/prisma-lint/pull/799) Fix field parsing in `require-field-index` rule for `@@unique` attributes with named constraints.
+
 ## 0.13.0 (2025-12-29)
 
 - [#790](https://github.com/loop-payments/prisma-lint/issues/790) Add support for Prisma 7 config file schema path configuration (`prisma.config.ts` or `.config/prisma.ts`). The `package.json#prisma.schema` field remains supported for backwards compatibility.
