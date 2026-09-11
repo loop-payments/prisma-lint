@@ -28,6 +28,8 @@ jobs:
           git checkout HEAD -- package.json
 
   maybe-release:
+    permissions:
+      contents: write
     needs: 'version-check'
     if: needs.version-check.outputs.new-version
     uses: ./.github/workflows/release.yml
