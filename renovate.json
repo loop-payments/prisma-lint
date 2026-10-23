@@ -1,10 +1,10 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:base"],
+  "extends": ["local>loop-payments/renovate-config"],
   "rangeStrategy": "bump",
   "timezone": "America/Chicago",
   "schedule": ["after 8am and before 5pm every weekday"],
-  "stabilityDays": 3,
+  "minimumReleaseAge": "3 days",
   "labels": ["renovate"],
   "packageRules": [
     {
